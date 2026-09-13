@@ -262,13 +262,13 @@
                 lblSpacing: "Відстань між осями труб (Pipe Spacing)",
                 guideStub: "📏 <b>Гайд:</b> Відміряй рулеткою від підлоги до тої точки, де має закінчитись вигин.",
                 guideOffset: "📏 <b>Гайд:</b> Відміряй прямо від початку траси до початку перешкоди.",
-                guideParallel: "📏 <b>Гайд:</b> Для пучка труб. Вкажи крок між трубами (зазвичай 1\" або 2\"). Кожна наступна труба зрушується автоматично.",
+                guideParallel: "📏 <b>Гайд:</b> Для пучка труб. Вкажи крок. Кожна наступна труба зсувається на tan(angle/2) * spacing.",
                 guideRolling: "📏 <b>Гайд:</b> Відміряй пряму відстань. Rise — наскільки труба підіймається. Roll — наскільки йде вбік.",
                 guideSaddle3: "📏 <b>Гайд:</b> Відміряй рулеткою рівно до ЦЕНТРУ чужої труби.",
                 guideSaddle4: "📏 <b>Гайд:</b> Відстань (Distance) міряй до ПОЧАТКУ короба. Ширина (Width) — повний розмір від краю до краю.",
                 tipStub: "👉 Сумісти мітку зі <b>Стрілкою [ ➔ ]</b>. Гни до 90°.",
                 tipOffset: "👉 Гни обидві мітки по <b>Стрілці [ ➔ ]</b>. Розверни трубу на 180° перед другим вигином.",
-                tipParallel: "👉 Згинай кожну трубу за своїм комплектом міток (M1, M2) по <b>Стрілці [ ➔ ]</b>. Не забувай розгортати на 180°.",
+                tipParallel: "👉 Згинай кожну трубу за своїм комплектом меток (M1, M2) по <b>Стрілці [ ➔ ]</b>. Не забувай розгортати на 180°.",
                 tipSaddle3: "👉 Крок 1: Центр (M2) по <b>Насічці [ ⯎ ]</b>.<br>👉 Крок 2: Боки (M1, M3) по <b>Стрілці [ ➔ ]</b>. Башмак дивиться до центру.",
                 tipSaddle4: "👉 <b>Протяжний метод:</b> Усі 4 вигини по <b>Стрілці [ ➔ ]</b>. Розвертай трубу на 180° після кожного вигину.",
                 markStart: "(Початок / Start)",
@@ -319,13 +319,13 @@
                 lblSpacing: "Шаг между осями труб (Pipe Spacing)",
                 guideStub: "📏 <b>Гайд:</b> Отмерь рулеткой от пола до той точки, где должен закончиться изгиб.",
                 guideOffset: "📏 <b>Гайд:</b> Отмерь прямо от начала трассы до начала препятствия.",
-                guideParallel: "📏 <b>Гайд:</b> Для пучка труб. Укажи шаг между осями (обычно 1\" или 2\"). Каждая следующая труба смещается автоматически.",
+                guideParallel: "📏 <b>Гайд:</b> Для пучка труб. Укажи шаг. Каждая следующая труба смещается на tan(angle/2) * spacing.",
                 guideRolling: "📏 <b>Гайд:</b> Отмерь прямое расстояние. Rise — насколько труба поднимается. Roll — насколько уходит вбок.",
                 guideSaddle3: "📏 <b>Гайд:</b> Отмерь рулеткой ровно до ЦЕНТРА чужой трубы.",
                 guideSaddle4: "📏 <b>Гайд:</b> Расстояние (Distance) меряй до НАЧАЛА короба. Ширина (Width) — полный размер короба от края до края.",
                 tipStub: "👉 Совмести метку со <b>Стрелкой [ ➔ ]</b>. Гни до 90°.",
                 tipOffset: "👉 Гни обе метки по <b>Стрелке [ ➔ ]</b>. Разверни трубу на 180° перед вторым гибом.",
-                tipParallel: "👉 Гни каждую трубу по своему комплекту меток (M1, M2) на <b>Стрелке [ ➔ ]</b>. Не забывай разворачивать на 180°.",
+                tipParallel: "👉 Гни каждую трубу по своему комплекту меток (M1, M2) на <b>Стрелке [ ➔ ]</b>. Не забувай разворачивать на 180°.",
                 tipSaddle3: "👉 Шаг 1: Центр (M2) по <b>Засечке [ ⯎ ]</b>.<br>👉 Шаг 2: Бока (M1, M3) по <b>Стрелке [ ➔ ]</b>. Башмак смотрит к центру.",
                 tipSaddle4: "👉 <b>Протяжной метод:</b> Все 4 гиба по <b>Стрелке [ ➔ ]</b>. Разворачивай трубу на 180° после каждого гиба.",
                 markStart: "(Начало / Start)",
@@ -376,7 +376,7 @@
                 lblSpacing: "Pipe Spacing",
                 guideStub: "📏 <b>Guide:</b> Measure from the box/floor to the back of the desired 90° bend.",
                 guideOffset: "📏 <b>Guide:</b> Measure from your starting point straight to the beginning of the obstacle.",
-                guideParallel: "📏 <b>Guide:</b> For conduit runs. Set spacing (typically 1\" or 2\"). Each successive pipe shifts automatically.",
+                guideParallel: "📏 <b>Guide:</b> For conduit runs. Each successive pipe shifts by tan(angle/2) * spacing.",
                 guideRolling: "📏 <b>Guide:</b> Measure straight distance. Rise is how far up it goes. Roll is how far left/right it shifts.",
                 guideSaddle3: "📏 <b>Guide:</b> Measure directly to the dead center of the pipe you are crossing.",
                 guideSaddle4: "📏 <b>Guide:</b> Distance is to the START of the duct. Width is the total outer width of the duct.",
@@ -461,7 +461,6 @@
             document.getElementById('widthGroup').style.display = (type === 'saddle4') ? 'block' : 'none';
             document.getElementById('shiftGroup').style.display = (type === 'rolling') ? 'block' : 'none';
             
-            // Управление видимостью полей Parallel Offset
             const isParallel = (type === 'parallelOffset');
             document.getElementById('pipesGroup').style.display = isParallel ? 'block' : 'none';
             document.getElementById('spacingGroup').style.display = isParallel ? 'block' : 'none';
@@ -532,8 +531,7 @@
                 infoHTML = t.tipStub;
             } else {
                 let h = getFullVal('height');
-                if (!h && type !== 'parallelOffset') { alert("Rise height required!"); return; }
-                if (!h && type === 'parallelOffset') { alert("Rise height required!"); return; }
+                if (!h) { alert("Rise height required!"); return; }
                 
                 const angle = parseFloat(document.getElementById('bendAngle').value);
                 let shrinkPerInch = 0, multiplier = 0;
@@ -567,11 +565,14 @@
                     let baseM1 = dist + shrink;
                     let baseM2 = baseM1 + step;
 
-                    infoHTML += `<b>${t.shrink}:</b> ${toFraction(shrink)} <br><b>${t.spacing}:</b> ${toFraction(step)}<br><br>${t.tipParallel}`;
+                    // ПРАВИЛЬНАЯ ФОРМУЛА СДВИГА: Spacing * tan(angle / 2)
+                    let angleRad = (angle * Math.PI) / 180;
+                    let stagger = spacing * Math.tan(angleRad / 2);
+
+                    infoHTML += `<b>${t.shrink}:</b> ${toFraction(shrink)} <br><b>Stagger:</b> ${toFraction(stagger)}<br><br>${t.tipParallel}`;
                     
                     for (let i = 0; i < count; i++) {
-                        // Смещение стартовой точки для каждой следующей трубы в пучке
-                        let shiftAmount = i * spacing * multiplier;
+                        let shiftAmount = i * stagger;
                         let piM1 = baseM1 + shiftAmount;
                         let piM2 = baseM2 + shiftAmount;
                         resHTML += `
