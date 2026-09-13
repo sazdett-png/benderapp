@@ -23,30 +23,34 @@
             border-radius: 45px;
             box-shadow: 0 0px 0px rgba(0,0,0,0.0);
         }
-       .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    position: relative; /* нужно для точного центрирования */
-}
-
-h2 {
-    color: #B04D3A;
-    margin: 0;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-style: italic;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%); /* двигает ровно на середину */
-    text-align: center;
-}
-
-.lang-btn {
-    margin-left: auto; /* прижимает кнопку в самый правый угол */
-    z-index: 1; /* чтобы кнопка была поверх, если текст длинный */
-}
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        h2 {
+            color: #B04D3A;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-style: italic;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+        }
+        .lang-btn {
+            margin-left: auto;
+            z-index: 1;
+            background-color: #333;
+            color: #fff;
+            border: 1px solid #555;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
         }
         .form-group {
             margin-bottom: 20px;
@@ -81,12 +85,15 @@ h2 {
         .guide-box {
             background-color: #1a1a2e;
             border-left: 3px solid #4da6ff;
-            padding: 10px;
+            padding: 12px;
             margin-top: 10px;
             margin-bottom: 15px;
             font-size: 13px;
             color: #88c0d0;
-            border-radius: 0 4px 4px 0;
+            border-radius: 0 8px 8px 0;
+            box-sizing: border-box;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         button.calc-btn {
             width: 100%;
@@ -133,6 +140,7 @@ h2 {
             line-height: 1.5;
         }
         .highlight { color: #4da6ff; font-weight: bold; }
+        .limit-warning { color: #ff9900; font-weight: bold; margin-top: 15px; display: block; border-top: 1px dashed #ff9900; padding-top: 10px; }
     </style>
 </head>
 <body>
@@ -161,13 +169,21 @@ h2 {
         <select id="bendAngle"></select>
     </div>
 
-    <!-- Параметры для Parallel Offset -->
     <div class="form-group" id="pipesGroup" style="display: none;">
         <label id="lblPipes">Number of Pipes (Кількість труб)</label>
         <select id="pipeCount">
             <option value="2">2 Pipes</option>
             <option value="3">3 Pipes</option>
             <option value="4">4 Pipes</option>
+        </select>
+    </div>
+    
+    <div class="form-group" id="bendsCountGroup" style="display: none;">
+        <label id="lblBends">Number of Bends (Кількість дрібних вигинів)</label>
+        <select id="bendsCount">
+            <option value="9">9 Bends (10° each)</option>
+            <option value="15">15 Bends (6° each)</option>
+            <option value="18">18 Bends (5° each)</option>
         </select>
     </div>
 
@@ -234,11 +250,13 @@ h2 {
                 resTitle: "Мітки (Layout Marks):",
                 types: {
                     stub90: "90° Stub-up",
+                    backToBack: "Back-to-Back 90° (П-подібний)",
                     offset: "Offset (Зміщення / Утка)",
                     parallelOffset: "Parallel Offset (Паралельні утки)",
                     rolling: "Rolling Offset (Діагональна утка)",
                     saddle3: "3-Point Saddle (Сідло 3 точки)",
-                    saddle4: "4-Point Saddle (Сідло 4 точки / Короб)"
+                    saddle4: "4-Point Saddle (Сідло 4 точки / Короб)",
+                    concentric: "Concentric 90° (Багатошаговий радіус)"
                 },
                 sizes: {
                     "5": '1/2" (Take-up 5")',
@@ -255,32 +273,40 @@ h2 {
                     22.5: 'Центр(Center) 45° / Боки(Sides) 22.5°',
                     30: 'Центр(Center) 60° / Боки(Sides) 30°'
                 },
-                lblDistStub: "Висота від підлоги до краю труби (Height to back of bend)",
-                lblDistStart: "Відстань до ПОЧАТКУ перешкоди (Distance to obstacle)",
-                lblDistCenter: "Відстань до ЦЕНТРУ перешкоди (Distance to center)",
+                lblDistStub: "Висота від підлоги до краю труби (Height)",
+                lblDistB2B: "Відстань від стіни до стіни (Outside-to-Outside)",
+                lblDistStart: "Відстань до ПОЧАТКУ перешкоди (Distance)",
+                lblDistCenter: "Відстань до ЦЕНТРУ перешкоди (Distance)",
+                lblDistRadius: "Радіус перешкоди/колонни (Radius)",
                 lblHeight: "Висота перешкоди (Rise)",
                 lblWidth: "Ширина перешкоди (Obstacle Width)",
                 lblShift: "Зсув убік (Roll / Horizontal Shift)",
                 lblPipes: "Кількість труб у пучку (Number of Pipes)",
                 lblSpacing: "Відстань між осями труб (Pipe Spacing)",
+                lblBends: "Кількість дрібних вигинів (Number of Bends)",
                 guideStub: "📏 <b>Гайд:</b> Відміряй рулеткою від підлоги до тої точки, де має закінчитись вигин.",
+                guideB2B: "📏 <b>Гайд:</b> Відміряй зовнішню відстань (Outside-to-Outside) між двома стінами або щитками.",
                 guideOffset: "📏 <b>Гайд:</b> Відміряй прямо від початку траси до початку перешкоди.",
                 guideParallel: "📏 <b>Гайд:</b> Для пучка труб. Вкажи крок. Кожна наступна труба зсувається на tan(angle/2) * spacing.",
                 guideRolling: "📏 <b>Гайд:</b> Відміряй пряму відстань. Rise — наскільки труба підіймається. Roll — наскільки йде вбік.",
                 guideSaddle3: "📏 <b>Гайд:</b> Відміряй рулеткою рівно до ЦЕНТРУ чужої труби.",
-                guideSaddle4: "📏 <b>Гайд:</b> Відстань (Distance) міряй до ПОЧАТКУ короба. Ширина (Width) — повний розмір від краю до краю.",
+                guideSaddle4: "📏 <b>Гайд:</b> Відстань міряй до ПОЧАТКУ короба. Ширина — повний розмір від краю до краю.",
+                guideConcentric: "📏 <b>Гайд:</b> Вкажи радіус обходу. Програма розрахує крок. Відміряй центральну мітку, а від неї відклади решту міток в обидва боки.",
                 tipStub: "👉 Сумісти мітку зі <b>Стрілкою [ ➔ ]</b>. Гни до 90°.",
+                tipB2B: "👉 <b>Стрілка [ ➔ ]:</b> Використовуй мітку M1. Башмак дивиться НА перший вигин.<br>👉 <b>Зірка [ ★ ]:</b> Використовуй мітку M2. Башмак дивиться ВІД першого вигину.",
                 tipOffset: "👉 Гни обидві мітки по <b>Стрілці [ ➔ ]</b>. Розверни трубу на 180° перед другим вигином.",
-                tipParallel: "👉 Згинай кожну трубу за своїм комплектом меток (M1, M2) по <b>Стрілці [ ➔ ]</b>. Не забувай розгортати на 180°.",
-                tipSaddle3: "👉 Крок 1: Центр (M2) по <b>Насічці [ ⯎ ]</b>.<br>👉 Крок 2: Боки (M1, M3) по <b>Стрілці [ ➔ ]</b>. Башмак дивиться до центру.",
+                tipParallel: "👉 Згинай кожну трубу за своїм комплектом меток (M1, M2) по <b>Стрілці [ ➔ ]</b>. Розвертай на 180°.",
+                tipSaddle3: "👉 Крок 1: Центр (M2) по <b>Насічці [ ⯎ ]</b>.<br>👉 Крок 2: Боки (M1, M3) по <b>Стрілці [ ➔ ]</b>. Башмак до центру.",
                 tipSaddle4: "👉 <b>Протяжний метод:</b> Усі 4 вигини по <b>Стрілці [ ➔ ]</b>. Розвертай трубу на 180° після кожного вигину.",
+                tipConcentric: "👉 Поклади центральну мітку на стрілку. Згинай кожну мітку на однаковий градус, просуваючи трубу в одному напрямку.",
                 markStart: "(Початок / Start)",
                 markEnd: "(Кінець / End)",
                 markSide: "(Боковий / Side)",
                 markCenter: "ЦЕНТР (CENTER)",
                 shrink: "Усадка (Shrink)",
                 spacing: "Крок (Spacing)",
-                trueOffset: "Реальна висота (True Offset)"
+                trueOffset: "Реальна висота (True Offset)",
+                limitWarn: "⚠️ Увага: Довжина деталі перевищує 120\" (10 ft). Буде потрібна муфта (Coupling)!"
             },
             ru: {
                 btnText: "RU",
@@ -291,11 +317,13 @@ h2 {
                 resTitle: "Метки (Layout Marks):",
                 types: {
                     stub90: "90° Stub-up",
+                    backToBack: "Back-to-Back 90° (П-образный)",
                     offset: "Offset (Утка)",
                     parallelOffset: "Parallel Offset (Параллельные утки)",
                     rolling: "Rolling Offset (Диагональная утка)",
                     saddle3: "3-Point Saddle (Седло 3 точки)",
-                    saddle4: "4-Point Saddle (Седло 4 точки / Короб)"
+                    saddle4: "4-Point Saddle (Седло 4 точки / Короб)",
+                    concentric: "Concentric 90° (Многошаговый радиус)"
                 },
                 sizes: {
                     "5": '1/2" (Take-up 5")',
@@ -312,32 +340,40 @@ h2 {
                     22.5: 'Центр(Center) 45° / Бока(Sides) 22.5°',
                     30: 'Центр(Center) 60° / Бока(Sides) 30°'
                 },
-                lblDistStub: "Высота от пола до края трубы (Height to back of bend)",
-                lblDistStart: "Расстояние до НАЧАЛА препятствия (Distance to obstacle)",
-                lblDistCenter: "Расстояние до ЦЕНТРУ препятствия (Distance to center)",
+                lblDistStub: "Высота от пола до края трубы (Height)",
+                lblDistB2B: "Расстояние от стены до стены (Outside-to-Outside)",
+                lblDistStart: "Расстояние до НАЧАЛА препятствия (Distance)",
+                lblDistCenter: "Расстояние до ЦЕНТРА препятствия (Distance)",
+                lblDistRadius: "Радиус препятствия/колонны (Radius)",
                 lblHeight: "Высота препятствия (Rise)",
                 lblWidth: "Ширина препятствия (Obstacle Width)",
                 lblShift: "Смещение вбок (Roll / Horizontal Shift)",
                 lblPipes: "Количество труб в пучке (Number of Pipes)",
                 lblSpacing: "Шаг между осями труб (Pipe Spacing)",
+                lblBends: "Количество мелких изгибов (Number of Bends)",
                 guideStub: "📏 <b>Гайд:</b> Отмерь рулеткой от пола до той точки, где должен закончиться изгиб.",
+                guideB2B: "📏 <b>Гайд:</b> Отмерь внешнее расстояние (Outside-to-Outside) между двумя стенами или щитками.",
                 guideOffset: "📏 <b>Гайд:</b> Отмерь прямо от начала трассы до начала препятствия.",
                 guideParallel: "📏 <b>Гайд:</b> Для пучка труб. Укажи шаг. Каждая следующая труба смещается на tan(angle/2) * spacing.",
                 guideRolling: "📏 <b>Гайд:</b> Отмерь прямое расстояние. Rise — насколько труба поднимается. Roll — насколько уходит вбок.",
                 guideSaddle3: "📏 <b>Гайд:</b> Отмерь рулеткой ровно до ЦЕНТРА чужой трубы.",
-                guideSaddle4: "📏 <b>Гайд:</b> Расстояние (Distance) меряй до НАЧАЛА короба. Ширина (Width) — полный размер короба от края до края.",
+                guideSaddle4: "📏 <b>Гайд:</b> Расстояние меряй до НАЧАЛА короба. Ширина — полный размер от края до края.",
+                guideConcentric: "📏 <b>Гайд:</b> Укажи радиус обхода. Программа рассчитает шаг. Отмерь центр, от него отложи остальные метки в обе стороны.",
                 tipStub: "👉 Совмести метку со <b>Стрелкой [ ➔ ]</b>. Гни до 90°.",
+                tipB2B: "👉 <b>Стрелка [ ➔ ]:</b> Используй метку M1. Башмак смотрит НА первый гиб.<br>👉 <b>Звезда [ ★ ]:</b> Используй метку M2. Башмак смотрит ОТ первого гиба.",
                 tipOffset: "👉 Гни обе метки по <b>Стрелке [ ➔ ]</b>. Разверни трубу на 180° перед вторым гибом.",
-                tipParallel: "👉 Гни каждую трубу по своему комплекту меток (M1, M2) на <b>Стрелке [ ➔ ]</b>. Не забувай разворачивать на 180°.",
+                tipParallel: "👉 Гни каждую трубу по своему комплекту меток (M1, M2) на <b>Стрелке [ ➔ ]</b>. Разворачивай на 180°.",
                 tipSaddle3: "👉 Шаг 1: Центр (M2) по <b>Засечке [ ⯎ ]</b>.<br>👉 Шаг 2: Бока (M1, M3) по <b>Стрелке [ ➔ ]</b>. Башмак смотрит к центру.",
                 tipSaddle4: "👉 <b>Протяжной метод:</b> Все 4 гиба по <b>Стрелке [ ➔ ]</b>. Разворачивай трубу на 180° после каждого гиба.",
+                tipConcentric: "👉 Положи центральную метку на стрелку. Гни каждую метку на одинаковый градус, продвигая трубу в одном направлении.",
                 markStart: "(Начало / Start)",
                 markEnd: "(Конец / End)",
                 markSide: "(Боковой / Side)",
                 markCenter: "ЦЕНТР (CENTER)",
                 shrink: "Усадка (Shrink)",
                 spacing: "Шаг (Spacing)",
-                trueOffset: "Реальная высота (True Offset)"
+                trueOffset: "Реальная высота (True Offset)",
+                limitWarn: "⚠️ Внимание: Длина детали превышает 120\" (10 ft). Потребуется муфта (Coupling)!"
             },
             en: {
                 btnText: "EN",
@@ -348,11 +384,13 @@ h2 {
                 resTitle: "Layout Marks:",
                 types: {
                     stub90: "90° Stub-up",
+                    backToBack: "Back-to-Back 90°",
                     offset: "Offset",
                     parallelOffset: "Parallel Offset",
                     rolling: "Rolling Offset",
                     saddle3: "3-Point Saddle",
-                    saddle4: "4-Point Saddle (Duct/Beam)"
+                    saddle4: "4-Point Saddle (Duct/Beam)",
+                    concentric: "Concentric 90°"
                 },
                 sizes: {
                     "5": '1/2" (Take-up 5")',
@@ -370,31 +408,39 @@ h2 {
                     30: 'Center 60° / Sides 30°'
                 },
                 lblDistStub: "Distance to back of 90° bend",
+                lblDistB2B: "Outside-to-Outside Distance",
                 lblDistStart: "Distance to start of obstacle",
                 lblDistCenter: "Distance to CENTER of obstacle",
+                lblDistRadius: "Radius of curve/column (Radius)",
                 lblHeight: "Obstacle Height (Rise)",
                 lblWidth: "Obstacle Width",
                 lblShift: "Horizontal Shift (Roll)",
                 lblPipes: "Number of Pipes",
                 lblSpacing: "Pipe Spacing",
+                lblBends: "Number of small bends",
                 guideStub: "📏 <b>Guide:</b> Measure from the box/floor to the back of the desired 90° bend.",
+                guideB2B: "📏 <b>Guide:</b> Measure the total outer distance between the two walls or panels.",
                 guideOffset: "📏 <b>Guide:</b> Measure from your starting point straight to the beginning of the obstacle.",
                 guideParallel: "📏 <b>Guide:</b> For conduit runs. Each successive pipe shifts by tan(angle/2) * spacing.",
                 guideRolling: "📏 <b>Guide:</b> Measure straight distance. Rise is how far up it goes. Roll is how far left/right it shifts.",
                 guideSaddle3: "📏 <b>Guide:</b> Measure directly to the dead center of the pipe you are crossing.",
                 guideSaddle4: "📏 <b>Guide:</b> Distance is to the START of the duct. Width is the total outer width of the duct.",
+                guideConcentric: "📏 <b>Guide:</b> Enter curve radius. Program calculates mark spacing. Mark center, then layout remaining marks on both sides.",
                 tipStub: "👉 Align mark with the <b>Arrow [ ➔ ]</b>. Bend to 90°.",
+                tipB2B: "👉 <b>Arrow [ ➔ ]:</b> Use M1 mark. Bender hook points TOWARD first bend.<br>👉 <b>Star [ ★ ]:</b> Use M2 mark. Bender hook points AWAY from first bend.",
                 tipOffset: "👉 Bend both marks on the <b>Arrow [ ➔ ]</b>. Roll conduit 180° before the second bend.",
                 tipParallel: "👉 Bend each pipe using its specific set of marks (M1, M2) on the <b>Arrow [ ➔ ]</b>. Roll 180°.",
                 tipSaddle3: "👉 Step 1: Center (M2) on the <b>Center Notch [ ⯎ ]</b>.<br>👉 Step 2: Sides (M1, M3) on the <b>Arrow [ ➔ ]</b> pointing toward the center.",
                 tipSaddle4: "👉 <b>Push-Through Method:</b> All 4 bends on the <b>Arrow [ ➔ ]</b>. Roll conduit 180° after each bend.",
+                tipConcentric: "👉 Bend each mark to the calculated exact degree pushing the bender in the same direction.",
                 markStart: "(Start)",
                 markEnd: "(End)",
                 markSide: "(Side bend)",
                 markCenter: "CENTER",
                 shrink: "Shrink",
                 spacing: "Spacing",
-                trueOffset: "True Offset"
+                trueOffset: "True Offset",
+                limitWarn: "⚠️ Warning: Total bend length exceeds 120\" (10 ft). A coupling will be required!"
             }
         };
 
@@ -449,6 +495,7 @@ h2 {
             document.getElementById('lblShift').innerText = dict[currentLang].lblShift;
             document.getElementById('lblPipes').innerText = dict[currentLang].lblPipes;
             document.getElementById('lblSpacing').innerText = dict[currentLang].lblSpacing;
+            document.getElementById('lblBends').innerText = dict[currentLang].lblBends;
         }
 
         function updateUI() {
@@ -458,11 +505,12 @@ h2 {
             const guide = document.getElementById('guideText');
             const t = dict[currentLang];
             
-            document.getElementById('conduitSizeGroup').style.display = (type === 'stub90') ? 'block' : 'none';
-            document.getElementById('angleGroup').style.display = (type === 'stub90') ? 'none' : 'block';
-            document.getElementById('heightGroup').style.display = (type === 'stub90') ? 'none' : 'block';
+            document.getElementById('conduitSizeGroup').style.display = (type === 'stub90' || type === 'backToBack') ? 'block' : 'none';
+            document.getElementById('angleGroup').style.display = (type === 'stub90' || type === 'backToBack' || type === 'concentric') ? 'none' : 'block';
+            document.getElementById('heightGroup').style.display = (type === 'stub90' || type === 'backToBack' || type === 'concentric') ? 'none' : 'block';
             document.getElementById('widthGroup').style.display = (type === 'saddle4') ? 'block' : 'none';
             document.getElementById('shiftGroup').style.display = (type === 'rolling') ? 'block' : 'none';
+            document.getElementById('bendsCountGroup').style.display = (type === 'concentric') ? 'block' : 'none';
             
             const isParallel = (type === 'parallelOffset');
             document.getElementById('pipesGroup').style.display = isParallel ? 'block' : 'none';
@@ -473,17 +521,15 @@ h2 {
             if (type === 'stub90') {
                 dLabel.innerText = t.lblDistStub;
                 guide.innerHTML = t.guideStub;
-            } else if (type === 'offset' || type === 'rolling' || type === 'saddle4') {
+            } else if (type === 'backToBack') {
+                dLabel.innerText = t.lblDistB2B;
+                guide.innerHTML = t.guideB2B;
+            } else if (type === 'concentric') {
+                dLabel.innerText = t.lblDistRadius;
+                guide.innerHTML = t.guideConcentric;
+            } else if (type === 'offset' || type === 'rolling' || type === 'saddle4' || type === 'parallelOffset') {
                 dLabel.innerText = t.lblDistStart;
-                guide.innerHTML = (type === 'offset') ? t.guideOffset : (type === 'rolling' ? t.guideRolling : t.guideSaddle4);
-                
-                for (const [key, val] of Object.entries(t.anglesOffset)) {
-                    angleSel.add(new Option(val, key));
-                }
-                angleSel.value = "30";
-            } else if (type === 'parallelOffset') {
-                dLabel.innerText = t.lblDistStart;
-                guide.innerHTML = t.guideParallel;
+                guide.innerHTML = (type === 'offset') ? t.guideOffset : (type === 'rolling' ? t.guideRolling : (type === 'parallelOffset' ? t.guideParallel : t.guideSaddle4));
                 
                 for (const [key, val] of Object.entries(t.anglesOffset)) {
                     angleSel.add(new Option(val, key));
@@ -524,14 +570,43 @@ h2 {
             const dist = getFullVal('distance');
             const t = dict[currentLang];
             
-            if (!dist) { alert("Distance required!"); return; }
+            if (!dist) { alert("Distance/Radius required!"); return; }
 
             let resHTML = "", infoHTML = "";
+            let maxMark = 0; // Переменная для проверки лимита 120"
 
             if (type === 'stub90') {
                 const takeup = parseFloat(document.getElementById('conduitSize').value);
-                resHTML = `<div class="mark"><span class="highlight">Mark:</span> ${toFraction(dist - takeup)}</div>`;
+                let mark = dist - takeup;
+                resHTML = `<div class="mark"><span class="highlight">Mark:</span> ${toFraction(mark)}</div>`;
                 infoHTML = t.tipStub;
+                maxMark = dist;
+            } else if (type === 'backToBack') {
+                const takeup = parseFloat(document.getElementById('conduitSize').value);
+                let m1 = dist - takeup;
+                let m2 = dist;
+                resHTML = `
+                    <div class="mark"><span class="highlight">M1 (Arrow / ➔):</span> ${toFraction(m1)}</div>
+                    <div class="mark"><span class="highlight">M2 (Star / ★):</span> ${toFraction(m2)}</div>
+                `;
+                infoHTML = t.tipB2B;
+                maxMark = dist;
+            } else if (type === 'concentric') {
+                let radius = dist;
+                let bends = parseInt(document.getElementById('bendsCount').value);
+                
+                // Формула длины дуги: L = R * 1.57 (Пи/2 для 90 градусов)
+                let devLength = radius * 1.5708;
+                let spacing = devLength / bends;
+                let degPerBend = 90 / bends;
+                let sideMarks = (bends - 1) / 2;
+
+                resHTML = `
+                    <div class="mark"><span class="highlight">${t.spacing}:</span> ${toFraction(spacing)}</div>
+                    <div class="mark"><span class="highlight">Angle:</span> ${degPerBend}° per bend</div>
+                `;
+                infoHTML = `<b>Всього міток:</b> ${bends} (1 Центр + по ${sideMarks} шт в обидва боки від центру)<br><br>${t.tipConcentric}`;
+                maxMark = devLength; 
             } else {
                 let h = getFullVal('height');
                 if (!h) { alert("Rise height required!"); return; }
@@ -562,13 +637,13 @@ h2 {
                         <div class="mark"><span class="highlight">M2:</span> ${toFraction(m2)} ${t.markEnd}</div>
                     `;
                     infoHTML += `<b>${t.shrink}:</b> ${toFraction(shrink)} <br><b>${t.spacing}:</b> ${toFraction(step)}<br><br>${t.tipOffset}`;
+                    maxMark = m2;
                 } else if (type === 'parallelOffset') {
                     let count = parseInt(document.getElementById('pipeCount').value) || 2;
                     let spacing = getFullVal('spacing') || 1;
                     let baseM1 = dist + shrink;
                     let baseM2 = baseM1 + step;
 
-                    // ПРАВИЛЬНАЯ ФОРМУЛА СДВИГА: Spacing * tan(angle / 2)
                     let angleRad = (angle * Math.PI) / 180;
                     let stagger = spacing * Math.tan(angleRad / 2);
 
@@ -583,6 +658,7 @@ h2 {
                                 <span class="highlight">Pipe ${i+1}:</span> M1: ${toFraction(piM1)} | M2: ${toFraction(piM2)}
                             </div>
                         `;
+                        maxMark = piM2; // Последняя труба даст максимальную метку
                     }
                 } else if (type === 'saddle3') {
                     let m2 = dist + shrink;
@@ -594,6 +670,7 @@ h2 {
                         <div class="mark"><span class="highlight">M3:</span> ${toFraction(m3)} ${t.markSide}</div>
                     `;
                     infoHTML += `<b>${t.shrink}:</b> ${toFraction(shrink)} <br><b>${t.spacing}:</b> ${toFraction(step)}<br><br>${t.tipSaddle3}`;
+                    maxMark = m3;
                 } else if (type === 'saddle4') {
                     let w = getFullVal('width');
                     if (!w) { alert("Obstacle width required!"); return; }
@@ -605,8 +682,15 @@ h2 {
                         <div class="mark"><span class="highlight">M4:</span> ${toFraction(m4)}</div>
                     `;
                     infoHTML += `<b>${t.shrink}:</b> ${toFraction(shrink)} <br><b>${t.spacing}:</b> ${toFraction(step)}<br><br>${t.tipSaddle4}`;
+                    maxMark = m4;
                 }
             }
+
+            // Проверка лимита в 120 дюймов (10 футов)
+            if (maxMark > 120) {
+                infoHTML += `<div class="limit-warning">${t.limitWarn}</div>`;
+            }
+
             document.getElementById('marks').innerHTML = resHTML;
             document.getElementById('extraInfo').innerHTML = infoHTML;
             document.getElementById('resultBox').style.display = 'block';
