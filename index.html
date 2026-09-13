@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BEND IT SUKA ⚡️</title>
+    <title>BEND IT⚡️</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -54,6 +54,18 @@
             color: #a0a0a0;
             font-size: 14px;
         }
+        /* Стили для строки ввода (целое число + дробь) */
+        .input-row {
+            display: flex;
+            gap: 10px;
+        }
+        .input-row input {
+            flex: 2;
+        }
+        .input-row select {
+            flex: 1;
+            text-align: center;
+        }
         select, input {
             width: 100%;
             padding: 12px;
@@ -63,27 +75,6 @@
             color: #fff;
             font-size: 16px;
             box-sizing: border-box;
-        }
-        /* Стили для кнопок быстрого ввода дробей */
-        .frac-row {
-            display: flex;
-            gap: 5px;
-            margin-top: 8px;
-        }
-        .frac-btn {
-            flex: 1;
-            background-color: #2a2a2a;
-            color: #88c0d0;
-            border: 1px solid #444;
-            border-radius: 4px;
-            padding: 6px 0;
-            font-size: 13px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .frac-btn:active {
-            background-color: #4da6ff;
-            color: #121212;
         }
         .guide-box {
             background-color: #1a1a2e;
@@ -149,7 +140,7 @@
     </div>
 
     <div class="header">
-        <h2>BEND IT SUKA ⚡️</h2>
+        <h2>BEND IT⚡️</h2>
         <button class="lang-btn" id="langBtn" onclick="toggleLang()">UA</button>
     </div>
 
@@ -170,45 +161,33 @@
 
     <div class="form-group">
         <label id="lblDist">Distance</label>
-        <input type="number" id="distance" step="0.125" placeholder="e.g., 20">
-        <div class="frac-row">
-            <button class="frac-btn" onclick="addFrac('distance', 0.125)">+ 1/8</button>
-            <button class="frac-btn" onclick="addFrac('distance', 0.25)">+ 1/4</button>
-            <button class="frac-btn" onclick="addFrac('distance', 0.5)">+ 1/2</button>
-            <button class="frac-btn" onclick="addFrac('distance', 0.75)">+ 3/4</button>
+        <div class="input-row">
+            <input type="number" id="distanceWhole" placeholder="e.g., 20">
+            <select id="distanceFrac" class="frac-select"></select>
         </div>
     </div>
 
     <div class="form-group" id="heightGroup">
         <label id="lblHeight">Rise (Obstacle Height)</label>
-        <input type="number" id="height" step="0.125" placeholder="e.g., 4">
-        <div class="frac-row">
-            <button class="frac-btn" onclick="addFrac('height', 0.125)">+ 1/8</button>
-            <button class="frac-btn" onclick="addFrac('height', 0.25)">+ 1/4</button>
-            <button class="frac-btn" onclick="addFrac('height', 0.5)">+ 1/2</button>
-            <button class="frac-btn" onclick="addFrac('height', 0.75)">+ 3/4</button>
+        <div class="input-row">
+            <input type="number" id="heightWhole" placeholder="e.g., 4">
+            <select id="heightFrac" class="frac-select"></select>
         </div>
     </div>
 
     <div class="form-group" id="widthGroup" style="display: none;">
         <label id="lblWidth">Obstacle Width</label>
-        <input type="number" id="width" step="0.125" placeholder="e.g., 10">
-        <div class="frac-row">
-            <button class="frac-btn" onclick="addFrac('width', 0.125)">+ 1/8</button>
-            <button class="frac-btn" onclick="addFrac('width', 0.25)">+ 1/4</button>
-            <button class="frac-btn" onclick="addFrac('width', 0.5)">+ 1/2</button>
-            <button class="frac-btn" onclick="addFrac('width', 0.75)">+ 3/4</button>
+        <div class="input-row">
+            <input type="number" id="widthWhole" placeholder="e.g., 10">
+            <select id="widthFrac" class="frac-select"></select>
         </div>
     </div>
 
     <div class="form-group" id="shiftGroup" style="display: none;">
         <label id="lblShift">Horizontal Shift (Roll)</label>
-        <input type="number" id="shift" step="0.125" placeholder="e.g., 3">
-        <div class="frac-row">
-            <button class="frac-btn" onclick="addFrac('shift', 0.125)">+ 1/8</button>
-            <button class="frac-btn" onclick="addFrac('shift', 0.25)">+ 1/4</button>
-            <button class="frac-btn" onclick="addFrac('shift', 0.5)">+ 1/2</button>
-            <button class="frac-btn" onclick="addFrac('shift', 0.75)">+ 3/4</button>
+        <div class="input-row">
+            <input type="number" id="shiftWhole" placeholder="e.g., 3">
+            <select id="shiftFrac" class="frac-select"></select>
         </div>
     </div>
 
@@ -224,14 +203,6 @@
 
     <script>
         let currentLang = 'ua';
-
-        // Функция прибавления дробей к полю ввода
-        function addFrac(id, val) {
-            let el = document.getElementById(id);
-            let current = parseFloat(el.value) || 0;
-            // Округляем до 3 знаков, чтобы не было багов с JavaScript математикой (типа 0.1250000001)
-            el.value = (current + val).toFixed(3).replace(/\.?0+$/, '');
-        }
 
         const dict = {
             ua: {
@@ -392,6 +363,13 @@
             }
         };
 
+        const fracOptions = [
+            {v: 0, t: '0"'}, {v: 0.0625, t: '1/16"'}, {v: 0.125, t: '1/8"'}, {v: 0.1875, t: '3/16"'},
+            {v: 0.25, t: '1/4"'}, {v: 0.3125, t: '5/16"'}, {v: 0.375, t: '3/8"'}, {v: 0.4375, t: '7/16"'},
+            {v: 0.5, t: '1/2"'}, {v: 0.5625, t: '9/16"'}, {v: 0.625, t: '5/8"'}, {v: 0.6875, t: '11/16"'},
+            {v: 0.75, t: '3/4"'}, {v: 0.8125, t: '13/16"'}, {v: 0.875, t: '7/8"'}, {v: 0.9375, t: '15/16"'}
+        ];
+
         function toggleLang() {
             if (currentLang === 'ua') currentLang = 'ru';
             else if (currentLang === 'ru') currentLang = 'en';
@@ -419,6 +397,14 @@
             }
             sizeSel.value = "6";
             
+            // Заполняем списки дробей
+            document.querySelectorAll('.frac-select').forEach(sel => {
+                const prev = sel.value;
+                sel.innerHTML = '';
+                fracOptions.forEach(f => sel.add(new Option(f.t, f.v)));
+                if(prev) sel.value = prev; // Сохраняем выбранную дробь при смене языка
+            });
+
             document.getElementById('lblType').innerText = dict[currentLang].typeLabel;
             document.getElementById('lblSize').innerText = dict[currentLang].sizeLabel;
             document.getElementById('lblAngle').innerText = dict[currentLang].angleLabel;
@@ -466,8 +452,14 @@
             }
         }
 
+        function getFullVal(idPrefix) {
+            let w = parseFloat(document.getElementById(idPrefix + 'Whole').value) || 0;
+            let f = parseFloat(document.getElementById(idPrefix + 'Frac').value) || 0;
+            return w > 0 || f > 0 ? w + f : 0;
+        }
+
         function toFraction(decimal) {
-            if (isNaN(decimal)) return "0";
+            if (isNaN(decimal) || decimal === 0) return "0";
             let whole = Math.floor(decimal);
             let frac = decimal - whole;
             let sixteenths = Math.round(frac * 16);
@@ -481,7 +473,7 @@
 
         function calculate() {
             const type = document.getElementById('bendType').value;
-            const dist = parseFloat(document.getElementById('distance').value);
+            const dist = getFullVal('distance');
             const t = dict[currentLang];
             
             if (!dist) { alert("Distance required!"); return; }
@@ -493,13 +485,13 @@
                 resHTML = `<div class="mark"><span class="highlight">Mark:</span> ${toFraction(dist - takeup)}</div>`;
                 infoHTML = t.tipStub;
             } else {
-                let h = parseFloat(document.getElementById('height').value);
+                let h = getFullVal('height');
                 if (!h) { alert("Rise height required!"); return; }
                 const angle = parseFloat(document.getElementById('bendAngle').value);
                 let shrinkPerInch = 0, multiplier = 0;
 
                 if (type === 'rolling') {
-                    let shift = parseFloat(document.getElementById('shift').value) || 0;
+                    let shift = getFullVal('shift');
                     if (!shift) { alert("Roll shift required!"); return; }
                     h = Math.sqrt((h * h) + (shift * shift)); 
                     infoHTML = `<b>${t.trueOffset}: ${toFraction(h)}</b><br>`;
@@ -532,7 +524,7 @@
                     `;
                     infoHTML += `<b>${t.shrink}:</b> ${toFraction(shrink)} <br><b>${t.spacing}:</b> ${toFraction(step)}<br><br>${t.tipSaddle3}`;
                 } else if (type === 'saddle4') {
-                    let w = parseFloat(document.getElementById('width').value);
+                    let w = getFullVal('width');
                     if (!w) { alert("Obstacle width required!"); return; }
                     let m2 = dist + shrink, m1 = m2 - step, m3 = m2 + w, m4 = m3 + step;
                     resHTML = `
