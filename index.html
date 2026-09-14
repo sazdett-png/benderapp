@@ -468,15 +468,30 @@
             {v: 0.75, t: '3/4"'}, {v: 0.8125, t: '13/16"'}, {v: 0.875, t: '7/8"'}, {v: 0.9375, t: '15/16"'}
         ];
 
-        function toggleLang() {
+       function toggleLang() {
             if (currentLang === 'ua') currentLang = 'ru';
             else if (currentLang === 'ru') currentLang = 'en';
-            else currentLang === 'ua';
+            else currentLang = 'en'; // Страховка, если вдруг зависло
+
+            // Добавляем замыкание цикла обратно на ua
+            if (currentLang !== 'ua' && currentLang !== 'ru' && currentLang !== 'en') {
+                currentLang = 'ua';
+            }
+            
+            // Если проще:
+            if (currentLang === 'ua') {
+                currentLang = 'ru';
+            } else if (currentLang === 'ru') {
+                currentLang = 'en';
+            } else {
+                currentLang = 'ua'; // С англ снова кидает на укр
+            }
 
             document.getElementById('langBtn').innerText = dict[currentLang].btnText;
             initDropdowns();
             updateUI();
             document.getElementById('resultBox').style.display = 'none';
+        }
         }
 
         function initDropdowns() {
