@@ -195,7 +195,6 @@
         </div>
     </div>
 
-    <!-- Основное поле дистанции (Distance / Radius / Total Span) -->
     <div class="form-group" id="distanceGroup">
         <label id="lblDist">Distance</label>
         <div class="input-row">
@@ -204,7 +203,6 @@
         </div>
     </div>
 
-    <!-- Второе поле для полного B2B (Высота X) -->
     <div class="form-group" id="heightGroup">
         <label id="lblHeight">Rise (Obstacle Height)</label>
         <div class="input-row">
@@ -299,7 +297,7 @@
                 guideSaddle4: "📏 <b>Гайд:</b> Відстань міряй до ПОЧАТКУ короба. Ширина — повний розмір від краю до краю.",
                 guideConcentric: "📏 <b>Гайд:</b> Вкажи радіус обходу. Програма розрахує крок. Відміряй центральну мітку, а від неї відклади решту міток в обидва боки.",
                 tipStub: "👉 Сумісти мітку зі <b>Стрілкою [ ➔ ]</b>. Гни до 90°.",
-                tipB2B: "👉 <b>Стрілка [ ➔ ]:</b> Використовуй мітку M1. Башмак дивиться НА перший вигин.<br>👉 <b>Зірка [ ★ ]:</b> Використовуй мітку M2. Башмак дивиться ВІД першого вигину.",
+                tipB2B: "👉 <b>Стрілка [ ➔ ]:</b> Використовуй мітку M1. Башмак дивиться НА первый вигин.<br>👉 <b>Зірка [ ★ ]:</b> Використовуй мітку M2. Башмак дивиться ВІД першого вигину.",
                 tipFullB2B: "👉 <b>M1:</b> Перший гиб (Stub-up) по Стрілці.<br>👉 <b>M2:</b> Другий гиб (Back-to-Back) по Стрілці (з урахуванням Take-up).",
                 tipOffset: "👉 Гни обидві мітки по <b>Стрілці [ ➔ ]</b>. Розверни трубу на 180° перед другим вигином.",
                 tipParallel: "👉 Згинай кожну трубу за своїм комплектом меток (M1, M2) по <b>Стрілці [ ➔ ]</b>. Розвертай на 180°.",
@@ -468,30 +466,19 @@
             {v: 0.75, t: '3/4"'}, {v: 0.8125, t: '13/16"'}, {v: 0.875, t: '7/8"'}, {v: 0.9375, t: '15/16"'}
         ];
 
-       function toggleLang() {
-            if (currentLang === 'ua') currentLang = 'ru';
-            else if (currentLang === 'ru') currentLang = 'en';
-            else currentLang = 'en'; // Страховка, если вдруг зависло
-
-            // Добавляем замыкание цикла обратно на ua
-            if (currentLang !== 'ua' && currentLang !== 'ru' && currentLang !== 'en') {
-                currentLang = 'ua';
-            }
-            
-            // Если проще:
+        function toggleLang() {
             if (currentLang === 'ua') {
                 currentLang = 'ru';
             } else if (currentLang === 'ru') {
                 currentLang = 'en';
             } else {
-                currentLang = 'ua'; // С англ снова кидает на укр
+                currentLang = 'ua';
             }
 
             document.getElementById('langBtn').innerText = dict[currentLang].btnText;
             initDropdowns();
             updateUI();
             document.getElementById('resultBox').style.display = 'none';
-        }
         }
 
         function initDropdowns() {
@@ -537,11 +524,9 @@
             const guide = document.getElementById('guideText');
             const t = dict[currentLang];
             
-            // Управление видимостью полей
             document.getElementById('conduitSizeGroup').style.display = (type === 'stub90' || type === 'backToBack' || type === 'fullB2B') ? 'block' : 'none';
             document.getElementById('angleGroup').style.display = (type === 'stub90' || type === 'backToBack' || type === 'fullB2B' || type === 'concentric') ? 'none' : 'block';
             
-            // Высота (Rise / Stub X) видна для офсетов, сдел и полного B2B
             const showHeight = (type !== 'stub90' && type !== 'backToBack' && type !== 'concentric');
             document.getElementById('heightGroup').style.display = showHeight ? 'block' : 'none';
 
@@ -637,11 +622,11 @@
                 maxMark = dist;
             } else if (type === 'fullB2B') {
                 const takeup = parseFloat(document.getElementById('conduitSize').value);
-                let stubX = getFullVal('height'); // Высота первого сгиба
+                let stubX = getFullVal('height');
                 if (!stubX) { alert("First stub height (X) required!"); return; }
                 
-                let m1 = stubX - takeup; // Метка первого гиба по стрелке
-                let m2 = dist - takeup;  // Метка второго гиба по стрелке с учетом take-up
+                let m1 = stubX - takeup;
+                let m2 = dist - takeup;
                 
                 resHTML = `
                     <div class="mark"><span class="highlight">M1 (1st Stub-up):</span> ${toFraction(m1)} (на Стрілці)</div>
