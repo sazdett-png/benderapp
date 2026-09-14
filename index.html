@@ -195,7 +195,8 @@
         </div>
     </div>
 
-    <div class="form-group">
+    <!-- Основное поле дистанции (Distance / Radius / Total Span) -->
+    <div class="form-group" id="distanceGroup">
         <label id="lblDist">Distance</label>
         <div class="input-row">
             <input type="number" id="distanceWhole" placeholder="e.g., 20">
@@ -203,6 +204,7 @@
         </div>
     </div>
 
+    <!-- Второе поле для полного B2B (Высота X) -->
     <div class="form-group" id="heightGroup">
         <label id="lblHeight">Rise (Obstacle Height)</label>
         <div class="input-row">
@@ -250,7 +252,8 @@
                 resTitle: "Мітки (Layout Marks):",
                 types: {
                     stub90: "90° Stub-up",
-                    backToBack: "Back-to-Back 90° (П-подібний)",
+                    backToBack: "Back-to-Back 90° (Другий кінець)",
+                    fullB2B: "Full Back-to-Back (X / Y повний розмір)",
                     offset: "Offset (Зміщення / Утка)",
                     parallelOffset: "Parallel Offset (Паралельні утки)",
                     rolling: "Rolling Offset (Діагональна утка)",
@@ -274,7 +277,9 @@
                     30: 'Центр(Center) 60° / Боки(Sides) 30°'
                 },
                 lblDistStub: "Висота від підлоги до краю труби (Height)",
-                lblDistB2B: "Відстань від стіни до стіни (Outside-to-Outside)",
+                lblDistB2B: "Відстань від першого гибу до упору (Span Y)",
+                lblFullB2B_Y: "Загальна довжина до упору (Span Y)",
+                lblFullB2B_X: "Висота першої стійки (Stub X)",
                 lblDistStart: "Відстань до ПОЧАТКУ перешкоди (Distance)",
                 lblDistCenter: "Відстань до ЦЕНТРУ перешкоди (Distance)",
                 lblDistRadius: "Радіус перешкоди/колонни (Radius)",
@@ -285,7 +290,8 @@
                 lblSpacing: "Відстань між осями труб (Pipe Spacing)",
                 lblBends: "Кількість дрібних вигинів (Number of Bends)",
                 guideStub: "📏 <b>Гайд:</b> Відміряй рулеткою від підлоги до тої точки, де має закінчитись вигин.",
-                guideB2B: "📏 <b>Гайд:</b> Відміряй зовнішню відстань (Outside-to-Outside) між двома стінами або щитками.",
+                guideB2B: "📏 <b>Гайд:</b> Вкажи відстань від спинки вже готового першого 90° до упору в стіну.",
+                guideFullB2B: "📏 <b>Гайд:</b> Вкажи висоту першої стійки (X) та загальну довжину від стіни до стіни (Y). Програма розрахує обидві мітки на одному хлысті!",
                 guideOffset: "📏 <b>Гайд:</b> Відміряй прямо від початку траси до початку перешкоди.",
                 guideParallel: "📏 <b>Гайд:</b> Для пучка труб. Вкажи крок. Кожна наступна труба зсувається на tan(angle/2) * spacing.",
                 guideRolling: "📏 <b>Гайд:</b> Відміряй пряму відстань. Rise — наскільки труба підіймається. Roll — наскільки йде вбік.",
@@ -294,6 +300,7 @@
                 guideConcentric: "📏 <b>Гайд:</b> Вкажи радіус обходу. Програма розрахує крок. Відміряй центральну мітку, а від неї відклади решту міток в обидва боки.",
                 tipStub: "👉 Сумісти мітку зі <b>Стрілкою [ ➔ ]</b>. Гни до 90°.",
                 tipB2B: "👉 <b>Стрілка [ ➔ ]:</b> Використовуй мітку M1. Башмак дивиться НА перший вигин.<br>👉 <b>Зірка [ ★ ]:</b> Використовуй мітку M2. Башмак дивиться ВІД першого вигину.",
+                tipFullB2B: "👉 <b>M1:</b> Перший гиб (Stub-up) по Стрілці.<br>👉 <b>M2:</b> Другий гиб (Back-to-Back) по Стрілці (з урахуванням Take-up).",
                 tipOffset: "👉 Гни обидві мітки по <b>Стрілці [ ➔ ]</b>. Розверни трубу на 180° перед другим вигином.",
                 tipParallel: "👉 Згинай кожну трубу за своїм комплектом меток (M1, M2) по <b>Стрілці [ ➔ ]</b>. Розвертай на 180°.",
                 tipSaddle3: "👉 Крок 1: Центр (M2) по <b>Насічці [ ⯎ ]</b>.<br>👉 Крок 2: Боки (M1, M3) по <b>Стрілці [ ➔ ]</b>. Башмак до центру.",
@@ -317,7 +324,8 @@
                 resTitle: "Метки (Layout Marks):",
                 types: {
                     stub90: "90° Stub-up",
-                    backToBack: "Back-to-Back 90° (П-образный)",
+                    backToBack: "Back-to-Back 90° (Второй конец)",
+                    fullB2B: "Full Back-to-Back (X / Y полный размер)",
                     offset: "Offset (Утка)",
                     parallelOffset: "Parallel Offset (Параллельные утки)",
                     rolling: "Rolling Offset (Диагональная утка)",
@@ -341,7 +349,9 @@
                     30: 'Центр(Center) 60° / Бока(Sides) 30°'
                 },
                 lblDistStub: "Высота от пола до края трубы (Height)",
-                lblDistB2B: "Расстояние от стены до стены (Outside-to-Outside)",
+                lblDistB2B: "Расстояние от первого гиба до упора (Span Y)",
+                lblFullB2B_Y: "Общая длина до упора (Span Y)",
+                lblFullB2B_X: "Высота первой стойки (Stub X)",
                 lblDistStart: "Расстояние до НАЧАЛА препятствия (Distance)",
                 lblDistCenter: "Расстояние до ЦЕНТРА препятствия (Distance)",
                 lblDistRadius: "Радиус препятствия/колонны (Radius)",
@@ -352,7 +362,8 @@
                 lblSpacing: "Шаг между осями труб (Pipe Spacing)",
                 lblBends: "Количество мелких изгибов (Number of Bends)",
                 guideStub: "📏 <b>Гайд:</b> Отмерь рулеткой от пола до той точки, где должен закончиться изгиб.",
-                guideB2B: "📏 <b>Гайд:</b> Отмерь внешнее расстояние (Outside-to-Outside) между двумя стенами или щитками.",
+                guideB2B: "📏 <b>Гайд:</b> Укажи расстояние от спинки уже готового первого 90° до упора в стену.",
+                guideFullB2B: "📏 <b>Гайд:</b> Укажи высоту первой стойки (X) и общую длину от стены до стены (Y). Программа рассчитает обе метки на одном хлысте!",
                 guideOffset: "📏 <b>Гайд:</b> Отмерь прямо от начала трассы до начала препятствия.",
                 guideParallel: "📏 <b>Гайд:</b> Для пучка труб. Укажи шаг. Каждая следующая труба смещается на tan(angle/2) * spacing.",
                 guideRolling: "📏 <b>Гайд:</b> Отмерь прямое расстояние. Rise — насколько труба поднимается. Roll — насколько уходит вбок.",
@@ -361,6 +372,7 @@
                 guideConcentric: "📏 <b>Гайд:</b> Укажи радиус обхода. Программа рассчитает шаг. Отмерь центр, от него отложи остальные метки в обе стороны.",
                 tipStub: "👉 Совмести метку со <b>Стрелкой [ ➔ ]</b>. Гни до 90°.",
                 tipB2B: "👉 <b>Стрелка [ ➔ ]:</b> Используй метку M1. Башмак смотрит НА первый гиб.<br>👉 <b>Звезда [ ★ ]:</b> Используй метку M2. Башмак смотрит ОТ первого гиба.",
+                tipFullB2B: "👉 <b>M1:</b> Первый гиб (Stub-up) по Стрелке.<br>👉 <b>M2:</b> Второй гиб (Back-to-Back) по Стрелке (с учетом Take-up).",
                 tipOffset: "👉 Гни обе метки по <b>Стрелке [ ➔ ]</b>. Разверни трубу на 180° перед вторым гибом.",
                 tipParallel: "👉 Гни каждую трубу по своему комплекту меток (M1, M2) на <b>Стрелке [ ➔ ]</b>. Разворачивай на 180°.",
                 tipSaddle3: "👉 Шаг 1: Центр (M2) по <b>Засечке [ ⯎ ]</b>.<br>👉 Шаг 2: Бока (M1, M3) по <b>Стрелке [ ➔ ]</b>. Башмак смотрит к центру.",
@@ -384,7 +396,8 @@
                 resTitle: "Layout Marks:",
                 types: {
                     stub90: "90° Stub-up",
-                    backToBack: "Back-to-Back 90°",
+                    backToBack: "Back-to-Back 90° (Second end)",
+                    fullB2B: "Full Back-to-Back (X / Y complete run)",
                     offset: "Offset",
                     parallelOffset: "Parallel Offset",
                     rolling: "Rolling Offset",
@@ -408,7 +421,9 @@
                     30: 'Center 60° / Sides 30°'
                 },
                 lblDistStub: "Distance to back of 90° bend",
-                lblDistB2B: "Outside-to-Outside Distance",
+                lblDistB2B: "Distance from first bend to wall (Span Y)",
+                lblFullB2B_Y: "Total span to wall (Span Y)",
+                lblFullB2B_X: "First stub height (Stub X)",
                 lblDistStart: "Distance to start of obstacle",
                 lblDistCenter: "Distance to CENTER of obstacle",
                 lblDistRadius: "Radius of curve/column (Radius)",
@@ -419,7 +434,8 @@
                 lblSpacing: "Pipe Spacing",
                 lblBends: "Number of small bends",
                 guideStub: "📏 <b>Guide:</b> Measure from the box/floor to the back of the desired 90° bend.",
-                guideB2B: "📏 <b>Guide:</b> Measure the total outer distance between the two walls or panels.",
+                guideB2B: "📏 <b>Guide:</b> Measure the span from the back of the first 90° bend to the wall.",
+                guideFullB2B: "📏 <b>Guide:</b> Enter first stub height (X) and total span (Y). Program calculates both marks on a single conduit stick!",
                 guideOffset: "📏 <b>Guide:</b> Measure from your starting point straight to the beginning of the obstacle.",
                 guideParallel: "📏 <b>Guide:</b> For conduit runs. Each successive pipe shifts by tan(angle/2) * spacing.",
                 guideRolling: "📏 <b>Guide:</b> Measure straight distance. Rise is how far up it goes. Roll is how far left/right it shifts.",
@@ -428,6 +444,7 @@
                 guideConcentric: "📏 <b>Guide:</b> Enter curve radius. Program calculates mark spacing. Mark center, then layout remaining marks on both sides.",
                 tipStub: "👉 Align mark with the <b>Arrow [ ➔ ]</b>. Bend to 90°.",
                 tipB2B: "👉 <b>Arrow [ ➔ ]:</b> Use M1 mark. Bender hook points TOWARD first bend.<br>👉 <b>Star [ ★ ]:</b> Use M2 mark. Bender hook points AWAY from first bend.",
+                tipFullB2B: "👉 <b>M1:</b> First Stub-up mark on Arrow.<br>👉 <b>M2:</b> Second Back-to-Back mark on Arrow (includes Take-up).",
                 tipOffset: "👉 Bend both marks on the <b>Arrow [ ➔ ]</b>. Roll conduit 180° before the second bend.",
                 tipParallel: "👉 Bend each pipe using its specific set of marks (M1, M2) on the <b>Arrow [ ➔ ]</b>. Roll 180°.",
                 tipSaddle3: "👉 Step 1: Center (M2) on the <b>Center Notch [ ⯎ ]</b>.<br>👉 Step 2: Sides (M1, M3) on the <b>Arrow [ ➔ ]</b> pointing toward the center.",
@@ -454,7 +471,7 @@
         function toggleLang() {
             if (currentLang === 'ua') currentLang = 'ru';
             else if (currentLang === 'ru') currentLang = 'en';
-            else currentLang = 'ua';
+            else currentLang === 'ua';
 
             document.getElementById('langBtn').innerText = dict[currentLang].btnText;
             initDropdowns();
@@ -490,7 +507,6 @@
             document.getElementById('lblAngle').innerText = dict[currentLang].angleLabel;
             document.getElementById('btnCalc').innerText = dict[currentLang].btnCalc;
             document.getElementById('resTitle').innerText = dict[currentLang].resTitle;
-            document.getElementById('lblHeight').innerText = dict[currentLang].lblHeight;
             document.getElementById('lblWidth').innerText = dict[currentLang].lblWidth;
             document.getElementById('lblShift').innerText = dict[currentLang].lblShift;
             document.getElementById('lblPipes').innerText = dict[currentLang].lblPipes;
@@ -502,12 +518,18 @@
             const type = document.getElementById('bendType').value;
             const angleSel = document.getElementById('bendAngle');
             const dLabel = document.getElementById('lblDist');
+            const hLabel = document.getElementById('lblHeight');
             const guide = document.getElementById('guideText');
             const t = dict[currentLang];
             
-            document.getElementById('conduitSizeGroup').style.display = (type === 'stub90' || type === 'backToBack') ? 'block' : 'none';
-            document.getElementById('angleGroup').style.display = (type === 'stub90' || type === 'backToBack' || type === 'concentric') ? 'none' : 'block';
-            document.getElementById('heightGroup').style.display = (type === 'stub90' || type === 'backToBack' || type === 'concentric') ? 'none' : 'block';
+            // Управление видимостью полей
+            document.getElementById('conduitSizeGroup').style.display = (type === 'stub90' || type === 'backToBack' || type === 'fullB2B') ? 'block' : 'none';
+            document.getElementById('angleGroup').style.display = (type === 'stub90' || type === 'backToBack' || type === 'fullB2B' || type === 'concentric') ? 'none' : 'block';
+            
+            // Высота (Rise / Stub X) видна для офсетов, сдел и полного B2B
+            const showHeight = (type !== 'stub90' && type !== 'backToBack' && type !== 'concentric');
+            document.getElementById('heightGroup').style.display = showHeight ? 'block' : 'none';
+
             document.getElementById('widthGroup').style.display = (type === 'saddle4') ? 'block' : 'none';
             document.getElementById('shiftGroup').style.display = (type === 'rolling') ? 'block' : 'none';
             document.getElementById('bendsCountGroup').style.display = (type === 'concentric') ? 'block' : 'none';
@@ -524,11 +546,17 @@
             } else if (type === 'backToBack') {
                 dLabel.innerText = t.lblDistB2B;
                 guide.innerHTML = t.guideB2B;
+            } else if (type === 'fullB2B') {
+                dLabel.innerText = t.lblFullB2B_Y;
+                hLabel.innerText = t.lblFullB2B_X;
+                document.getElementById('heightGroup').style.display = 'block';
+                guide.innerHTML = t.guideFullB2B;
             } else if (type === 'concentric') {
                 dLabel.innerText = t.lblDistRadius;
                 guide.innerHTML = t.guideConcentric;
             } else if (type === 'offset' || type === 'rolling' || type === 'saddle4' || type === 'parallelOffset') {
                 dLabel.innerText = t.lblDistStart;
+                hLabel.innerText = t.lblHeight;
                 guide.innerHTML = (type === 'offset') ? t.guideOffset : (type === 'rolling' ? t.guideRolling : (type === 'parallelOffset' ? t.guideParallel : t.guideSaddle4));
                 
                 for (const [key, val] of Object.entries(t.anglesOffset)) {
@@ -537,6 +565,7 @@
                 angleSel.value = "30";
             } else if (type === 'saddle3') {
                 dLabel.innerText = t.lblDistCenter;
+                hLabel.innerText = t.lblHeight;
                 guide.innerHTML = t.guideSaddle3;
                 
                 for (const [key, val] of Object.entries(t.anglesSaddle)) {
@@ -570,10 +599,10 @@
             const dist = getFullVal('distance');
             const t = dict[currentLang];
             
-            if (!dist) { alert("Distance/Radius required!"); return; }
+            if (!dist) { alert("Distance/Span required!"); return; }
 
             let resHTML = "", infoHTML = "";
-            let maxMark = 0; // Переменная для проверки лимита 120"
+            let maxMark = 0; 
 
             if (type === 'stub90') {
                 const takeup = parseFloat(document.getElementById('conduitSize').value);
@@ -591,11 +620,24 @@
                 `;
                 infoHTML = t.tipB2B;
                 maxMark = dist;
+            } else if (type === 'fullB2B') {
+                const takeup = parseFloat(document.getElementById('conduitSize').value);
+                let stubX = getFullVal('height'); // Высота первого сгиба
+                if (!stubX) { alert("First stub height (X) required!"); return; }
+                
+                let m1 = stubX - takeup; // Метка первого гиба по стрелке
+                let m2 = dist - takeup;  // Метка второго гиба по стрелке с учетом take-up
+                
+                resHTML = `
+                    <div class="mark"><span class="highlight">M1 (1st Stub-up):</span> ${toFraction(m1)} (на Стрілці)</div>
+                    <div class="mark"><span class="highlight">M2 (2nd Back-to-Back):</span> ${toFraction(m2)} (на Стрілці)</div>
+                `;
+                infoHTML = t.tipFullB2B;
+                maxMark = dist;
             } else if (type === 'concentric') {
                 let radius = dist;
                 let bends = parseInt(document.getElementById('bendsCount').value);
                 
-                // Формула длины дуги: L = R * 1.57 (Пи/2 для 90 градусов)
                 let devLength = radius * 1.5708;
                 let spacing = devLength / bends;
                 let degPerBend = 90 / bends;
@@ -658,7 +700,7 @@
                                 <span class="highlight">Pipe ${i+1}:</span> M1: ${toFraction(piM1)} | M2: ${toFraction(piM2)}
                             </div>
                         `;
-                        maxMark = piM2; // Последняя труба даст максимальную метку
+                        maxMark = piM2;
                     }
                 } else if (type === 'saddle3') {
                     let m2 = dist + shrink;
@@ -686,7 +728,6 @@
                 }
             }
 
-            // Проверка лимита в 120 дюймов (10 футов)
             if (maxMark > 120) {
                 infoHTML += `<div class="limit-warning">${t.limitWarn}</div>`;
             }
