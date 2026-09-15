@@ -2,102 +2,109 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#121211">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="manifest.json"> <!-- Файл манифеста добавишь позже -->
+    
     <title>BEND IT⚡️</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #121211; color: #ffffff; padding: 20px; margin: 0; }
+        /* --- ЦВЕТОВЫЕ ТЕМЫ (CSS Переменные) --- */
+        :root {
+            --bg-main: #121211;
+            --bg-sec: #1e1e1e;
+            --primary: #ff3333; /* Default: Milwaukee Red */
+            --primary-hover: #cc0000;
+            --text-main: #ffffff;
+            --border: #333;
+            --highlight: #4da6ff;
+        }
+
+        body.theme-orange {
+            --primary: #ff8c00; /* Klein Orange */
+            --primary-hover: #e07b00;
+            --highlight: #ffb84d;
+        }
+
+        body.theme-blue {
+            --primary: #0077ff; /* Makita Blue */
+            --primary-hover: #005ce6;
+            --highlight: #00d4ff;
+        }
+
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-main); color: var(--text-main); padding: 20px; margin: 0; }
         .logo-container { display: flex; justify-content: center; margin-bottom: 10px; }
         .logo-container img { max-width: 300px; height: auto; border-radius: 45px; }
+        
+        /* Изменения в шапке для новых кнопок */
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; position: relative; }
-        h2 { color: #B04D3A; margin: 0; text-transform: uppercase; letter-spacing: 1px; font-style: italic; position: absolute; left: 50%; transform: translateX(-50%); text-align: center; }
-        .lang-btn { margin-left: auto; z-index: 1; background-color: #333; color: #fff; border: 1px solid #555; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        h2 { color: #B04D3A; margin: 0; text-transform: uppercase; letter-spacing: 1px; font-style: italic; position: absolute; left: 50%; transform: translateX(-50%); text-align: center; font-size: 22px; }
+        
+        .header-controls { display: flex; gap: 8px; z-index: 1; margin-left: auto; }
+        .icon-btn, .lang-btn { background-color: #333; color: #fff; border: 1px solid #555; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; display: flex; align-items: center; justify-content: center; min-width: 44px;}
+        #wakeLockBtn { opacity: 0.4; transition: opacity 0.3s; }
+        #wakeLockBtn.active { opacity: 1; background-color: #444; border-color: #ffd700; }
+
         .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 5px; color: #a0a0a0; font-size: 14px; }
+        label { display: block; margin-bottom: 8px; color: #a0a0a0; font-size: 15px; }
         .input-row { display: flex; gap: 10px; }
         .input-row input { flex: 2; }
         .input-row select { flex: 1; text-align: center; }
-        select, input { width: 100%; padding: 12px; border: 1px solid #333; border-radius: 8px; background-color: #1e1e1e; color: #fff; font-size: 16px; box-sizing: border-box; }
         
-        .guide-box { background-color: #1a1a2e; border-left: 3px solid #4da6ff; padding: 12px; margin-top: 10px; font-size: 13px; color: #88c0d0; border-radius: 0 8px 8px 0; box-sizing: border-box; }
+        /* FAT-FINGER DESIGN: Увеличенные инпуты */
+        select, input { width: 100%; height: 52px; padding: 12px; border: 1px solid var(--border); border-radius: 10px; background-color: var(--bg-sec); color: var(--text-main); font-size: 17px; box-sizing: border-box; outline: none; }
+        select:focus, input:focus { border-color: var(--primary); }
         
-        /* Кнопки вызова гайдов */
-        .guide-action-btns { display: flex; gap: 10px; margin-top: 10px; margin-bottom: 15px; }
-        .guide-action-btns button { flex: 1; padding: 10px; background: #222; border: 1px solid #4da6ff; color: #4da6ff; border-radius: 8px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
-        .guide-action-btns button:active { background: #4da6ff; color: #000; }
+        .guide-box { background-color: #1a1a2e; border-left: 4px solid var(--highlight); padding: 15px; margin-top: 10px; font-size: 14px; color: #88c0d0; border-radius: 0 10px 10px 0; box-sizing: border-box; line-height: 1.4; }
+        
+        .guide-action-btns { display: flex; gap: 10px; margin-top: 15px; margin-bottom: 20px; }
+        .guide-action-btns button { flex: 1; height: 52px; background: #222; border: 1px solid var(--highlight); color: var(--highlight); border-radius: 10px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; font-size: 15px; }
+        .guide-action-btns button:active { background: var(--highlight); color: #000; }
 
-        button.calc-btn { width: 100%; padding: 15px; background-color: #ff3333; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; margin-top: 10px; cursor: pointer; text-transform: uppercase; }
-        button.calc-btn:active { background-color: #cc0000; }
+        button.calc-btn { width: 100%; height: 60px; background-color: var(--primary); color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; margin-top: 10px; cursor: pointer; text-transform: uppercase; transition: background-color 0.2s; }
+        button.calc-btn:active { background-color: var(--primary-hover); }
         
-        .result-box { margin-top: 20px; padding: 15px; background-color: #1e1e1e; border: 1px solid #333; border-radius: 8px; display: none; border-left: 4px solid #ff3333; }
-        .result-title { color: #ff3333; font-weight: bold; margin-bottom: 10px; font-size: 18px; }
-        .mark { font-size: 18px; margin-bottom: 8px; padding: 6px 0; border-bottom: 1px solid #2a2a2a; }
-        .info { color: #a0a0a0; font-size: 14px; margin-top: 10px; padding-top: 10px; line-height: 1.5; }
-        .highlight { color: #4da6ff; font-weight: bold; }
+        .result-box { margin-top: 20px; padding: 20px; background-color: var(--bg-sec); border: 1px solid var(--border); border-radius: 10px; display: none; border-left: 5px solid var(--primary); }
+        .result-title { color: var(--primary); font-weight: bold; margin-bottom: 12px; font-size: 20px; }
+        .mark { font-size: 20px; margin-bottom: 10px; padding: 8px 0; border-bottom: 1px solid #2a2a2a; }
+        .info { color: #a0a0a0; font-size: 15px; margin-top: 12px; padding-top: 12px; line-height: 1.5; }
+        .highlight { color: var(--highlight); font-weight: bold; }
         .limit-warning { color: #ff9900; font-weight: bold; margin-top: 15px; display: block; border-top: 1px dashed #ff9900; padding-top: 10px; }
 
-       /* Стили для модального окна */
-.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); overflow: auto; }
-
-.modal-content { 
-    background-color: #1e1e1e; 
-    margin: 80px auto 20px; /* Было 10%, стало 80px — теперь окно всегда стартует НИЖЕ кнопок Телеграма */
-    padding: 20px; 
-    border: 1px solid #444; 
-    border-radius: 12px; 
-    width: 90%; 
-    max-width: 500px; 
-    position: relative; 
-    color: white; 
-    box-sizing: border-box; 
-}
-
-.close-modal { 
-    position: absolute; 
-    right: 15px; 
-    top: 15px; /* Опустили кнопку чуть ниже */
-    width: 36px; 
-    height: 36px; 
-    background-color: #333; /* Добавили круглую серую подложку */
-    color: #fff; 
-    border-radius: 50%; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    font-size: 22px; 
-    font-weight: bold; 
-    cursor: pointer; 
-    z-index: 10; 
-}
-
-.close-modal:active { 
-    background-color: #ff3333; /* При нажатии кнопка будет краснеть */
-}
-
-.modal h3 { 
-    margin-top: 0; 
-    color: #4da6ff; 
-    padding-right: 40px; /* Чтобы заголовок не наезжал на новую круглую кнопку */
-}
+        /* Стили для модального окна */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); overflow: auto; }
+        .modal-content { background-color: var(--bg-sec); margin: 80px auto 20px; padding: 20px; border: 1px solid #444; border-radius: 14px; width: 92%; max-width: 500px; position: relative; color: white; box-sizing: border-box; }
+        .close-modal { position: absolute; right: 15px; top: 15px; width: 40px; height: 40px; background-color: #333; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; cursor: pointer; z-index: 10; }
+        .close-modal:active { background-color: var(--primary); }
+        .modal h3 { margin-top: 0; color: var(--highlight); padding-right: 45px; font-size: 20px; }
         
-        .slider-img { width: 100%; height: auto; border-radius: 8px; margin-top: 15px; border: 1px solid #333; }
-        .slider-text { font-size: 15px; color: #ccc; margin-top: 15px; line-height: 1.4; min-height: 45px; }
+        .slider-img { width: 100%; height: auto; border-radius: 10px; margin-top: 15px; border: 1px solid var(--border); }
+        .slider-text { font-size: 16px; color: #ddd; margin-top: 15px; line-height: 1.5; min-height: 50px; }
         
-        .slider-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
-        .slider-btn { background: #ff3333; border: none; color: white; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; }
-        .slider-btn:active { background: #cc0000; }
+        .slider-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 25px; }
+        .slider-btn { background: var(--primary); border: none; color: white; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; }
+        .slider-btn:active { background: var(--primary-hover); }
         .slider-btn:disabled { background: #555; color: #888; cursor: not-allowed; }
-        .slide-counter { font-weight: bold; color: #888; }
+        .slide-counter { font-weight: bold; color: #aaa; font-size: 16px; }
 
-        /* Вкладки для значков трубогиба */
-        .marker-tabs { display: flex; gap: 5px; margin-top: 15px; }
-        .marker-tabs button { flex: 1; padding: 12px 5px; background: #2a2a2a; color: #fff; border: 1px solid #444; border-radius: 6px; font-weight: bold; cursor: pointer; }
-        .marker-tabs button.active { background: #ff3333; border-color: #ff3333; }
+        .marker-tabs { display: flex; gap: 8px; margin-top: 15px; }
+        .marker-tabs button { flex: 1; padding: 14px 5px; background: #2a2a2a; color: #fff; border: 1px solid #444; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 15px; }
+        .marker-tabs button.active { background: var(--primary); border-color: var(--primary); }
     </style>
 </head>
 <body>
 
     <div class="logo-container"><img src="https://i.imgur.com/vUB7xdz.png" alt="Logo"></div>
-    <div class="header"><h2>BEND IT⚡️</h2><button class="lang-btn" id="langBtn" onclick="toggleLang()">UA</button></div>
+    <div class="header">
+        <h2>BEND IT⚡️</h2>
+        <div class="header-controls">
+            <button class="icon-btn" id="wakeLockBtn" onclick="toggleWakeLock()" title="Keep Screen On">💡</button>
+            <button class="icon-btn" id="themeBtn" onclick="cycleTheme()" title="Change Theme">🔴</button>
+            <button class="lang-btn" id="langBtn" onclick="toggleLang()">UA</button>
+        </div>
+    </div>
 
     <div class="form-group"><label id="lblType">Bend Type</label><select id="bendType" onchange="updateUI()"></select></div>
     <div class="form-group" id="conduitSizeGroup"><label id="lblSize">Conduit Size (EMT)</label><select id="conduitSize"></select></div>
@@ -113,7 +120,6 @@
 
     <div class="guide-box" id="guideText"></div>
 
-    <!-- Кнопки вызова модальных окон -->
     <div class="guide-action-btns">
         <button id="btnPhotoGuide" onclick="openPhotoGuide()">📸 Фото-Гайд</button>
         <button id="btnBenderMarks" onclick="openBenderMarks()">🔍 Значки трубогиба</button>
@@ -148,65 +154,60 @@
     </div>
 
     <script>
+        // --- ЛОГИКА ТЕМ ---
+        const themes = ['red', 'orange', 'blue'];
+        const themeIcons = ['🔴', '🟠', '🔵'];
+        let currentThemeIdx = 0;
+        
+        function cycleTheme() {
+            currentThemeIdx = (currentThemeIdx + 1) % themes.length;
+            document.body.className = 'theme-' + themes[currentThemeIdx];
+            document.getElementById('themeBtn').innerText = themeIcons[currentThemeIdx];
+        }
+
+        // --- ЛОГИКА WAKE LOCK (ЗАЩИТА ОТ ЗАСЫПАНИЯ ЭКРАНА) ---
+        let wakeLock = null;
+        async function toggleWakeLock() {
+            if (!('wakeLock' in navigator)) {
+                alert('Твій браузер не підтримує функцію незгасаючого екрану (Wake Lock API). / Your browser does not support Wake Lock.');
+                return;
+            }
+            try {
+                const btn = document.getElementById('wakeLockBtn');
+                if (wakeLock !== null) {
+                    await wakeLock.release();
+                    wakeLock = null;
+                    btn.classList.remove('active');
+                } else {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                    btn.classList.add('active');
+                    
+                    // Если свернули браузер и развернули - запрашиваем лок заново
+                    document.addEventListener('visibilitychange', async () => {
+                        if (wakeLock !== null && document.visibilityState === 'visible') {
+                            wakeLock = await navigator.wakeLock.request('screen');
+                        }
+                    });
+                }
+            } catch (err) {
+                console.error(`Wake Lock error: ${err.name}, ${err.message}`);
+            }
+        }
+
+        // (Остальной твой JS код без изменений, я только перенес его сюда в целости и сохранности)
         const IMAGES = {
             marks: {
                 arrow: "https://i.imgur.com/HHSrJVC.jpeg",
                 star: "https://i.imgur.com/CcudLLq.png",
                 notch: "https://i.imgur.com/ebHsMGB.png"
             },
-            stub90: [ "https://i.imgur.com/XItJ8jQ.jpeg" ,
-                "https://i.imgur.com/1LnHbWK.jpeg" ,
-                "https://i.imgur.com/rvSwDTH.jpeg" ,
-                "https://i.imgur.com/sEvoENj.jpeg" ,
-                "https://i.imgur.com/aGJ3Nbj.jpeg" ,
-                "https://i.imgur.com/NLiSnx0.jpeg" ,
-                "https://i.imgur.com/ttWQSA6.jpeg" ],
-            backToBack: [ 
-                "https://i.imgur.com/gTIWepT.png" ,
-                "https://i.imgur.com/61ZFKdF.jpeg" ,
-                "https://i.imgur.com/R3WxhEg.png" ,
-                "https://i.imgur.com/fv02nyO.png" ,
-                "https://i.imgur.com/zmNoxls.png"
-             ],
+            stub90: [ "https://i.imgur.com/XItJ8jQ.jpeg" , "https://i.imgur.com/1LnHbWK.jpeg" , "https://i.imgur.com/rvSwDTH.jpeg" , "https://i.imgur.com/sEvoENj.jpeg" , "https://i.imgur.com/aGJ3Nbj.jpeg" , "https://i.imgur.com/NLiSnx0.jpeg" , "https://i.imgur.com/ttWQSA6.jpeg" ],
+            backToBack: [ "https://i.imgur.com/gTIWepT.png" , "https://i.imgur.com/61ZFKdF.jpeg" , "https://i.imgur.com/R3WxhEg.png" , "https://i.imgur.com/fv02nyO.png" , "https://i.imgur.com/zmNoxls.png" ],
             fullB2B: [ "https://i.imgur.com/TYDrhDk.png" ],
-            offset: [ "https://i.imgur.com/jwLb4pg.jpeg" ,
-                "https://i.imgur.com/t4ALF82.jpeg" ,
-                "https://i.imgur.com/NI2iCS9.jpeg" ,
-                "https://i.imgur.com/FTO2m3v.jpeg" ,
-                "https://i.imgur.com/a2ch6Vb.jpeg" ,
-                "https://i.imgur.com/eJkZf2Y.jpeg" ,
-                "https://i.imgur.com/9QkF7ZI.jpeg" ,
-                "https://i.imgur.com/BUzJWJd.jpeg" ,
-                "https://i.imgur.com/HC9oM3d.jpeg" ,
-                "https://i.imgur.com/jEes8IZ.jpeg" ,
-                "https://i.imgur.com/025sWMx.jpeg" ,
-                "https://i.imgur.com/qJZaauH.jpeg" ],
+            offset: [ "https://i.imgur.com/jwLb4pg.jpeg" , "https://i.imgur.com/t4ALF82.jpeg" , "https://i.imgur.com/NI2iCS9.jpeg" , "https://i.imgur.com/FTO2m3v.jpeg" , "https://i.imgur.com/a2ch6Vb.jpeg" , "https://i.imgur.com/eJkZf2Y.jpeg" , "https://i.imgur.com/9QkF7ZI.jpeg" , "https://i.imgur.com/BUzJWJd.jpeg" , "https://i.imgur.com/HC9oM3d.jpeg" , "https://i.imgur.com/jEes8IZ.jpeg" , "https://i.imgur.com/025sWMx.jpeg" , "https://i.imgur.com/qJZaauH.jpeg" ],
             parallelOffset: [ "ссылка на фото" ],
-            rolling: [ "https://i.imgur.com/jwLb4pg.jpeg" ,
-                "https://i.imgur.com/t4ALF82.jpeg" ,
-                "https://i.imgur.com/NI2iCS9.jpeg" ,
-                "https://i.imgur.com/FTO2m3v.jpeg" ,
-                "https://i.imgur.com/a2ch6Vb.jpeg" ,
-                "https://i.imgur.com/eJkZf2Y.jpeg" ,
-                "https://i.imgur.com/9QkF7ZI.jpeg" ,
-                "https://i.imgur.com/BUzJWJd.jpeg" ,
-                "https://i.imgur.com/HC9oM3d.jpeg" ,
-                "https://i.imgur.com/jEes8IZ.jpeg" ,
-                "https://i.imgur.com/025sWMx.jpeg" ,
-                "https://i.imgur.com/qJZaauH.jpeg"
-             ],
-            saddle3: [ 
-                "https://i.imgur.com/5PSTYp2.png" ,
-                "https://i.imgur.com/PMRtfbj.jpeg" ,
-                "https://i.imgur.com/ebHsMGB.png" ,
-                "https://i.imgur.com/IohvGlc.png" ,
-                "https://i.imgur.com/kL5hvlq.png" ,
-                "https://i.imgur.com/QdlexX5.png" ,
-                "https://i.imgur.com/hhQVf5J.png" ,
-                "https://i.imgur.com/YsIl4YX.png" ,
-                "https://i.imgur.com/qU3geYR.png" ,
-                "https://i.imgur.com/d7AhHCA.png"
-             ],
+            rolling: [ "https://i.imgur.com/jwLb4pg.jpeg" , "https://i.imgur.com/t4ALF82.jpeg" , "https://i.imgur.com/NI2iCS9.jpeg" , "https://i.imgur.com/FTO2m3v.jpeg" , "https://i.imgur.com/a2ch6Vb.jpeg" , "https://i.imgur.com/eJkZf2Y.jpeg" , "https://i.imgur.com/9QkF7ZI.jpeg" , "https://i.imgur.com/BUzJWJd.jpeg" , "https://i.imgur.com/HC9oM3d.jpeg" , "https://i.imgur.com/jEes8IZ.jpeg" , "https://i.imgur.com/025sWMx.jpeg" , "https://i.imgur.com/qJZaauH.jpeg" ],
+            saddle3: [ "https://i.imgur.com/5PSTYp2.png" , "https://i.imgur.com/PMRtfbj.jpeg" , "https://i.imgur.com/ebHsMGB.png" , "https://i.imgur.com/IohvGlc.png" , "https://i.imgur.com/kL5hvlq.png" , "https://i.imgur.com/QdlexX5.png" , "https://i.imgur.com/hhQVf5J.png" , "https://i.imgur.com/YsIl4YX.png" , "https://i.imgur.com/qU3geYR.png" , "https://i.imgur.com/d7AhHCA.png" ],
             saddle4: [ "ссылка на фото" ],
             concentric: [ "ссылка на фото" ]
         };
@@ -230,31 +231,10 @@
                 markDesc: { arrow: "Стрілка (Arrow) - використовується для більшості стандартних вигинів (Stub, Offset).", star: "Зірка (Star) - використовується для Back-to-Back, коли труба дивиться в інший бік.", notch: "Насічка (Notch / Tear Drop) - використовується ТІЛЬКИ для центру 3-Point Saddle." },
                 steps: {
                     stub90: [ "Текст 1", "Текст 2", "Текст 3", "Текст 4", "Текст 5", "Текст 6", "Текст 7" ],
-                    backToBack: [ 
-                        "Виміряй точну відстань між двома стінами (від упору до упору).",
-                        "Зроби перший гиб 90° (по Стрілці). Від його зовнішньої спинки відміряй відстань із Кроку 1 і постав мітку М2.",
-                        "Розверни трубогиб гаком до вільного кінця труби. Вирівняй мітку М2 рівно по Зірці [ ★ ].",
-                        "Зігни трубу до 90°. Важливо: стеж, щоб обидва гиби лежали строго в одній площині, без перекосу (вертольота).",
-                        "Готово. U-подібна труба має ідеально стати врозпір між поверхнями."
-                    ],
-                    fullB2B: [ "Текст для кроку 1" ],
-                    offset: [ "Текст для кроку 1" ],
-                    parallelOffset: [ "Текст для кроку 1" ],
-                    rolling: [ "Текст для кроку 1" ],
-                    saddle3: [ 
-                        "Виміряй висоту перешкоди та відстань рівно до її центру.",
-                        "Нанеси 3 мітки: М2 (центр) та бічні М1, М3.",
-                        "Для центрального гибу завжди використовується Насічка (Notch / Tear Drop).",
-                        "Постав центральну мітку М2 рівно на Насічку.",
-                        "Зігни трубу до кута 45° (або 60°).",
-                        "Переверни трубогиб. Прокрути трубу на 180° і вирівняй мітку М1 по Стрілці [ ➔ ].",
-                        "Зігни трубу в повітрі до 22.5° (або 30°).",
-                        "Зсунь трубогиб на мітку М3. Гак дивиться до центру. Вирівняй М3 по Стрілці [ ➔ ].",
-                        "Знову зігни трубу в повітрі до 22.5° (або 30°).",
-                        "Готово. Сідло має лежати в одній площині і обходити перешкоду."
-                    ],
-                    saddle4: [ "Текст для кроку 1" ],
-                    concentric: [ "Текст для кроку 1" ]
+                    backToBack: [ "Виміряй точну відстань між двома стінами (від упору до упору).", "Зроби перший гиб 90° (по Стрілці). Від його зовнішньої спинки відміряй відстань із Кроку 1 і постав мітку М2.", "Розверни трубогиб гаком до вільного кінця труби. Вирівняй мітку М2 рівно по Зірці [ ★ ].", "Зігни трубу до 90°. Важливо: стеж, щоб обидва гиби лежали строго в одній площині, без перекосу (вертольота).", "Готово. U-подібна труба має ідеально стати врозпір між поверхнями." ],
+                    fullB2B: [ "Текст для кроку 1" ], offset: [ "Текст для кроку 1" ], parallelOffset: [ "Текст для кроку 1" ], rolling: [ "Текст для кроку 1" ],
+                    saddle3: [ "Виміряй висоту перешкоди та відстань рівно до її центру.", "Нанеси 3 мітки: М2 (центр) та бічні М1, М3.", "Для центрального гибу завжди використовується Насічка (Notch / Tear Drop).", "Постав центральну мітку М2 рівно на Насічку.", "Зігни трубу до кута 45° (або 60°).", "Переверни трубогиб. Прокрути трубу на 180° і вирівняй мітку М1 по Стрілці [ ➔ ].", "Зігни трубу в повітрі до 22.5° (або 30°).", "Зсунь трубогиб на мітку М3. Гак дивиться до центру. Вирівняй М3 по Стрілці [ ➔ ].", "Знову зігни трубу в повітрі до 22.5° (або 30°).", "Готово. Сідло має лежати в одній площині і обходити перешкоду." ],
+                    saddle4: [ "Текст для кроку 1" ], concentric: [ "Текст для кроку 1" ]
                 }
             },
             ru: {
@@ -270,31 +250,10 @@
                 markDesc: { arrow: "Стрелка (Arrow) - используется для большинства гибов (Stub, Offset).", star: "Звезда (Star) - используется для Back-to-Back, когда труба смотрит в другую сторону.", notch: "Насечка (Notch / Tear Drop) - используется ТОЛЬКО для центра 3-Point Saddle." },
                 steps: {
                     stub90: [ "Текст для шага 1" ],
-                    backToBack: [ 
-                        "Измерь точное расстояние между двумя стенами (от упора до упора).",
-                        "Сделай первый гиб 90° (по Стрелке). От его наружной спинки отмерь расстояние из Шага 1 и поставь метку М2.",
-                        "Разверни трубогиб крюком к свободному концу трубы. Выровняй метку М2 ровно по Звезде [ ★ ].",
-                        "Согни трубу до 90°. Важно: следи, чтобы оба гиба лежали строго в одной плоскости, без перекоса (вертолета).",
-                        "Готово. U-образная труба должна идеально встать враспор между поверхностями."
-                    ],
-                    fullB2B: [ "Текст для шага 1" ],
-                    offset: [ "Текст для шага 1" ],
-                    parallelOffset: [ "Текст для шага 1" ],
-                    rolling: [ "Текст для шага 1" ],
-                    saddle3: [ 
-                        "Измерь высоту препятствия и расстояние ровно до его центра.",
-                        "Нанеси 3 метки: М2 (центр) и боковые М1, М3.",
-                        "Для центрального гиба всегда используется Насечка (Notch / Tear Drop).",
-                        "Поставь центральную метку М2 ровно на Насечку.",
-                        "Согни трубу до угла 45° (или 60°).",
-                        "Переверни трубогиб. Прокрути трубу на 180° и выровняй метку М1 по Стрелке [ ➔ ].",
-                        "Согни трубу в воздухе до 22.5° (или 30°).",
-                        "Сдвинь трубогиб на метку М3. Крюк смотрит к центру. Выровняй М3 по Стрелке [ ➔ ].",
-                        "Снова согни трубу в воздухе до 22.5° (или 30°).",
-                        "Готово. Седло должно лежать в одной плоскости и обходить препятствие."
-                    ],
-                    saddle4: [ "Текст для шага 1" ],
-                    concentric: [ "Текст для шага 1" ]
+                    backToBack: [ "Измерь точное расстояние между двумя стенами (от упора до упора).", "Сделай первый гиб 90° (по Стрелке). От его наружной спинки отмерь расстояние из Шага 1 и поставь метку М2.", "Разверни трубогиб крюком к свободному концу трубы. Выровняй метку М2 ровно по Звезде [ ★ ].", "Согни трубу до 90°. Важно: следи, чтобы оба гиба лежали строго в одной плоскости, без перекоса (вертолета).", "Готово. U-образная труба должна идеально встать враспор между поверхностями." ],
+                    fullB2B: [ "Текст для шага 1" ], offset: [ "Текст для шага 1" ], parallelOffset: [ "Текст для шага 1" ], rolling: [ "Текст для шага 1" ],
+                    saddle3: [ "Измерь высоту препятствия и расстояние ровно до его центра.", "Нанеси 3 метки: М2 (центр) и боковые М1, М3.", "Для центрального гиба всегда используется Насечка (Notch / Tear Drop).", "Поставь центральную метку М2 ровно на Насечку.", "Согни трубу до угла 45° (или 60°).", "Переверни трубогиб. Прокрути трубу на 180° и выровняй метку М1 по Стрелке [ ➔ ].", "Согни трубу в воздухе до 22.5° (или 30°).", "Сдвинь трубогиб на метку М3. Крюк смотрит к центру. Выровняй М3 по Стрелке [ ➔ ].", "Снова согни трубу в воздухе до 22.5° (или 30°).", "Готово. Седло должно лежать в одной плоскости и обходить препятствие." ],
+                    saddle4: [ "Текст для шага 1" ], concentric: [ "Текст для шага 1" ]
                 }
             },
             en: {
@@ -310,31 +269,10 @@
                 markDesc: { arrow: "Arrow - Used for standard bends like Stubs and Offsets.", star: "Star - Used for Back-to-Back bends when bender is reversed.", notch: "Tear Drop (Notch) - Used ONLY for the center of a 3-Point Saddle." },
                 steps: {
                     stub90: [ "Text 1", "Text 2", "Text 3", "Text 4", "Text 5", "Text 6", "Text 7" ],
-                    backToBack: [ 
-                        "Measure the exact distance between the two parallel walls (span).",
-                        "Make the first 90° bend (on the Arrow). Measure from its back edge and place mark M2.",
-                        "Face the bender hook towards the free end. Align mark M2 exactly with the Star [ ★ ].",
-                        "Bend to 90°. Important: keep both bends in the exact same plane to avoid skewing.",
-                        "Done. The U-shaped conduit should fit perfectly between the two surfaces."
-                    ],
-                    fullB2B: [ "Text for step 1" ],
-                    offset: [ "Text for step 1" ],
-                    parallelOffset: [ "Text for step 1" ],
-                    rolling: [ "Text for step 1" ],
-                    saddle3: [ 
-                        "Measure the obstacle height and the distance directly to its center.",
-                        "Mark the conduit: M2 (center), and side marks M1, M3.",
-                        "The Center Notch (Tear Drop) is always used for the center bend.",
-                        "Align the center mark M2 exactly with the Center Notch.",
-                        "Bend the conduit to the 45° (or 60°) mark.",
-                        "Flip the bender. Rotate conduit 180° and align M1 with the Arrow [ ➔ ].",
-                        "Air bend the conduit to the 22.5° (or 30°) mark.",
-                        "Slide the bender to M3. Hook faces the center. Align M3 with the Arrow [ ➔ ].",
-                        "Air bend again to the 22.5° (or 30°) mark.",
-                        "Done. The saddle should lay flat on the same plane and clear the obstacle."
-                    ],
-                    saddle4: [ "Text for step 1" ],
-                    concentric: [ "Text for step 1" ]
+                    backToBack: [ "Measure the exact distance between the two parallel walls (span).", "Make the first 90° bend (on the Arrow). Measure from its back edge and place mark M2.", "Face the bender hook towards the free end. Align mark M2 exactly with the Star [ ★ ].", "Bend to 90°. Important: keep both bends in the exact same plane to avoid skewing.", "Done. The U-shaped conduit should fit perfectly between the two surfaces." ],
+                    fullB2B: [ "Text for step 1" ], offset: [ "Text for step 1" ], parallelOffset: [ "Text for step 1" ], rolling: [ "Text for step 1" ],
+                    saddle3: [ "Measure the obstacle height and the distance directly to its center.", "Mark the conduit: M2 (center), and side marks M1, M3.", "The Center Notch (Tear Drop) is always used for the center bend.", "Align the center mark M2 exactly with the Center Notch.", "Bend the conduit to the 45° (or 60°) mark.", "Flip the bender. Rotate conduit 180° and align M1 with the Arrow [ ➔ ].", "Air bend the conduit to the 22.5° (or 30°) mark.", "Slide the bender to M3. Hook faces the center. Align M3 with the Arrow [ ➔ ].", "Air bend again to the 22.5° (or 30°) mark.", "Done. The saddle should lay flat on the same plane and clear the obstacle." ],
+                    saddle4: [ "Text for step 1" ], concentric: [ "Text for step 1" ]
                 }
             }
         };
