@@ -7,7 +7,7 @@
     <meta name="theme-color" content="#121211">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="manifest" href="manifest.json"> <!-- Файл манифеста добавишь позже -->
+    <link rel="manifest" href="manifest.json">
     
     <title>BEND IT⚡️</title>
     <style>
@@ -38,14 +38,15 @@
         .logo-container { display: flex; justify-content: center; margin-bottom: 10px; }
         .logo-container img { max-width: 300px; height: auto; border-radius: 45px; }
         
-        /* Изменения в шапке для новых кнопок */
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; position: relative; }
-        h2 { color: #B04D3A; margin: 0; text-transform: uppercase; letter-spacing: 1px; font-style: italic; position: absolute; left: 50%; transform: translateX(-50%); text-align: center; font-size: 22px; }
+        /* НОВАЯ ШАПКА: Лампочка слева, текст по центру, кнопки справа */
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; position: relative; width: 100%; }
+        .left-controls { display: flex; z-index: 2; }
+        .right-controls { display: flex; gap: 8px; z-index: 2; }
+        h2 { color: #B04D3A; margin: 0; text-transform: uppercase; letter-spacing: 1px; font-style: italic; font-size: 22px; position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; z-index: 1; }
         
-        .header-controls { display: flex; gap: 8px; z-index: 1; margin-left: auto; }
         .icon-btn, .lang-btn { background-color: #333; color: #fff; border: 1px solid #555; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; display: flex; align-items: center; justify-content: center; min-width: 44px;}
         #wakeLockBtn { opacity: 0.4; transition: opacity 0.3s; }
-        #wakeLockBtn.active { opacity: 1; background-color: #444; border-color: #ffd700; }
+        #wakeLockBtn.active { opacity: 1; background-color: #444; border-color: #ffd700; box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
 
         .form-group { margin-bottom: 20px; }
         label { display: block; margin-bottom: 8px; color: #a0a0a0; font-size: 15px; }
@@ -97,10 +98,14 @@
 <body>
 
     <div class="logo-container"><img src="https://i.imgur.com/vUB7xdz.png" alt="Logo"></div>
+    
+    <!-- ОБНОВЛЕННАЯ ШАПКА -->
     <div class="header">
-        <h2>BEND IT⚡️</h2>
-        <div class="header-controls">
+        <div class="left-controls">
             <button class="icon-btn" id="wakeLockBtn" onclick="toggleWakeLock()" title="Keep Screen On">💡</button>
+        </div>
+        <h2>BEND IT⚡️</h2>
+        <div class="right-controls">
             <button class="icon-btn" id="themeBtn" onclick="cycleTheme()" title="Change Theme">🔴</button>
             <button class="lang-btn" id="langBtn" onclick="toggleLang()">UA</button>
         </div>
@@ -182,7 +187,6 @@
                     wakeLock = await navigator.wakeLock.request('screen');
                     btn.classList.add('active');
                     
-                    // Если свернули браузер и развернули - запрашиваем лок заново
                     document.addEventListener('visibilitychange', async () => {
                         if (wakeLock !== null && document.visibilityState === 'visible') {
                             wakeLock = await navigator.wakeLock.request('screen');
@@ -194,7 +198,6 @@
             }
         }
 
-        // (Остальной твой JS код без изменений, я только перенес его сюда в целости и сохранности)
         const IMAGES = {
             marks: {
                 arrow: "https://i.imgur.com/HHSrJVC.jpeg",
