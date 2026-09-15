@@ -111,11 +111,6 @@
     </div>
 
     <script>
-        // =========================================================================
-        // === БЛОК ДЛЯ ФОТОГРАФИЙ (ВСТАВЛЯЙ ССЫЛКИ С IMGUR СЮДА) ===
-        // Если фотка одна - пиши ["ссылка"]
-        // Если фоток несколько - перечисляй через запятую: ["ссылка1", "ссылка2", "ссылка3"]
-        // =========================================================================
         const IMAGES = {
             marks: {
                 arrow: "https://i.imgur.com/HHSrJVC.jpeg",
@@ -129,17 +124,19 @@
                 "https://i.imgur.com/aGJ3Nbj.jpeg" ,
                 "https://i.imgur.com/NLiSnx0.jpeg" ,
                 "https://i.imgur.com/ttWQSA6.jpeg" ],
-            backToBack: [ "https://i.imgur.com/gTIWepT.png" ,
+            backToBack: [ 
+                "https://i.imgur.com/gTIWepT.png" ,
                 "https://i.imgur.com/61ZFKdF.jpeg" ,
                 "https://i.imgur.com/R3WxhEg.png" ,
                 "https://i.imgur.com/fv02nyO.png" ,
-                "https://i.imgur.com/zmNoxls.png" ,
+                "https://i.imgur.com/zmNoxls.png"
              ],
-            fullB2B: [ "ссылка на фото" ],
+            fullB2B: [ "https://i.imgur.com/TYDrhDk.png" ],
             offset: [ "ссылка на фото" ],
             parallelOffset: [ "ссылка на фото" ],
             rolling: [ "ссылка на фото" ],
-            saddle3: [ "https://i.imgur.com/5PSTYp2.png" ,
+            saddle3: [ 
+                "https://i.imgur.com/5PSTYp2.png" ,
                 "https://i.imgur.com/PMRtfbj.jpeg" ,
                 "https://i.imgur.com/ebHsMGB.png" ,
                 "https://i.imgur.com/IohvGlc.png" ,
@@ -153,7 +150,6 @@
             saddle4: [ "ссылка на фото" ],
             concentric: [ "ссылка на фото" ]
         };
-        // =========================================================================
 
         let currentLang = 'ua';
         let currentGuideType = ''; 
@@ -172,19 +168,31 @@
                 tipStub: "👉 Мітку на Стрілку [ ➔ ]. Гни до 90°.", tipB2B: "👉 Стрілка [ ➔ ] для M1. Зірка [ ★ ] для M2.", tipFullB2B: "👉 Обидва гиби по Стрілці [ ➔ ].", tipOffset: "👉 Обидві мітки по Стрілці [ ➔ ]. Розверни трубу.", tipParallel: "👉 Згинай по Стрілці [ ➔ ].", tipSaddle3: "👉 Центр по Насічці [ ⯎ ]. Боки по Стрілці [ ➔ ].", tipSaddle4: "👉 Усі 4 вигини по Стрілці [ ➔ ].", tipConcentric: "👉 Всі мітки по Стрілці, гнути в один бік.",
                 markStart: "(Початок)", markEnd: "(Кінець)", markSide: "(Боковий)", markCenter: "ЦЕНТР", shrink: "Усадка (Shrink)", spacing: "Крок (Spacing)", trueOffset: "Реальна висота", limitWarn: "⚠️ Потрібна муфта (Coupling)!",
                 markDesc: { arrow: "Стрілка (Arrow) - використовується для більшості стандартних вигинів (Stub, Offset).", star: "Зірка (Star) - використовується для Back-to-Back, коли труба дивиться в інший бік.", notch: "Насічка (Notch / Tear Drop) - використовується ТІЛЬКИ для центру 3-Point Saddle." },
-                
-                // =========================================================================
-                // ТЕКСТ ДЛЯ ФОТО-ГАЙДІВ (УКРАЇНСЬКОЮ)
-                // Перераховуй тексти в кавичках через кому, так само як фотки вище.
-                // =========================================================================
                 steps: {
-                    stub90: [ "Текст для кроку 1" ],
-                    backToBack: [ "Текст для кроку 1" ],
+                    stub90: [ "Текст 1", "Текст 2", "Текст 3", "Текст 4", "Текст 5", "Текст 6", "Текст 7" ],
+                    backToBack: [ 
+                        "Виміряй точну відстань між двома стінами (від упору до упору).",
+                        "Зроби перший гиб 90° (по Стрілці). Від його зовнішньої спинки відміряй відстань із Кроку 1 і постав мітку М2.",
+                        "Розверни трубогиб гаком до вільного кінця труби. Вирівняй мітку М2 рівно по Зірці [ ★ ].",
+                        "Зігни трубу до 90°. Важливо: стеж, щоб обидва гиби лежали строго в одній площині, без перекосу (вертольота).",
+                        "Готово. U-подібна труба має ідеально стати врозпір між поверхнями."
+                    ],
                     fullB2B: [ "Текст для кроку 1" ],
                     offset: [ "Текст для кроку 1" ],
                     parallelOffset: [ "Текст для кроку 1" ],
                     rolling: [ "Текст для кроку 1" ],
-                    saddle3: [ "Текст для кроку 1" ],
+                    saddle3: [ 
+                        "Виміряй висоту перешкоди та відстань рівно до її центру.",
+                        "Нанеси 3 мітки: М2 (центр) та бічні М1, М3.",
+                        "Для центрального гибу завжди використовується Насічка (Notch / Tear Drop).",
+                        "Постав центральну мітку М2 рівно на Насічку.",
+                        "Зігни трубу до кута 45° (або 60°).",
+                        "Переверни трубогиб. Прокрути трубу на 180° і вирівняй мітку М1 по Стрілці [ ➔ ].",
+                        "Зігни трубу в повітрі до 22.5° (або 30°).",
+                        "Зсунь трубогиб на мітку М3. Гак дивиться до центру. Вирівняй М3 по Стрілці [ ➔ ].",
+                        "Знову зігни трубу в повітрі до 22.5° (або 30°).",
+                        "Готово. Сідло має лежати в одній площині і обходити перешкоду."
+                    ],
                     saddle4: [ "Текст для кроку 1" ],
                     concentric: [ "Текст для кроку 1" ]
                 }
@@ -200,18 +208,31 @@
                 tipStub: "👉 Метку на Стрелку [ ➔ ]. Гни до 90°.", tipB2B: "👉 Стрелка [ ➔ ] для M1. Звезда [ ★ ] для M2.", tipFullB2B: "👉 Оба гиба по Стрелке [ ➔ ].", tipOffset: "👉 Обе метки по Стрелке [ ➔ ]. Разверни трубу.", tipParallel: "👉 Гни по Стрелке [ ➔ ].", tipSaddle3: "👉 Центр по Насечке [ ⯎ ]. Бока по Стрелке [ ➔ ].", tipSaddle4: "👉 Все 4 гиба по Стрелке [ ➔ ].", tipConcentric: "👉 Все метки по Стрелке, гнуть в одну сторону.",
                 markStart: "(Начало)", markEnd: "(Конец)", markSide: "(Боковий)", markCenter: "ЦЕНТР", shrink: "Усадка (Shrink)", spacing: "Шаг (Spacing)", trueOffset: "Реальная высота", limitWarn: "⚠️ Потребуется муфта (Coupling)!",
                 markDesc: { arrow: "Стрелка (Arrow) - используется для большинства гибов (Stub, Offset).", star: "Звезда (Star) - используется для Back-to-Back, когда труба смотрит в другую сторону.", notch: "Насечка (Notch / Tear Drop) - используется ТОЛЬКО для центра 3-Point Saddle." },
-                
-                // =========================================================================
-                // ТЕКСТ ДЛЯ ФОТО-ГАЙДОВ (НА РУССКОМ)
-                // =========================================================================
                 steps: {
                     stub90: [ "Текст для шага 1" ],
-                    backToBack: [ "Текст для шага 1" ],
+                    backToBack: [ 
+                        "Измерь точное расстояние между двумя стенами (от упора до упора).",
+                        "Сделай первый гиб 90° (по Стрелке). От его наружной спинки отмерь расстояние из Шага 1 и поставь метку М2.",
+                        "Разверни трубогиб крюком к свободному концу трубы. Выровняй метку М2 ровно по Звезде [ ★ ].",
+                        "Согни трубу до 90°. Важно: следи, чтобы оба гиба лежали строго в одной плоскости, без перекоса (вертолета).",
+                        "Готово. U-образная труба должна идеально встать враспор между поверхностями."
+                    ],
                     fullB2B: [ "Текст для шага 1" ],
                     offset: [ "Текст для шага 1" ],
                     parallelOffset: [ "Текст для шага 1" ],
                     rolling: [ "Текст для шага 1" ],
-                    saddle3: [ "Текст для шага 1" ],
+                    saddle3: [ 
+                        "Измерь высоту препятствия и расстояние ровно до его центра.",
+                        "Нанеси 3 метки: М2 (центр) и боковые М1, М3.",
+                        "Для центрального гиба всегда используется Насечка (Notch / Tear Drop).",
+                        "Поставь центральную метку М2 ровно на Насечку.",
+                        "Согни трубу до угла 45° (или 60°).",
+                        "Переверни трубогиб. Прокрути трубу на 180° и выровняй метку М1 по Стрелке [ ➔ ].",
+                        "Согни трубу в воздухе до 22.5° (или 30°).",
+                        "Сдвинь трубогиб на метку М3. Крюк смотрит к центру. Выровняй М3 по Стрелке [ ➔ ].",
+                        "Снова согни трубу в воздухе до 22.5° (или 30°).",
+                        "Готово. Седло должно лежать в одной плоскости и обходить препятствие."
+                    ],
                     saddle4: [ "Текст для шага 1" ],
                     concentric: [ "Текст для шага 1" ]
                 }
@@ -227,18 +248,31 @@
                 tipStub: "👉 Mark on Arrow [ ➔ ]. Bend to 90°.", tipB2B: "👉 Arrow [ ➔ ] for M1. Star [ ★ ] for M2.", tipFullB2B: "👉 Both bends on Arrow [ ➔ ].", tipOffset: "👉 Both marks on Arrow [ ➔ ]. Roll conduit 180°.", tipParallel: "👉 Bend on Arrow [ ➔ ].", tipSaddle3: "👉 Center on Notch [ ⯎ ]. Sides on Arrow [ ➔ ].", tipSaddle4: "👉 All 4 bends on Arrow [ ➔ ].", tipConcentric: "👉 Bend all marks on Arrow.",
                 markStart: "(Start)", markEnd: "(End)", markSide: "(Side bend)", markCenter: "CENTER", shrink: "Shrink", spacing: "Spacing", trueOffset: "True Offset", limitWarn: "⚠️ Coupling required!",
                 markDesc: { arrow: "Arrow - Used for standard bends like Stubs and Offsets.", star: "Star - Used for Back-to-Back bends when bender is reversed.", notch: "Tear Drop (Notch) - Used ONLY for the center of a 3-Point Saddle." },
-                
-                // =========================================================================
-                // ТЕКСТ ДЛЯ ФОТО-ГАЙДОВ (НА АНГЛИЙСКОМ)
-                // =========================================================================
                 steps: {
-                    stub90: [ "Text for step 1" ],
-                    backToBack: [ "Text for step 1" ],
+                    stub90: [ "Text 1", "Text 2", "Text 3", "Text 4", "Text 5", "Text 6", "Text 7" ],
+                    backToBack: [ 
+                        "Measure the exact distance between the two parallel walls (span).",
+                        "Make the first 90° bend (on the Arrow). Measure from its back edge and place mark M2.",
+                        "Face the bender hook towards the free end. Align mark M2 exactly with the Star [ ★ ].",
+                        "Bend to 90°. Important: keep both bends in the exact same plane to avoid skewing.",
+                        "Done. The U-shaped conduit should fit perfectly between the two surfaces."
+                    ],
                     fullB2B: [ "Text for step 1" ],
                     offset: [ "Text for step 1" ],
                     parallelOffset: [ "Text for step 1" ],
                     rolling: [ "Text for step 1" ],
-                    saddle3: [ "Text for step 1" ],
+                    saddle3: [ 
+                        "Measure the obstacle height and the distance directly to its center.",
+                        "Mark the conduit: M2 (center), and side marks M1, M3.",
+                        "The Center Notch (Tear Drop) is always used for the center bend.",
+                        "Align the center mark M2 exactly with the Center Notch.",
+                        "Bend the conduit to the 45° (or 60°) mark.",
+                        "Flip the bender. Rotate conduit 180° and align M1 with the Arrow [ ➔ ].",
+                        "Air bend the conduit to the 22.5° (or 30°) mark.",
+                        "Slide the bender to M3. Hook faces the center. Align M3 with the Arrow [ ➔ ].",
+                        "Air bend again to the 22.5° (or 30°) mark.",
+                        "Done. The saddle should lay flat on the same plane and clear the obstacle."
+                    ],
                     saddle4: [ "Text for step 1" ],
                     concentric: [ "Text for step 1" ]
                 }
@@ -297,7 +331,6 @@
             document.getElementById('pipesGroup').style.display = isParallel ? 'block' : 'none'; document.getElementById('spacingGroup').style.display = isParallel ? 'block' : 'none';
 
             angleSel.innerHTML = '';
-            // Кнопка фото-гайда теперь отображается для всех типов
             document.getElementById('btnPhotoGuide').style.display = 'flex';
 
             if (type === 'stub90') { dLabel.innerText = t.lblDistStub; guide.innerHTML = t.guideStub; } 
@@ -313,9 +346,6 @@
             }
         }
 
-        // ==========================================
-        // ЛОГИКА СЛАЙДЕРА
-        // ==========================================
         function openPhotoGuide() {
             currentGuideType = document.getElementById('bendType').value;
             if(!IMAGES[currentGuideType] || IMAGES[currentGuideType].length === 0) {
@@ -351,7 +381,6 @@
             const texts = dict[currentLang].steps[currentGuideType];
             
             document.getElementById('modalImg').src = imgs[currentSlideIdx] || "";
-            // Защита от пустых текстов: если для фотки забыли написать текст, выведет дефолт
             document.getElementById('modalText').innerText = texts[currentSlideIdx] || "Опис відсутній / Описание отсутствует / No description";
             
             document.getElementById('slideCounter').innerText = (currentSlideIdx + 1) + " / " + imgs.length;
