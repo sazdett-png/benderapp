@@ -5,229 +5,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BEND IT⚡️</title>
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #121211;
-            color: #ffffff;
-            padding: 20px;
-            margin: 0;
-        }
-        .logo-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 10px;
-        }
-        .logo-container img {
-            max-width: 300px;
-            height: auto;
-            border-radius: 45px;
-            box-shadow: 0 0px 0px rgba(0,0,0,0.0);
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            position: relative;
-        }
-        h2 {
-            color: #B04D3A;
-            margin: 0;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-style: italic;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            text-align: center;
-        }
-        .lang-btn {
-            margin-left: auto;
-            z-index: 1;
-            background-color: #333;
-            color: #fff;
-            border: 1px solid #555;
-            padding: 8px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #a0a0a0;
-            font-size: 14px;
-        }
-        .input-row {
-            display: flex;
-            gap: 10px;
-        }
-        .input-row input {
-            flex: 2;
-        }
-        .input-row select {
-            flex: 1;
-            text-align: center;
-        }
-        select, input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #333;
-            border-radius: 8px;
-            background-color: #1e1e1e;
-            color: #fff;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-        .guide-box {
-            background-color: #1a1a2e;
-            border-left: 3px solid #4da6ff;
-            padding: 12px;
-            margin-top: 10px;
-            margin-bottom: 15px;
-            font-size: 13px;
-            color: #88c0d0;
-            border-radius: 0 8px 8px 0;
-            box-sizing: border-box;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-        }
-        button.calc-btn {
-            width: 100%;
-            padding: 15px;
-            background-color: #ff3333;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            margin-top: 10px;
-            cursor: pointer;
-            text-transform: uppercase;
-        }
-        button.calc-btn:active {
-            background-color: #cc0000;
-        }
-        .result-box {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #1e1e1e;
-            border: 1px solid #333;
-            border-radius: 8px;
-            display: none;
-            border-left: 4px solid #ff3333;
-        }
-        .result-title {
-            color: #ff3333;
-            font-weight: bold;
-            margin-bottom: 10px;
-            font-size: 18px;
-        }
-        .mark {
-            font-size: 18px;
-            margin-bottom: 8px;
-            padding: 6px 0;
-            border-bottom: 1px solid #2a2a2a;
-        }
-        .info {
-            color: #a0a0a0;
-            font-size: 14px;
-            margin-top: 10px;
-            padding-top: 10px;
-            line-height: 1.5;
-        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #121211; color: #ffffff; padding: 20px; margin: 0; }
+        .logo-container { display: flex; justify-content: center; margin-bottom: 10px; }
+        .logo-container img { max-width: 300px; height: auto; border-radius: 45px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; position: relative; }
+        h2 { color: #B04D3A; margin: 0; text-transform: uppercase; letter-spacing: 1px; font-style: italic; position: absolute; left: 50%; transform: translateX(-50%); text-align: center; }
+        .lang-btn { margin-left: auto; z-index: 1; background-color: #333; color: #fff; border: 1px solid #555; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 5px; color: #a0a0a0; font-size: 14px; }
+        .input-row { display: flex; gap: 10px; }
+        .input-row input { flex: 2; }
+        .input-row select { flex: 1; text-align: center; }
+        select, input { width: 100%; padding: 12px; border: 1px solid #333; border-radius: 8px; background-color: #1e1e1e; color: #fff; font-size: 16px; box-sizing: border-box; }
+        
+        .guide-box { background-color: #1a1a2e; border-left: 3px solid #4da6ff; padding: 12px; margin-top: 10px; font-size: 13px; color: #88c0d0; border-radius: 0 8px 8px 0; box-sizing: border-box; }
+        
+        /* Кнопки вызова гайдов */
+        .guide-action-btns { display: flex; gap: 10px; margin-top: 10px; margin-bottom: 15px; }
+        .guide-action-btns button { flex: 1; padding: 10px; background: #222; border: 1px solid #4da6ff; color: #4da6ff; border-radius: 8px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .guide-action-btns button:active { background: #4da6ff; color: #000; }
+
+        button.calc-btn { width: 100%; padding: 15px; background-color: #ff3333; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; margin-top: 10px; cursor: pointer; text-transform: uppercase; }
+        button.calc-btn:active { background-color: #cc0000; }
+        
+        .result-box { margin-top: 20px; padding: 15px; background-color: #1e1e1e; border: 1px solid #333; border-radius: 8px; display: none; border-left: 4px solid #ff3333; }
+        .result-title { color: #ff3333; font-weight: bold; margin-bottom: 10px; font-size: 18px; }
+        .mark { font-size: 18px; margin-bottom: 8px; padding: 6px 0; border-bottom: 1px solid #2a2a2a; }
+        .info { color: #a0a0a0; font-size: 14px; margin-top: 10px; padding-top: 10px; line-height: 1.5; }
         .highlight { color: #4da6ff; font-weight: bold; }
         .limit-warning { color: #ff9900; font-weight: bold; margin-top: 15px; display: block; border-top: 1px dashed #ff9900; padding-top: 10px; }
+
+        /* Стили для модального окна */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.85); overflow: auto; }
+        .modal-content { background-color: #1e1e1e; margin: 10% auto; padding: 20px; border: 1px solid #444; border-radius: 12px; width: 90%; max-width: 500px; position: relative; color: white; box-sizing: border-box; }
+        .close-modal { position: absolute; right: 15px; top: 10px; color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close-modal:hover { color: #fff; }
+        .modal h3 { margin-top: 0; color: #4da6ff; }
+        
+        .slider-img { width: 100%; height: auto; border-radius: 8px; margin-top: 15px; border: 1px solid #333; }
+        .slider-text { font-size: 15px; color: #ccc; margin-top: 15px; line-height: 1.4; min-height: 45px; }
+        
+        .slider-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+        .slider-btn { background: #ff3333; border: none; color: white; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .slider-btn:active { background: #cc0000; }
+        .slider-btn:disabled { background: #555; color: #888; cursor: not-allowed; }
+        .slide-counter { font-weight: bold; color: #888; }
+
+        /* Вкладки для значков трубогиба */
+        .marker-tabs { display: flex; gap: 5px; margin-top: 15px; }
+        .marker-tabs button { flex: 1; padding: 12px 5px; background: #2a2a2a; color: #fff; border: 1px solid #444; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .marker-tabs button.active { background: #ff3333; border-color: #ff3333; }
     </style>
 </head>
 <body>
 
-    <div class="logo-container">
-        <img src="https://i.imgur.com/vUB7xdz.png" alt="Logo">
-    </div>
+    <div class="logo-container"><img src="https://i.imgur.com/vUB7xdz.png" alt="Logo"></div>
+    <div class="header"><h2>BEND IT⚡️</h2><button class="lang-btn" id="langBtn" onclick="toggleLang()">UA</button></div>
 
-    <div class="header">
-        <h2>BEND IT⚡️</h2>
-        <button class="lang-btn" id="langBtn" onclick="toggleLang()">UA</button>
-    </div>
-
-    <div class="form-group">
-        <label id="lblType">Bend Type</label>
-        <select id="bendType" onchange="updateUI()"></select>
-    </div>
-
-    <div class="form-group" id="conduitSizeGroup">
-        <label id="lblSize">Conduit Size (Take-up)</label>
-        <select id="conduitSize"></select>
-    </div>
-
-    <div class="form-group" id="angleGroup">
-        <label id="lblAngle">Bend Angle</label>
-        <select id="bendAngle"></select>
-    </div>
-
-    <div class="form-group" id="pipesGroup" style="display: none;">
-        <label id="lblPipes">Number of Pipes (Кількість труб)</label>
-        <select id="pipeCount">
-            <option value="2">2 Pipes</option>
-            <option value="3">3 Pipes</option>
-            <option value="4">4 Pipes</option>
-        </select>
-    </div>
+    <div class="form-group"><label id="lblType">Bend Type</label><select id="bendType" onchange="updateUI()"></select></div>
+    <div class="form-group" id="conduitSizeGroup"><label id="lblSize">Conduit Size (EMT)</label><select id="conduitSize"></select></div>
+    <div class="form-group" id="angleGroup"><label id="lblAngle">Bend Angle</label><select id="bendAngle"></select></div>
     
-    <div class="form-group" id="bendsCountGroup" style="display: none;">
-        <label id="lblBends">Number of Bends (Кількість дрібних вигинів)</label>
-        <select id="bendsCount">
-            <option value="9">9 Bends (10° each)</option>
-            <option value="15">15 Bends (6° each)</option>
-            <option value="18">18 Bends (5° each)</option>
-        </select>
-    </div>
-
-    <div class="form-group" id="spacingGroup" style="display: none;">
-        <label id="lblSpacing">Pipe Spacing (Відстань між осями труб)</label>
-        <div class="input-row">
-            <input type="number" id="spacingWhole" value="1" placeholder="1">
-            <select id="spacingFrac" class="frac-select"></select>
-        </div>
-    </div>
-
-    <div class="form-group" id="distanceGroup">
-        <label id="lblDist">Distance</label>
-        <div class="input-row">
-            <input type="number" id="distanceWhole" placeholder="e.g., 20">
-            <select id="distanceFrac" class="frac-select"></select>
-        </div>
-    </div>
-
-    <div class="form-group" id="heightGroup">
-        <label id="lblHeight">Rise (Obstacle Height)</label>
-        <div class="input-row">
-            <input type="number" id="heightWhole" placeholder="e.g., 4">
-            <select id="heightFrac" class="frac-select"></select>
-        </div>
-    </div>
-
-    <div class="form-group" id="widthGroup" style="display: none;">
-        <label id="lblWidth">Obstacle Width</label>
-        <div class="input-row">
-            <input type="number" id="widthWhole" placeholder="e.g., 10">
-            <select id="widthFrac" class="frac-select"></select>
-        </div>
-    </div>
-
-    <div class="form-group" id="shiftGroup" style="display: none;">
-        <label id="lblShift">Horizontal Shift (Roll)</label>
-        <div class="input-row">
-            <input type="number" id="shiftWhole" placeholder="e.g., 3">
-            <select id="shiftFrac" class="frac-select"></select>
-        </div>
-    </div>
+    <div class="form-group" id="pipesGroup" style="display: none;"><label id="lblPipes">Number of Pipes</label><select id="pipeCount"><option value="2">2 Pipes</option><option value="3">3 Pipes</option><option value="4">4 Pipes</option></select></div>
+    <div class="form-group" id="bendsCountGroup" style="display: none;"><label id="lblBends">Number of Bends</label><select id="bendsCount"><option value="9">9 Bends</option><option value="15">15 Bends</option><option value="18">18 Bends</option></select></div>
+    <div class="form-group" id="spacingGroup" style="display: none;"><label id="lblSpacing">Pipe Spacing</label><div class="input-row"><input type="number" id="spacingWhole" value="1"><select id="spacingFrac" class="frac-select"></select></div></div>
+    <div class="form-group" id="distanceGroup"><label id="lblDist">Distance</label><div class="input-row"><input type="number" id="distanceWhole"><select id="distanceFrac" class="frac-select"></select></div></div>
+    <div class="form-group" id="heightGroup"><label id="lblHeight">Rise</label><div class="input-row"><input type="number" id="heightWhole"><select id="heightFrac" class="frac-select"></select></div></div>
+    <div class="form-group" id="widthGroup" style="display: none;"><label id="lblWidth">Obstacle Width</label><div class="input-row"><input type="number" id="widthWhole"><select id="widthFrac" class="frac-select"></select></div></div>
+    <div class="form-group" id="shiftGroup" style="display: none;"><label id="lblShift">Horizontal Shift</label><div class="input-row"><input type="number" id="shiftWhole"><select id="shiftFrac" class="frac-select"></select></div></div>
 
     <div class="guide-box" id="guideText"></div>
+
+    <!-- Кнопки вызова модальных окон -->
+    <div class="guide-action-btns">
+        <button id="btnPhotoGuide" onclick="openPhotoGuide()">📸 Фото-Гайд</button>
+        <button id="btnBenderMarks" onclick="openBenderMarks()">🔍 Значки трубогиба</button>
+    </div>
 
     <button class="calc-btn" id="btnCalc" onclick="calculate()">Calculate</button>
 
@@ -237,508 +90,349 @@
         <div class="info" id="extraInfo"></div>
     </div>
 
+    <!-- МОДАЛЬНОЕ ОКНО -->
+    <div id="modalOverlay" class="modal" onclick="closeModalOutside(event)">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h3 id="modalTitle">Guide</h3>
+            <div id="markerTabsContainer" class="marker-tabs" style="display: none;">
+                <button id="tabArrow" onclick="switchMarker('arrow')">➔ Стрілка</button>
+                <button id="tabStar" onclick="switchMarker('star')">★ Зірка</button>
+                <button id="tabNotch" onclick="switchMarker('notch')">⯎ Насічка</button>
+            </div>
+            <img id="modalImg" class="slider-img" src="" alt="Guide Image">
+            <div id="modalText" class="slider-text">Текст шага</div>
+            <div id="sliderControls" class="slider-controls">
+                <button id="btnPrev" class="slider-btn" onclick="changeSlide(-1)">❮ Prev</button>
+                <span id="slideCounter" class="slide-counter">1 / 1</span>
+                <button id="btnNext" class="slider-btn" onclick="changeSlide(1)">Next ❯</button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // =========================================================================
+        // === БЛОК ДЛЯ ФОТОГРАФИЙ (ВСТАВЛЯЙ ССЫЛКИ С IMGUR СЮДА) ===
+        // Если фотка одна - пиши ["ссылка"]
+        // Если фоток несколько - перечисляй через запятую: ["ссылка1", "ссылка2", "ссылка3"]
+        // =========================================================================
+        const IMAGES = {
+            marks: {
+                arrow: "https://i.imgur.com/HHSrJVC.jpeg",
+                star: "https://i.imgur.com/CcudLLq.png",
+                notch: "https://i.imgur.com/ZEAT4gO.png"
+            },
+            stub90: [ "https://i.imgur.com/XItJ8jQ.jpeg" ,
+                "https://i.imgur.com/1LnHbWK.jpeg" ,
+                "https://i.imgur.com/rvSwDTH.jpeg" ,
+                "https://i.imgur.com/sEvoENj.jpeg" ,
+                "https://i.imgur.com/aGJ3Nbj.jpeg" ,
+                "https://i.imgur.com/NLiSnx0.jpeg" ,
+                "https://i.imgur.com/ttWQSA6.jpeg" ],
+            backToBack: [ "https://i.imgur.com/gTIWepT.png" ,
+                "https://i.imgur.com/61ZFKdF.jpeg" ,
+                "https://i.imgur.com/R3WxhEg.png" ,
+                "https://i.imgur.com/fv02nyO.png" ,
+                "https://i.imgur.com/zmNoxls.png" ,
+             ],
+            fullB2B: [ "ссылка на фото" ],
+            offset: [ "ссылка на фото" ],
+            parallelOffset: [ "ссылка на фото" ],
+            rolling: [ "ссылка на фото" ],
+            saddle3: [ "https://i.imgur.com/5PSTYp2.png" ,
+                "https://i.imgur.com/PMRtfbj.jpeg" ,
+                "https://i.imgur.com/ebHsMGB.png" ,
+                "https://i.imgur.com/IohvGlc.png" ,
+                "https://i.imgur.com/kL5hvlq.png" ,
+                "https://i.imgur.com/QdlexX5.png" ,
+                "https://i.imgur.com/hhQVf5J.png" ,
+                "https://i.imgur.com/YsIl4YX.png" ,
+                "https://i.imgur.com/qU3geYR.png" ,
+                "https://i.imgur.com/d7AhHCA.png"
+             ],
+            saddle4: [ "ссылка на фото" ],
+            concentric: [ "ссылка на фото" ]
+        };
+        // =========================================================================
+
         let currentLang = 'ua';
+        let currentGuideType = ''; 
+        let currentSlideIdx = 0;
+        let isMarkerView = false;
 
         const dict = {
             ua: {
-                btnText: "UA",
-                typeLabel: "Тип вигину (Bend Type)",
-                sizeLabel: "Розмір труби (Conduit Size - Take-up)",
-                angleLabel: "Кут вигину (Bend Angle)",
-                btnCalc: "Розрахувати (Calculate)",
-                resTitle: "Мітки (Layout Marks):",
-                types: {
-                    stub90: "90° Stub-up",
-                    backToBack: "Back-to-Back 90° (Другий кінець)",
-                    fullB2B: "Full Back-to-Back (X / Y повний розмір)",
-                    offset: "Offset (Зміщення / Утка)",
-                    parallelOffset: "Parallel Offset (Паралельні утки)",
-                    rolling: "Rolling Offset (Діагональна утка)",
-                    saddle3: "3-Point Saddle (Сідло 3 точки)",
-                    saddle4: "4-Point Saddle (Сідло 4 точки / Короб)",
-                    concentric: "Concentric 90° (Багатошаговий радіус)"
-                },
-                sizes: {
-                    "5": '1/2" (Take-up 5")',
-                    "6": '3/4" (Take-up 6")',
-                    "8": '1" (Take-up 8")'
-                },
-                anglesOffset: {
-                    10: '10° (Множник/Multiplier 6)',
-                    22.5: '22.5° (Множник/Multiplier 2.6)',
-                    30: '30° (Множник/Multiplier 2) - Класика',
-                    45: '45° (Множник/Multiplier 1.4)'
-                },
-                anglesSaddle: {
-                    22.5: 'Центр(Center) 45° / Боки(Sides) 22.5°',
-                    30: 'Центр(Center) 60° / Боки(Sides) 30°'
-                },
-                lblDistStub: "Висота від підлоги до краю труби (Height)",
-                lblDistB2B: "Відстань від першого гибу до упору (Span Y)",
-                lblFullB2B_Y: "Загальна довжина до упору (Span Y)",
-                lblFullB2B_X: "Висота першої стійки (Stub X)",
-                lblDistStart: "Відстань до ПОЧАТКУ перешкоди (Distance)",
-                lblDistCenter: "Відстань до ЦЕНТРУ перешкоди (Distance)",
-                lblDistRadius: "Радіус перешкоди/колонни (Radius)",
-                lblHeight: "Висота перешкоди (Rise)",
-                lblWidth: "Ширина перешкоди (Obstacle Width)",
-                lblShift: "Зсув убік (Roll / Horizontal Shift)",
-                lblPipes: "Кількість труб у пучку (Number of Pipes)",
-                lblSpacing: "Відстань між осями труб (Pipe Spacing)",
-                lblBends: "Кількість дрібних вигинів (Number of Bends)",
-                guideStub: "📏 <b>Гайд:</b> Відміряй рулеткою від підлоги до тої точки, де має закінчитись вигин.",
-                guideB2B: "📏 <b>Гайд:</b> Вкажи відстань від спинки вже готового першого 90° до упору в стіну.",
-                guideFullB2B: "📏 <b>Гайд:</b> Вкажи висоту першої стійки (X) та загальну довжину від стіни до стіни (Y). Програма розрахує обидві мітки на одному хлысті!",
-                guideOffset: "📏 <b>Гайд:</b> Відміряй прямо від початку траси до початку перешкоди.",
-                guideParallel: "📏 <b>Гайд:</b> Для пучка труб. Вкажи крок. Кожна наступна труба зсувається на tan(angle/2) * spacing.",
-                guideRolling: "📏 <b>Гайд:</b> Відміряй пряму відстань. Rise — наскільки труба підіймається. Roll — наскільки йде вбік.",
-                guideSaddle3: "📏 <b>Гайд:</b> Відміряй рулеткою рівно до ЦЕНТРУ чужої труби.",
-                guideSaddle4: "📏 <b>Гайд:</b> Відстань міряй до ПОЧАТКУ короба. Ширина — повний розмір від краю до краю.",
-                guideConcentric: "📏 <b>Гайд:</b> Вкажи радіус обходу. Програма розрахує крок. Відміряй центральну мітку, а від неї відклади решту міток в обидва боки.",
-                tipStub: "👉 Сумісти мітку зі <b>Стрілкою [ ➔ ]</b>. Гни до 90°.",
-                tipB2B: "👉 <b>Стрілка [ ➔ ]:</b> Використовуй мітку M1. Башмак дивиться НА первый вигин.<br>👉 <b>Зірка [ ★ ]:</b> Використовуй мітку M2. Башмак дивиться ВІД першого вигину.",
-                tipFullB2B: "👉 <b>M1:</b> Перший гиб (Stub-up) по Стрілці.<br>👉 <b>M2:</b> Другий гиб (Back-to-Back) по Стрілці (з урахуванням Take-up).",
-                tipOffset: "👉 Гни обидві мітки по <b>Стрілці [ ➔ ]</b>. Розверни трубу на 180° перед другим вигином.",
-                tipParallel: "👉 Згинай кожну трубу за своїм комплектом меток (M1, M2) по <b>Стрілці [ ➔ ]</b>. Розвертай на 180°.",
-                tipSaddle3: "👉 Крок 1: Центр (M2) по <b>Насічці [ ⯎ ]</b>.<br>👉 Крок 2: Боки (M1, M3) по <b>Стрілці [ ➔ ]</b>. Башмак до центру.",
-                tipSaddle4: "👉 <b>Протяжний метод:</b> Усі 4 вигини по <b>Стрілці [ ➔ ]</b>. Розвертай трубу на 180° після кожного вигину.",
-                tipConcentric: "👉 Поклади центральну мітку на стрілку. Згинай кожну мітку на однаковий градус, просуваючи трубу в одному напрямку.",
-                markStart: "(Початок / Start)",
-                markEnd: "(Кінець / End)",
-                markSide: "(Боковий / Side)",
-                markCenter: "ЦЕНТР (CENTER)",
-                shrink: "Усадка (Shrink)",
-                spacing: "Крок (Spacing)",
-                trueOffset: "Реальна висота (True Offset)",
-                limitWarn: "⚠️ Увага: Довжина деталі перевищує 120\" (10 ft). Буде потрібна муфта (Coupling)!"
+                btnText: "UA", typeLabel: "Тип вигину (Bend Type)", sizeLabel: "Розмір труби (EMT Size)", angleLabel: "Кут вигину (Bend Angle)", btnCalc: "Розрахувати", resTitle: "Мітки (Layout Marks):", btnPhotoGuide: "📸 Фото-Гайд", btnMarks: "🔍 Значки трубогиба", modalTitleGuide: "Покроковий Гайд", modalTitleMarks: "Значки трубогиба", btnPrev: "❮ Назад", btnNext: "Вперед ❯", tabArrow: "➔ Стрілка", tabStar: "★ Зірка", tabNotch: "⯎ Насічка",
+                types: { stub90: "90° Stub-up", backToBack: "Back-to-Back 90° (Другий кінець)", fullB2B: "Full Back-to-Back (X / Y повний розмір)", offset: "Offset (Зміщення / Утка)", parallelOffset: "Parallel Offset (Паралельні утки)", rolling: "Rolling Offset (Діагональна утка)", saddle3: "3-Point Saddle (Сідло 3 точки)", saddle4: "4-Point Saddle (Сідло 4 точки / Короб)", concentric: "Concentric 90° (Багатошаговий радіус)" },
+                sizes: { "5": '1/2" (Take-up 5")', "6": '3/4" (Take-up 6")', "8": '1" (Take-up 8")' },
+                anglesOffset: { 10: '10° (Множник 6)', 22.5: '22.5° (Множник 2.6)', 30: '30° (Множник 2)', 45: '45° (Множник 1.4)' },
+                anglesSaddle: { 22.5: 'Центр 45° / Боки 22.5°', 30: 'Центр 60° / Боки 30°' },
+                lblDistStub: "Висота від підлоги до краю труби (Height)", lblDistB2B: "Відстань від першого гибу до упору (Span Y)", lblFullB2B_Y: "Загальна довжина до упору (Span Y)", lblFullB2B_X: "Висота першої стійки (Stub X)", lblDistStart: "Відстань до ПОЧАТКУ перешкоди", lblDistCenter: "Відстань до ЦЕНТРУ перешкоди", lblDistRadius: "Радіус перешкоди (Radius)", lblHeight: "Висота перешкоди (Rise)", lblWidth: "Ширина перешкоди", lblShift: "Зсув убік (Roll)", lblPipes: "Кількість труб у пучку", lblSpacing: "Відстань між осями труб", lblBends: "Кількість дрібних вигинів",
+                guideStub: "📏 Гайд: Відміряй від підлоги до потрібної спинки 90°.", guideB2B: "📏 Гайд: Відстань від спинки вже готового 90° до упору.", guideFullB2B: "📏 Гайд (X / Y):<br>1. X: Висота першого 90° вигину (до спинки).<br>2. Y: Довжина вздовж стіни до упору.", guideOffset: "📏 Гайд: Відміряй прямо до початку перешкоди.", guideParallel: "📏 Гайд: Вкажи крок між трубами.", guideRolling: "📏 Гайд: Rise — підйом, Roll — зміщення вбік.", guideSaddle3: "📏 Гайд: Відміряй рівно до ЦЕНТРУ перешкоди.", guideSaddle4: "📏 Гайд: Відстань міряй до ПОЧАТКУ короба.", guideConcentric: "📏 Гайд: Вкажи радіус обходу. Згинай по центру і від нього.",
+                tipStub: "👉 Мітку на Стрілку [ ➔ ]. Гни до 90°.", tipB2B: "👉 Стрілка [ ➔ ] для M1. Зірка [ ★ ] для M2.", tipFullB2B: "👉 Обидва гиби по Стрілці [ ➔ ].", tipOffset: "👉 Обидві мітки по Стрілці [ ➔ ]. Розверни трубу.", tipParallel: "👉 Згинай по Стрілці [ ➔ ].", tipSaddle3: "👉 Центр по Насічці [ ⯎ ]. Боки по Стрілці [ ➔ ].", tipSaddle4: "👉 Усі 4 вигини по Стрілці [ ➔ ].", tipConcentric: "👉 Всі мітки по Стрілці, гнути в один бік.",
+                markStart: "(Початок)", markEnd: "(Кінець)", markSide: "(Боковий)", markCenter: "ЦЕНТР", shrink: "Усадка (Shrink)", spacing: "Крок (Spacing)", trueOffset: "Реальна висота", limitWarn: "⚠️ Потрібна муфта (Coupling)!",
+                markDesc: { arrow: "Стрілка (Arrow) - використовується для більшості стандартних вигинів (Stub, Offset).", star: "Зірка (Star) - використовується для Back-to-Back, коли труба дивиться в інший бік.", notch: "Насічка (Notch / Tear Drop) - використовується ТІЛЬКИ для центру 3-Point Saddle." },
+                
+                // =========================================================================
+                // ТЕКСТ ДЛЯ ФОТО-ГАЙДІВ (УКРАЇНСЬКОЮ)
+                // Перераховуй тексти в кавичках через кому, так само як фотки вище.
+                // =========================================================================
+                steps: {
+                    stub90: [ "Текст для кроку 1" ],
+                    backToBack: [ "Текст для кроку 1" ],
+                    fullB2B: [ "Текст для кроку 1" ],
+                    offset: [ "Текст для кроку 1" ],
+                    parallelOffset: [ "Текст для кроку 1" ],
+                    rolling: [ "Текст для кроку 1" ],
+                    saddle3: [ "Текст для кроку 1" ],
+                    saddle4: [ "Текст для кроку 1" ],
+                    concentric: [ "Текст для кроку 1" ]
+                }
             },
             ru: {
-                btnText: "RU",
-                typeLabel: "Вид изгиба (Bend Type)",
-                sizeLabel: "Размер трубы (Conduit Size - Take-up)",
-                angleLabel: "Угол изгиба (Bend Angle)",
-                btnCalc: "Рассчитать (Calculate)",
-                resTitle: "Метки (Layout Marks):",
-                types: {
-                    stub90: "90° Stub-up",
-                    backToBack: "Back-to-Back 90° (Второй конец)",
-                    fullB2B: "Full Back-to-Back (X / Y полный размер)",
-                    offset: "Offset (Утка)",
-                    parallelOffset: "Parallel Offset (Параллельные утки)",
-                    rolling: "Rolling Offset (Диагональная утка)",
-                    saddle3: "3-Point Saddle (Седло 3 точки)",
-                    saddle4: "4-Point Saddle (Седло 4 точки / Короб)",
-                    concentric: "Concentric 90° (Многошаговый радиус)"
-                },
-                sizes: {
-                    "5": '1/2" (Take-up 5")',
-                    "6": '3/4" (Take-up 6")',
-                    "8": '1" (Take-up 8")'
-                },
-                anglesOffset: {
-                    10: '10° (Множитель/Multiplier 6)',
-                    22.5: '22.5° (Множитель/Multiplier 2.6)',
-                    30: '30° (Множитель/Multiplier 2) - Классика',
-                    45: '45° (Множитель/Multiplier 1.4)'
-                },
-                anglesSaddle: {
-                    22.5: 'Центр(Center) 45° / Бока(Sides) 22.5°',
-                    30: 'Центр(Center) 60° / Бока(Sides) 30°'
-                },
-                lblDistStub: "Высота от пола до края трубы (Height)",
-                lblDistB2B: "Расстояние от первого гиба до упора (Span Y)",
-                lblFullB2B_Y: "Общая длина до упора (Span Y)",
-                lblFullB2B_X: "Высота первой стойки (Stub X)",
-                lblDistStart: "Расстояние до НАЧАЛА препятствия (Distance)",
-                lblDistCenter: "Расстояние до ЦЕНТРА препятствия (Distance)",
-                lblDistRadius: "Радиус препятствия/колонны (Radius)",
-                lblHeight: "Высота препятствия (Rise)",
-                lblWidth: "Ширина препятствия (Obstacle Width)",
-                lblShift: "Смещение вбок (Roll / Horizontal Shift)",
-                lblPipes: "Количество труб в пучке (Number of Pipes)",
-                lblSpacing: "Шаг между осями труб (Pipe Spacing)",
-                lblBends: "Количество мелких изгибов (Number of Bends)",
-                guideStub: "📏 <b>Гайд:</b> Отмерь рулеткой от пола до той точки, где должен закончиться изгиб.",
-                guideB2B: "📏 <b>Гайд:</b> Укажи расстояние от спинки уже готового первого 90° до упора в стену.",
-                guideFullB2B: "📏 <b>Гайд:</b> Укажи высоту первой стойки (X) и общую длину от стены до стены (Y). Программа рассчитает обе метки на одном хлысте!",
-                guideOffset: "📏 <b>Гайд:</b> Отмерь прямо от начала трассы до начала препятствия.",
-                guideParallel: "📏 <b>Гайд:</b> Для пучка труб. Укажи шаг. Каждая следующая труба смещается на tan(angle/2) * spacing.",
-                guideRolling: "📏 <b>Гайд:</b> Отмерь прямое расстояние. Rise — насколько труба поднимается. Roll — насколько уходит вбок.",
-                guideSaddle3: "📏 <b>Гайд:</b> Отмерь рулеткой ровно до ЦЕНТРА чужой трубы.",
-                guideSaddle4: "📏 <b>Гайд:</b> Расстояние меряй до НАЧАЛА короба. Ширина — полный размер от края до края.",
-                guideConcentric: "📏 <b>Гайд:</b> Укажи радиус обхода. Программа рассчитает шаг. Отмерь центр, от него отложи остальные метки в обе стороны.",
-                tipStub: "👉 Совмести метку со <b>Стрелкой [ ➔ ]</b>. Гни до 90°.",
-                tipB2B: "👉 <b>Стрелка [ ➔ ]:</b> Используй метку M1. Башмак смотрит НА первый гиб.<br>👉 <b>Звезда [ ★ ]:</b> Используй метку M2. Башмак смотрит ОТ первого гиба.",
-                tipFullB2B: "👉 <b>M1:</b> Первый гиб (Stub-up) по Стрелке.<br>👉 <b>M2:</b> Второй гиб (Back-to-Back) по Стрелке (с учетом Take-up).",
-                tipOffset: "👉 Гни обе метки по <b>Стрелке [ ➔ ]</b>. Разверни трубу на 180° перед вторым гибом.",
-                tipParallel: "👉 Гни каждую трубу по своему комплекту меток (M1, M2) на <b>Стрелке [ ➔ ]</b>. Разворачивай на 180°.",
-                tipSaddle3: "👉 Шаг 1: Центр (M2) по <b>Засечке [ ⯎ ]</b>.<br>👉 Шаг 2: Бока (M1, M3) по <b>Стрелке [ ➔ ]</b>. Башмак смотрит к центру.",
-                tipSaddle4: "👉 <b>Протяжной метод:</b> Все 4 гиба по <b>Стрелке [ ➔ ]</b>. Разворачивай трубу на 180° после каждого гиба.",
-                tipConcentric: "👉 Положи центральную метку на стрелку. Гни каждую метку на одинаковый градус, продвигая трубу в одном направлении.",
-                markStart: "(Начало / Start)",
-                markEnd: "(Конец / End)",
-                markSide: "(Боковой / Side)",
-                markCenter: "ЦЕНТР (CENTER)",
-                shrink: "Усадка (Shrink)",
-                spacing: "Шаг (Spacing)",
-                trueOffset: "Реальная высота (True Offset)",
-                limitWarn: "⚠️ Внимание: Длина детали превышает 120\" (10 ft). Потребуется муфта (Coupling)!"
+                btnText: "RU", typeLabel: "Вид изгиба (Bend Type)", sizeLabel: "Размер трубы (EMT Size)", angleLabel: "Угол изгиба (Bend Angle)", btnCalc: "Рассчитать", resTitle: "Метки (Layout Marks):", btnPhotoGuide: "📸 Фото-Гайд", btnMarks: "🔍 Значки трубогиба", modalTitleGuide: "Пошаговый Гайд", modalTitleMarks: "Значки трубогиба", btnPrev: "❮ Назад", btnNext: "Вперед ❯", tabArrow: "➔ Стрелка", tabStar: "★ Звезда", tabNotch: "⯎ Насечка",
+                types: { stub90: "90° Stub-up", backToBack: "Back-to-Back 90° (Второй конец)", fullB2B: "Full Back-to-Back (X / Y полный размер)", offset: "Offset (Утка)", parallelOffset: "Parallel Offset (Параллельные утки)", rolling: "Rolling Offset (Диагональная утка)", saddle3: "3-Point Saddle (Седло 3 точки)", saddle4: "4-Point Saddle (Седло 4 точки / Короб)", concentric: "Concentric 90° (Многошаговый радиус)" },
+                sizes: { "5": '1/2" (Take-up 5")', "6": '3/4" (Take-up 6")', "8": '1" (Take-up 8")' },
+                anglesOffset: { 10: '10° (Множитель 6)', 22.5: '22.5° (Множитель 2.6)', 30: '30° (Множитель 2)', 45: '45° (Множитель 1.4)' },
+                anglesSaddle: { 22.5: 'Центр 45° / Бока 22.5°', 30: 'Центр 60° / Бока 30°' },
+                lblDistStub: "Высота от пола до края трубы (Height)", lblDistB2B: "Расстояние от первого гиба до упора (Span Y)", lblFullB2B_Y: "Общая длина до упора (Span Y)", lblFullB2B_X: "Высота первой стойки (Stub X)", lblDistStart: "Расстояние до НАЧАЛА препятствия", lblDistCenter: "Расстояние до ЦЕНТРА препятствия", lblDistRadius: "Радиус препятствия (Radius)", lblHeight: "Высота препятствия (Rise)", lblWidth: "Ширина препятствия", lblShift: "Смещение вбок (Roll)", lblPipes: "Количество труб в пучке", lblSpacing: "Шаг между осями труб", lblBends: "Количество мелких изгибов",
+                guideStub: "📏 Гайд: Отмерь от пола до нужной спинки 90°.", guideB2B: "📏 Гайд: Укажи расстояние от спинки готового 90° до упора.", guideFullB2B: "📏 Гайд (X / Y):<br>1. X: Высота первого 90° изгиба (до спинки).<br>2. Y: Длина вдоль стены до упора.", guideOffset: "📏 Гайд: Отмерь прямо до начала препятствия.", guideParallel: "📏 Гайд: Укажи шаг между трубами.", guideRolling: "📏 Гайд: Rise — подъем, Roll — уход вбок.", guideSaddle3: "📏 Гайд: Отмерь ровно до ЦЕНТРА препятствия.", guideSaddle4: "📏 Гайд: Расстояние меряй до НАЧАЛА короба.", guideConcentric: "📏 Гайд: Укажи радиус обхода.",
+                tipStub: "👉 Метку на Стрелку [ ➔ ]. Гни до 90°.", tipB2B: "👉 Стрелка [ ➔ ] для M1. Звезда [ ★ ] для M2.", tipFullB2B: "👉 Оба гиба по Стрелке [ ➔ ].", tipOffset: "👉 Обе метки по Стрелке [ ➔ ]. Разверни трубу.", tipParallel: "👉 Гни по Стрелке [ ➔ ].", tipSaddle3: "👉 Центр по Насечке [ ⯎ ]. Бока по Стрелке [ ➔ ].", tipSaddle4: "👉 Все 4 гиба по Стрелке [ ➔ ].", tipConcentric: "👉 Все метки по Стрелке, гнуть в одну сторону.",
+                markStart: "(Начало)", markEnd: "(Конец)", markSide: "(Боковий)", markCenter: "ЦЕНТР", shrink: "Усадка (Shrink)", spacing: "Шаг (Spacing)", trueOffset: "Реальная высота", limitWarn: "⚠️ Потребуется муфта (Coupling)!",
+                markDesc: { arrow: "Стрелка (Arrow) - используется для большинства гибов (Stub, Offset).", star: "Звезда (Star) - используется для Back-to-Back, когда труба смотрит в другую сторону.", notch: "Насечка (Notch / Tear Drop) - используется ТОЛЬКО для центра 3-Point Saddle." },
+                
+                // =========================================================================
+                // ТЕКСТ ДЛЯ ФОТО-ГАЙДОВ (НА РУССКОМ)
+                // =========================================================================
+                steps: {
+                    stub90: [ "Текст для шага 1" ],
+                    backToBack: [ "Текст для шага 1" ],
+                    fullB2B: [ "Текст для шага 1" ],
+                    offset: [ "Текст для шага 1" ],
+                    parallelOffset: [ "Текст для шага 1" ],
+                    rolling: [ "Текст для шага 1" ],
+                    saddle3: [ "Текст для шага 1" ],
+                    saddle4: [ "Текст для шага 1" ],
+                    concentric: [ "Текст для шага 1" ]
+                }
             },
             en: {
-                btnText: "EN",
-                typeLabel: "Bend Type",
-                sizeLabel: "Conduit Size (Take-up)",
-                angleLabel: "Bend Angle",
-                btnCalc: "Calculate Layout",
-                resTitle: "Layout Marks:",
-                types: {
-                    stub90: "90° Stub-up",
-                    backToBack: "Back-to-Back 90° (Second end)",
-                    fullB2B: "Full Back-to-Back (X / Y complete run)",
-                    offset: "Offset",
-                    parallelOffset: "Parallel Offset",
-                    rolling: "Rolling Offset",
-                    saddle3: "3-Point Saddle",
-                    saddle4: "4-Point Saddle (Duct/Beam)",
-                    concentric: "Concentric 90°"
-                },
-                sizes: {
-                    "5": '1/2" (Take-up 5")',
-                    "6": '3/4" (Take-up 6")',
-                    "8": '1" (Take-up 8")'
-                },
-                anglesOffset: {
-                    10: '10° (Multiplier 6)',
-                    22.5: '22.5° (Multiplier 2.6)',
-                    30: '30° (Multiplier 2) - Common',
-                    45: '45° (Multiplier 1.4)'
-                },
-                anglesSaddle: {
-                    22.5: 'Center 45° / Sides 22.5°',
-                    30: 'Center 60° / Sides 30°'
-                },
-                lblDistStub: "Distance to back of 90° bend",
-                lblDistB2B: "Distance from first bend to wall (Span Y)",
-                lblFullB2B_Y: "Total span to wall (Span Y)",
-                lblFullB2B_X: "First stub height (Stub X)",
-                lblDistStart: "Distance to start of obstacle",
-                lblDistCenter: "Distance to CENTER of obstacle",
-                lblDistRadius: "Radius of curve/column (Radius)",
-                lblHeight: "Obstacle Height (Rise)",
-                lblWidth: "Obstacle Width",
-                lblShift: "Horizontal Shift (Roll)",
-                lblPipes: "Number of Pipes",
-                lblSpacing: "Pipe Spacing",
-                lblBends: "Number of small bends",
-                guideStub: "📏 <b>Guide:</b> Measure from the box/floor to the back of the desired 90° bend.",
-                guideB2B: "📏 <b>Guide:</b> Measure the span from the back of the first 90° bend to the wall.",
-                guideFullB2B: "📏 <b>Guide:</b> Enter first stub height (X) and total span (Y). Program calculates both marks on a single conduit stick!",
-                guideOffset: "📏 <b>Guide:</b> Measure from your starting point straight to the beginning of the obstacle.",
-                guideParallel: "📏 <b>Guide:</b> For conduit runs. Each successive pipe shifts by tan(angle/2) * spacing.",
-                guideRolling: "📏 <b>Guide:</b> Measure straight distance. Rise is how far up it goes. Roll is how far left/right it shifts.",
-                guideSaddle3: "📏 <b>Guide:</b> Measure directly to the dead center of the pipe you are crossing.",
-                guideSaddle4: "📏 <b>Guide:</b> Distance is to the START of the duct. Width is the total outer width of the duct.",
-                guideConcentric: "📏 <b>Guide:</b> Enter curve radius. Program calculates mark spacing. Mark center, then layout remaining marks on both sides.",
-                tipStub: "👉 Align mark with the <b>Arrow [ ➔ ]</b>. Bend to 90°.",
-                tipB2B: "👉 <b>Arrow [ ➔ ]:</b> Use M1 mark. Bender hook points TOWARD first bend.<br>👉 <b>Star [ ★ ]:</b> Use M2 mark. Bender hook points AWAY from first bend.",
-                tipFullB2B: "👉 <b>M1:</b> First Stub-up mark on Arrow.<br>👉 <b>M2:</b> Second Back-to-Back mark on Arrow (includes Take-up).",
-                tipOffset: "👉 Bend both marks on the <b>Arrow [ ➔ ]</b>. Roll conduit 180° before the second bend.",
-                tipParallel: "👉 Bend each pipe using its specific set of marks (M1, M2) on the <b>Arrow [ ➔ ]</b>. Roll 180°.",
-                tipSaddle3: "👉 Step 1: Center (M2) on the <b>Center Notch [ ⯎ ]</b>.<br>👉 Step 2: Sides (M1, M3) on the <b>Arrow [ ➔ ]</b> pointing toward the center.",
-                tipSaddle4: "👉 <b>Push-Through Method:</b> All 4 bends on the <b>Arrow [ ➔ ]</b>. Roll conduit 180° after each bend.",
-                tipConcentric: "👉 Bend each mark to the calculated exact degree pushing the bender in the same direction.",
-                markStart: "(Start)",
-                markEnd: "(End)",
-                markSide: "(Side bend)",
-                markCenter: "CENTER",
-                shrink: "Shrink",
-                spacing: "Spacing",
-                trueOffset: "True Offset",
-                limitWarn: "⚠️ Warning: Total bend length exceeds 120\" (10 ft). A coupling will be required!"
+                btnText: "EN", typeLabel: "Bend Type", sizeLabel: "Conduit Size (EMT Size)", angleLabel: "Bend Angle", btnCalc: "Calculate", resTitle: "Layout Marks:", btnPhotoGuide: "📸 Photo Guide", btnMarks: "🔍 Bender Marks", modalTitleGuide: "Step-by-Step Guide", modalTitleMarks: "Bender Marks", btnPrev: "❮ Prev", btnNext: "Next ❯", tabArrow: "➔ Arrow", tabStar: "★ Star", tabNotch: "⯎ Notch",
+                types: { stub90: "90° Stub-up", backToBack: "Back-to-Back 90°", fullB2B: "Full Back-to-Back (X / Y)", offset: "Offset", parallelOffset: "Parallel Offset", rolling: "Rolling Offset", saddle3: "3-Point Saddle", saddle4: "4-Point Saddle", concentric: "Concentric 90°" },
+                sizes: { "5": '1/2" (Take-up 5")', "6": '3/4" (Take-up 6")', "8": '1" (Take-up 8")' },
+                anglesOffset: { 10: '10° (Multiplier 6)', 22.5: '22.5° (Multiplier 2.6)', 30: '30° (Multiplier 2)', 45: '45° (Multiplier 1.4)' },
+                anglesSaddle: { 22.5: 'Center 45° / Sides 22.5°', 30: 'Center 60° / Sides 30°' },
+                lblDistStub: "Distance to back of 90° bend", lblDistB2B: "Distance from first bend to wall", lblFullB2B_Y: "Total span to wall (Span Y)", lblFullB2B_X: "First stub height (Stub X)", lblDistStart: "Distance to start of obstacle", lblDistCenter: "Distance to CENTER of obstacle", lblDistRadius: "Radius of curve", lblHeight: "Obstacle Height (Rise)", lblWidth: "Obstacle Width", lblShift: "Horizontal Shift (Roll)", lblPipes: "Number of Pipes", lblSpacing: "Pipe Spacing", lblBends: "Number of small bends",
+                guideStub: "📏 Guide: Measure to the back of the desired 90°.", guideB2B: "📏 Guide: Span from the back of first 90° to the wall.", guideFullB2B: "📏 Guide (X / Y):<br>1. X: 90° bend height (to back).<br>2. Y: Length to stopping point.", guideOffset: "📏 Guide: Measure straight to the beginning of obstacle.", guideParallel: "📏 Guide: Set pipe spacing.", guideRolling: "📏 Guide: Rise (up) and Roll (shift left/right).", guideSaddle3: "📏 Guide: Measure directly to the CENTER of obstacle.", guideSaddle4: "📏 Guide: Distance is to the START of the duct.", guideConcentric: "📏 Guide: Enter curve radius.",
+                tipStub: "👉 Mark on Arrow [ ➔ ]. Bend to 90°.", tipB2B: "👉 Arrow [ ➔ ] for M1. Star [ ★ ] for M2.", tipFullB2B: "👉 Both bends on Arrow [ ➔ ].", tipOffset: "👉 Both marks on Arrow [ ➔ ]. Roll conduit 180°.", tipParallel: "👉 Bend on Arrow [ ➔ ].", tipSaddle3: "👉 Center on Notch [ ⯎ ]. Sides on Arrow [ ➔ ].", tipSaddle4: "👉 All 4 bends on Arrow [ ➔ ].", tipConcentric: "👉 Bend all marks on Arrow.",
+                markStart: "(Start)", markEnd: "(End)", markSide: "(Side bend)", markCenter: "CENTER", shrink: "Shrink", spacing: "Spacing", trueOffset: "True Offset", limitWarn: "⚠️ Coupling required!",
+                markDesc: { arrow: "Arrow - Used for standard bends like Stubs and Offsets.", star: "Star - Used for Back-to-Back bends when bender is reversed.", notch: "Tear Drop (Notch) - Used ONLY for the center of a 3-Point Saddle." },
+                
+                // =========================================================================
+                // ТЕКСТ ДЛЯ ФОТО-ГАЙДОВ (НА АНГЛИЙСКОМ)
+                // =========================================================================
+                steps: {
+                    stub90: [ "Text for step 1" ],
+                    backToBack: [ "Text for step 1" ],
+                    fullB2B: [ "Text for step 1" ],
+                    offset: [ "Text for step 1" ],
+                    parallelOffset: [ "Text for step 1" ],
+                    rolling: [ "Text for step 1" ],
+                    saddle3: [ "Text for step 1" ],
+                    saddle4: [ "Text for step 1" ],
+                    concentric: [ "Text for step 1" ]
+                }
             }
         };
 
         const fracOptions = [
-            {v: 0, t: '0"'}, {v: 0.0625, t: '1/16"'}, {v: 0.125, t: '1/8"'}, {v: 0.1875, t: '3/16"'},
-            {v: 0.25, t: '1/4"'}, {v: 0.3125, t: '5/16"'}, {v: 0.375, t: '3/8"'}, {v: 0.4375, t: '7/16"'},
-            {v: 0.5, t: '1/2"'}, {v: 0.5625, t: '9/16"'}, {v: 0.625, t: '5/8"'}, {v: 0.6875, t: '11/16"'},
-            {v: 0.75, t: '3/4"'}, {v: 0.8125, t: '13/16"'}, {v: 0.875, t: '7/8"'}, {v: 0.9375, t: '15/16"'}
+            {v: 0, t: '0"'}, {v: 0.0625, t: '1/16"'}, {v: 0.125, t: '1/8"'}, {v: 0.1875, t: '3/16"'}, {v: 0.25, t: '1/4"'}, {v: 0.3125, t: '5/16"'}, {v: 0.375, t: '3/8"'}, {v: 0.4375, t: '7/16"'},
+            {v: 0.5, t: '1/2"'}, {v: 0.5625, t: '9/16"'}, {v: 0.625, t: '5/8"'}, {v: 0.6875, t: '11/16"'}, {v: 0.75, t: '3/4"'}, {v: 0.8125, t: '13/16"'}, {v: 0.875, t: '7/8"'}, {v: 0.9375, t: '15/16"'}
         ];
 
         function toggleLang() {
-            if (currentLang === 'ua') {
-                currentLang = 'ru';
-            } else if (currentLang === 'ru') {
-                currentLang = 'en';
-            } else {
-                currentLang = 'ua';
-            }
-
+            if (currentLang === 'ua') currentLang = 'ru'; else if (currentLang === 'ru') currentLang = 'en'; else currentLang = 'ua';
             document.getElementById('langBtn').innerText = dict[currentLang].btnText;
-            initDropdowns();
-            updateUI();
-            document.getElementById('resultBox').style.display = 'none';
+            initDropdowns(); updateUI(); document.getElementById('resultBox').style.display = 'none';
         }
 
         function initDropdowns() {
-            const typeSel = document.getElementById('bendType');
-            const prevType = typeSel.value;
+            const typeSel = document.getElementById('bendType'), prevType = typeSel.value;
             typeSel.innerHTML = '';
-            for (const [key, val] of Object.entries(dict[currentLang].types)) {
-                typeSel.add(new Option(val, key));
-            }
+            for (const [key, val] of Object.entries(dict[currentLang].types)) { typeSel.add(new Option(val, key)); }
             if (prevType && dict[currentLang].types[prevType]) typeSel.value = prevType;
 
-            const sizeSel = document.getElementById('conduitSize');
-            sizeSel.innerHTML = '';
-            for (const [key, val] of Object.entries(dict[currentLang].sizes)) {
-                sizeSel.add(new Option(val, key));
-            }
+            const sizeSel = document.getElementById('conduitSize'); sizeSel.innerHTML = '';
+            for (const [key, val] of Object.entries(dict[currentLang].sizes)) { sizeSel.add(new Option(val, key)); }
             sizeSel.value = "6";
             
             document.querySelectorAll('.frac-select').forEach(sel => {
-                const prev = sel.value;
-                sel.innerHTML = '';
-                fracOptions.forEach(f => sel.add(new Option(f.t, f.v)));
-                if(prev) sel.value = prev;
+                const prev = sel.value; sel.innerHTML = '';
+                fracOptions.forEach(f => sel.add(new Option(f.t, f.v))); if(prev) sel.value = prev;
             });
 
-            document.getElementById('lblType').innerText = dict[currentLang].typeLabel;
-            document.getElementById('lblSize').innerText = dict[currentLang].sizeLabel;
-            document.getElementById('lblAngle').innerText = dict[currentLang].angleLabel;
-            document.getElementById('btnCalc').innerText = dict[currentLang].btnCalc;
-            document.getElementById('resTitle').innerText = dict[currentLang].resTitle;
-            document.getElementById('lblWidth').innerText = dict[currentLang].lblWidth;
-            document.getElementById('lblShift').innerText = dict[currentLang].lblShift;
-            document.getElementById('lblPipes').innerText = dict[currentLang].lblPipes;
-            document.getElementById('lblSpacing').innerText = dict[currentLang].lblSpacing;
-            document.getElementById('lblBends').innerText = dict[currentLang].lblBends;
+            document.getElementById('lblType').innerText = dict[currentLang].typeLabel; document.getElementById('lblSize').innerText = dict[currentLang].sizeLabel;
+            document.getElementById('lblAngle').innerText = dict[currentLang].angleLabel; document.getElementById('btnCalc').innerText = dict[currentLang].btnCalc;
+            document.getElementById('resTitle').innerText = dict[currentLang].resTitle; document.getElementById('lblWidth').innerText = dict[currentLang].lblWidth;
+            document.getElementById('lblShift').innerText = dict[currentLang].lblShift; document.getElementById('lblPipes').innerText = dict[currentLang].lblPipes;
+            document.getElementById('lblSpacing').innerText = dict[currentLang].lblSpacing; document.getElementById('lblBends').innerText = dict[currentLang].lblBends;
+            document.getElementById('btnPhotoGuide').innerText = dict[currentLang].btnPhotoGuide; document.getElementById('btnBenderMarks').innerText = dict[currentLang].btnMarks;
+            document.getElementById('btnPrev').innerText = dict[currentLang].btnPrev; document.getElementById('btnNext').innerText = dict[currentLang].btnNext;
+            document.getElementById('tabArrow').innerText = dict[currentLang].tabArrow; document.getElementById('tabStar').innerText = dict[currentLang].tabStar; document.getElementById('tabNotch').innerText = dict[currentLang].tabNotch;
         }
 
         function updateUI() {
             const type = document.getElementById('bendType').value;
             const angleSel = document.getElementById('bendAngle');
-            const dLabel = document.getElementById('lblDist');
-            const hLabel = document.getElementById('lblHeight');
-            const guide = document.getElementById('guideText');
-            const t = dict[currentLang];
+            const dLabel = document.getElementById('lblDist'), hLabel = document.getElementById('lblHeight'), guide = document.getElementById('guideText'), t = dict[currentLang];
             
-            document.getElementById('conduitSizeGroup').style.display = (type === 'stub90' || type === 'backToBack' || type === 'fullB2B') ? 'block' : 'none';
+            document.getElementById('conduitSizeGroup').style.display = 'block';
             document.getElementById('angleGroup').style.display = (type === 'stub90' || type === 'backToBack' || type === 'fullB2B' || type === 'concentric') ? 'none' : 'block';
-            
-            const showHeight = (type !== 'stub90' && type !== 'backToBack' && type !== 'concentric');
-            document.getElementById('heightGroup').style.display = showHeight ? 'block' : 'none';
-
+            document.getElementById('heightGroup').style.display = (type !== 'stub90' && type !== 'backToBack' && type !== 'concentric') ? 'block' : 'none';
             document.getElementById('widthGroup').style.display = (type === 'saddle4') ? 'block' : 'none';
             document.getElementById('shiftGroup').style.display = (type === 'rolling') ? 'block' : 'none';
             document.getElementById('bendsCountGroup').style.display = (type === 'concentric') ? 'block' : 'none';
             
             const isParallel = (type === 'parallelOffset');
-            document.getElementById('pipesGroup').style.display = isParallel ? 'block' : 'none';
-            document.getElementById('spacingGroup').style.display = isParallel ? 'block' : 'none';
+            document.getElementById('pipesGroup').style.display = isParallel ? 'block' : 'none'; document.getElementById('spacingGroup').style.display = isParallel ? 'block' : 'none';
 
             angleSel.innerHTML = '';
+            // Кнопка фото-гайда теперь отображается для всех типов
+            document.getElementById('btnPhotoGuide').style.display = 'flex';
 
-            if (type === 'stub90') {
-                dLabel.innerText = t.lblDistStub;
-                guide.innerHTML = t.guideStub;
-            } else if (type === 'backToBack') {
-                dLabel.innerText = t.lblDistB2B;
-                guide.innerHTML = t.guideB2B;
-            } else if (type === 'fullB2B') {
-                dLabel.innerText = t.lblFullB2B_Y;
-                hLabel.innerText = t.lblFullB2B_X;
-                document.getElementById('heightGroup').style.display = 'block';
-                guide.innerHTML = t.guideFullB2B;
-            } else if (type === 'concentric') {
-                dLabel.innerText = t.lblDistRadius;
-                guide.innerHTML = t.guideConcentric;
-            } else if (type === 'offset' || type === 'rolling' || type === 'saddle4' || type === 'parallelOffset') {
-                dLabel.innerText = t.lblDistStart;
-                hLabel.innerText = t.lblHeight;
-                guide.innerHTML = (type === 'offset') ? t.guideOffset : (type === 'rolling' ? t.guideRolling : (type === 'parallelOffset' ? t.guideParallel : t.guideSaddle4));
-                
-                for (const [key, val] of Object.entries(t.anglesOffset)) {
-                    angleSel.add(new Option(val, key));
-                }
-                angleSel.value = "30";
+            if (type === 'stub90') { dLabel.innerText = t.lblDistStub; guide.innerHTML = t.guideStub; } 
+            else if (type === 'backToBack') { dLabel.innerText = t.lblDistB2B; guide.innerHTML = t.guideB2B; } 
+            else if (type === 'fullB2B') { dLabel.innerText = t.lblFullB2B_Y; hLabel.innerText = t.lblFullB2B_X; document.getElementById('heightGroup').style.display = 'block'; guide.innerHTML = t.guideFullB2B; } 
+            else if (type === 'concentric') { dLabel.innerText = t.lblDistRadius; guide.innerHTML = t.guideConcentric; } 
+            else if (type === 'offset' || type === 'rolling' || type === 'saddle4' || type === 'parallelOffset') {
+                dLabel.innerText = t.lblDistStart; hLabel.innerText = t.lblHeight; guide.innerHTML = (type === 'offset') ? t.guideOffset : (type === 'rolling' ? t.guideRolling : (type === 'parallelOffset' ? t.guideParallel : t.guideSaddle4));
+                for (const [key, val] of Object.entries(t.anglesOffset)) { angleSel.add(new Option(val, key)); } angleSel.value = "30";
             } else if (type === 'saddle3') {
-                dLabel.innerText = t.lblDistCenter;
-                hLabel.innerText = t.lblHeight;
-                guide.innerHTML = t.guideSaddle3;
-                
-                for (const [key, val] of Object.entries(t.anglesSaddle)) {
-                    angleSel.add(new Option(val, key));
-                }
-                angleSel.value = "30";
+                dLabel.innerText = t.lblDistCenter; hLabel.innerText = t.lblHeight; guide.innerHTML = t.guideSaddle3;
+                for (const [key, val] of Object.entries(t.anglesSaddle)) { angleSel.add(new Option(val, key)); } angleSel.value = "30";
             }
         }
 
-        function getFullVal(idPrefix) {
-            let w = parseFloat(document.getElementById(idPrefix + 'Whole').value) || 0;
-            let f = parseFloat(document.getElementById(idPrefix + 'Frac').value) || 0;
-            return w > 0 || f > 0 ? w + f : 0;
+        // ==========================================
+        // ЛОГИКА СЛАЙДЕРА
+        // ==========================================
+        function openPhotoGuide() {
+            currentGuideType = document.getElementById('bendType').value;
+            if(!IMAGES[currentGuideType] || IMAGES[currentGuideType].length === 0) {
+                alert("Ссылки на фото еще не добавлены!"); return;
+            }
+            isMarkerView = false; currentSlideIdx = 0;
+            document.getElementById('modalTitle').innerText = dict[currentLang].modalTitleGuide;
+            document.getElementById('markerTabsContainer').style.display = 'none';
+            document.getElementById('sliderControls').style.display = 'flex';
+            document.getElementById('modalOverlay').style.display = 'block';
+            renderSlide();
         }
 
+        function openBenderMarks() {
+            isMarkerView = true; document.getElementById('modalTitle').innerText = dict[currentLang].modalTitleMarks;
+            document.getElementById('sliderControls').style.display = 'none'; document.getElementById('markerTabsContainer').style.display = 'flex';
+            document.getElementById('modalOverlay').style.display = 'block'; switchMarker('arrow');
+        }
+
+        function closeModal() { document.getElementById('modalOverlay').style.display = 'none'; }
+        function closeModalOutside(e) { if(e.target.id === 'modalOverlay') closeModal(); }
+
+        function changeSlide(direction) {
+            const maxIdx = IMAGES[currentGuideType].length - 1;
+            currentSlideIdx += direction;
+            if (currentSlideIdx < 0) currentSlideIdx = 0;
+            if (currentSlideIdx > maxIdx) currentSlideIdx = maxIdx;
+            renderSlide();
+        }
+
+        function renderSlide() {
+            const imgs = IMAGES[currentGuideType];
+            const texts = dict[currentLang].steps[currentGuideType];
+            
+            document.getElementById('modalImg').src = imgs[currentSlideIdx] || "";
+            // Защита от пустых текстов: если для фотки забыли написать текст, выведет дефолт
+            document.getElementById('modalText').innerText = texts[currentSlideIdx] || "Опис відсутній / Описание отсутствует / No description";
+            
+            document.getElementById('slideCounter').innerText = (currentSlideIdx + 1) + " / " + imgs.length;
+            document.getElementById('btnPrev').disabled = (currentSlideIdx === 0);
+            document.getElementById('btnNext').disabled = (currentSlideIdx === imgs.length - 1);
+        }
+
+        function switchMarker(markerType) {
+            document.getElementById('tabArrow').classList.remove('active'); document.getElementById('tabStar').classList.remove('active'); document.getElementById('tabNotch').classList.remove('active');
+            if(markerType === 'arrow') document.getElementById('tabArrow').classList.add('active');
+            if(markerType === 'star') document.getElementById('tabStar').classList.add('active');
+            if(markerType === 'notch') document.getElementById('tabNotch').classList.add('active');
+            document.getElementById('modalImg').src = IMAGES.marks[markerType] || "";
+            document.getElementById('modalText').innerText = dict[currentLang].markDesc[markerType];
+        }
+
+        function getFullVal(idPrefix) { let w = parseFloat(document.getElementById(idPrefix + 'Whole').value) || 0; let f = parseFloat(document.getElementById(idPrefix + 'Frac').value) || 0; return w > 0 || f > 0 ? w + f : 0; }
         function toFraction(decimal) {
             if (isNaN(decimal) || decimal === 0) return "0";
-            let whole = Math.floor(decimal);
-            let frac = decimal - whole;
-            let sixteenths = Math.round(frac * 16);
-            if (sixteenths === 0) return whole.toString() + '"';
-            if (sixteenths === 16) return (whole + 1).toString() + '"';
-            let num = sixteenths, den = 16;
-            while (num % 2 === 0 && den % 2 === 0) { num /= 2; den /= 2; }
-            let fracStr = num + '/' + den;
-            return whole > 0 ? whole + ' ' + fracStr + '"' : fracStr + '"';
+            let whole = Math.floor(decimal), frac = decimal - whole, sixteenths = Math.round(frac * 16);
+            if (sixteenths === 0) return whole.toString() + '"'; if (sixteenths === 16) return (whole + 1).toString() + '"';
+            let num = sixteenths, den = 16; while (num % 2 === 0 && den % 2 === 0) { num /= 2; den /= 2; }
+            let fracStr = num + '/' + den; return whole > 0 ? whole + ' ' + fracStr + '"' : fracStr + '"';
         }
 
         function calculate() {
-            const type = document.getElementById('bendType').value;
-            const dist = getFullVal('distance');
-            const t = dict[currentLang];
-            
+            const type = document.getElementById('bendType').value; const dist = getFullVal('distance'); const t = dict[currentLang];
             if (!dist) { alert("Distance/Span required!"); return; }
-
-            let resHTML = "", infoHTML = "";
-            let maxMark = 0; 
+            let resHTML = "", infoHTML = "", maxMark = 0; 
 
             if (type === 'stub90') {
-                const takeup = parseFloat(document.getElementById('conduitSize').value);
-                let mark = dist - takeup;
-                resHTML = `<div class="mark"><span class="highlight">Mark:</span> ${toFraction(mark)}</div>`;
-                infoHTML = t.tipStub;
-                maxMark = dist;
+                const takeup = parseFloat(document.getElementById('conduitSize').value); let mark = dist - takeup;
+                resHTML = `<div class="mark"><span class="highlight">Mark:</span> ${toFraction(mark)}</div>`; infoHTML = t.tipStub; maxMark = dist;
             } else if (type === 'backToBack') {
-                const takeup = parseFloat(document.getElementById('conduitSize').value);
-                let m1 = dist - takeup;
-                let m2 = dist;
-                resHTML = `
-                    <div class="mark"><span class="highlight">M1 (Arrow / ➔):</span> ${toFraction(m1)}</div>
-                    <div class="mark"><span class="highlight">M2 (Star / ★):</span> ${toFraction(m2)}</div>
-                `;
-                infoHTML = t.tipB2B;
-                maxMark = dist;
+                const takeup = parseFloat(document.getElementById('conduitSize').value); let m1 = dist - takeup, m2 = dist;
+                resHTML = `<div class="mark"><span class="highlight">M1 (Arrow / ➔):</span> ${toFraction(m1)}</div><div class="mark"><span class="highlight">M2 (Star / ★):</span> ${toFraction(m2)}</div>`; infoHTML = t.tipB2B; maxMark = dist;
             } else if (type === 'fullB2B') {
-                const takeup = parseFloat(document.getElementById('conduitSize').value);
-                let stubX = getFullVal('height');
+                const takeup = parseFloat(document.getElementById('conduitSize').value); let stubX = getFullVal('height');
                 if (!stubX) { alert("First stub height (X) required!"); return; }
-                
-                let m1 = stubX - takeup;
-                let m2 = dist - takeup;
-                
-                resHTML = `
-                    <div class="mark"><span class="highlight">M1 (1st Stub-up):</span> ${toFraction(m1)} (на Стрілці)</div>
-                    <div class="mark"><span class="highlight">M2 (2nd Back-to-Back):</span> ${toFraction(m2)} (на Стрілці)</div>
-                `;
-                infoHTML = t.tipFullB2B;
-                maxMark = dist;
+                let m1 = stubX - takeup, m2 = dist - takeup;
+                resHTML = `<div class="mark"><span class="highlight">M1 (1st Stub-up):</span> ${toFraction(m1)} (на Стрілці)</div><div class="mark"><span class="highlight">M2 (2nd Back-to-Back):</span> ${toFraction(m2)} (на Стрілці)</div>`; infoHTML = t.tipFullB2B; maxMark = dist;
             } else if (type === 'concentric') {
-                let radius = dist;
-                let bends = parseInt(document.getElementById('bendsCount').value);
-                
-                let devLength = radius * 1.5708;
-                let spacing = devLength / bends;
-                let degPerBend = 90 / bends;
-                let sideMarks = (bends - 1) / 2;
-
-                resHTML = `
-                    <div class="mark"><span class="highlight">${t.spacing}:</span> ${toFraction(spacing)}</div>
-                    <div class="mark"><span class="highlight">Angle:</span> ${degPerBend}° per bend</div>
-                `;
-                infoHTML = `<b>Всього міток:</b> ${bends} (1 Центр + по ${sideMarks} шт в обидва боки від центру)<br><br>${t.tipConcentric}`;
-                maxMark = devLength; 
+                let radius = dist, bends = parseInt(document.getElementById('bendsCount').value), devLength = radius * 1.5708, spacing = devLength / bends, degPerBend = 90 / bends, sideMarks = (bends - 1) / 2;
+                resHTML = `<div class="mark"><span class="highlight">${t.spacing}:</span> ${toFraction(spacing)}</div><div class="mark"><span class="highlight">Angle:</span> ${degPerBend}° per bend</div>`; infoHTML = `<b>Всього міток:</b> ${bends} (1 Центр + по ${sideMarks} шт в обидва боки від центру)<br><br>${t.tipConcentric}`; maxMark = devLength; 
             } else {
-                let h = getFullVal('height');
-                if (!h) { alert("Rise height required!"); return; }
-                
-                const angle = parseFloat(document.getElementById('bendAngle').value);
-                let shrinkPerInch = 0, multiplier = 0;
-
+                let h = getFullVal('height'); if (!h) { alert("Rise height required!"); return; }
+                const angle = parseFloat(document.getElementById('bendAngle').value); let shrinkPerInch = 0, multiplier = 0;
                 if (type === 'rolling') {
-                    let shift = getFullVal('shift');
-                    if (!shift) { alert("Roll shift required!"); return; }
-                    h = Math.sqrt((h * h) + (shift * shift)); 
-                    infoHTML = `<b>${t.trueOffset}: ${toFraction(h)}</b><br>`;
+                    let shift = getFullVal('shift'); if (!shift) { alert("Roll shift required!"); return; }
+                    h = Math.sqrt((h * h) + (shift * shift)); infoHTML = `<b>${t.trueOffset}: ${toFraction(h)}</b><br>`;
                 }
+                if (angle === 10) { shrinkPerInch = 1/16; multiplier = 6.0; } if (angle === 22.5) { shrinkPerInch = 3/16; multiplier = (type === 'saddle3' ? 2.5 : 2.6); }
+                if (angle === 30) { shrinkPerInch = 1/4; multiplier = 2.0; } if (angle === 45) { shrinkPerInch = 3/8; multiplier = 1.4; }
 
-                if (angle === 10) { shrinkPerInch = 1/16; multiplier = 6.0; }
-                if (angle === 22.5) { shrinkPerInch = 3/16; multiplier = (type === 'saddle3' ? 2.5 : 2.6); }
-                if (angle === 30) { shrinkPerInch = 1/4; multiplier = 2.0; }
-                if (angle === 45) { shrinkPerInch = 3/8; multiplier = 1.4; }
-
-                let shrink = h * shrinkPerInch;
-                let step = h * multiplier;
+                let shrink = h * shrinkPerInch, step = h * multiplier;
 
                 if (type === 'offset' || type === 'rolling') {
-                    let m1 = dist + shrink;
-                    let m2 = m1 + step;
-                    resHTML = `
-                        <div class="mark"><span class="highlight">M1:</span> ${toFraction(m1)} ${t.markStart}</div>
-                        <div class="mark"><span class="highlight">M2:</span> ${toFraction(m2)} ${t.markEnd}</div>
-                    `;
-                    infoHTML += `<b>${t.shrink}:</b> ${toFraction(shrink)} <br><b>${t.spacing}:</b> ${toFraction(step)}<br><br>${t.tipOffset}`;
-                    maxMark = m2;
+                    let m1 = dist + shrink, m2 = m1 + step;
+                    resHTML = `<div class="mark"><span class="highlight">M1:</span> ${toFraction(m1)} ${t.markStart}</div><div class="mark"><span class="highlight">M2:</span> ${toFraction(m2)} ${t.markEnd}</div>`;
+                    infoHTML += `<b>${t.shrink}:</b> ${toFraction(shrink)} <br><b>${t.spacing}:</b> ${toFraction(step)}<br><br>${t.tipOffset}`; maxMark = m2;
                 } else if (type === 'parallelOffset') {
-                    let count = parseInt(document.getElementById('pipeCount').value) || 2;
-                    let spacing = getFullVal('spacing') || 1;
-                    let baseM1 = dist + shrink;
-                    let baseM2 = baseM1 + step;
-
-                    let angleRad = (angle * Math.PI) / 180;
-                    let stagger = spacing * Math.tan(angleRad / 2);
-
+                    let count = parseInt(document.getElementById('pipeCount').value) || 2, spacing = getFullVal('spacing') || 1, baseM1 = dist + shrink, baseM2 = baseM1 + step, angleRad = (angle * Math.PI) / 180, stagger = spacing * Math.tan(angleRad / 2);
                     infoHTML += `<b>${t.shrink}:</b> ${toFraction(shrink)} <br><b>Stagger:</b> ${toFraction(stagger)}<br><br>${t.tipParallel}`;
-                    
                     for (let i = 0; i < count; i++) {
-                        let shiftAmount = i * stagger;
-                        let piM1 = baseM1 + shiftAmount;
-                        let piM2 = baseM2 + shiftAmount;
-                        resHTML += `
-                            <div class="mark">
-                                <span class="highlight">Pipe ${i+1}:</span> M1: ${toFraction(piM1)} | M2: ${toFraction(piM2)}
-                            </div>
-                        `;
-                        maxMark = piM2;
+                        let shiftAmount = i * stagger, piM1 = baseM1 + shiftAmount, piM2 = baseM2 + shiftAmount;
+                        resHTML += `<div class="mark"><span class="highlight">Pipe ${i+1}:</span> M1: ${toFraction(piM1)} | M2: ${toFraction(piM2)}</div>`; maxMark = piM2;
                     }
                 } else if (type === 'saddle3') {
-                    let m2 = dist + shrink;
-                    let m1 = m2 - step;
-                    let m3 = m2 + step;
-                    resHTML = `
-                        <div class="mark"><span class="highlight">M1:</span> ${toFraction(m1)} ${t.markSide}</div>
-                        <div class="mark" style="color:#ff3333;"><b>M2: ${toFraction(m2)} ${t.markCenter}</b></div>
-                        <div class="mark"><span class="highlight">M3:</span> ${toFraction(m3)} ${t.markSide}</div>
-                    `;
-                    infoHTML += `<b>${t.shrink}:</b> ${toFraction(shrink)} <br><b>${t.spacing}:</b> ${toFraction(step)}<br><br>${t.tipSaddle3}`;
-                    maxMark = m3;
+                    let m2 = dist + shrink, m1 = m2 - step, m3 = m2 + step;
+                    resHTML = `<div class="mark"><span class="highlight">M1:</span> ${toFraction(m1)} ${t.markSide}</div><div class="mark" style="color:#ff3333;"><b>M2: ${toFraction(m2)} ${t.markCenter}</b></div><div class="mark"><span class="highlight">M3:</span> ${toFraction(m3)} ${t.markSide}</div>`; infoHTML += `<b>${t.shrink}:</b> ${toFraction(shrink)} <br><b>${t.spacing}:</b> ${toFraction(step)}<br><br>${t.tipSaddle3}`; maxMark = m3;
                 } else if (type === 'saddle4') {
-                    let w = getFullVal('width');
-                    if (!w) { alert("Obstacle width required!"); return; }
+                    let w = getFullVal('width'); if (!w) { alert("Obstacle width required!"); return; }
                     let m2 = dist + shrink, m1 = m2 - step, m3 = m2 + w, m4 = m3 + step;
-                    resHTML = `
-                        <div class="mark"><span class="highlight">M1:</span> ${toFraction(m1)}</div>
-                        <div class="mark"><span class="highlight">M2:</span> ${toFraction(m2)}</div>
-                        <div class="mark"><span class="highlight">M3:</span> ${toFraction(m3)}</div>
-                        <div class="mark"><span class="highlight">M4:</span> ${toFraction(m4)}</div>
-                    `;
-                    infoHTML += `<b>${t.shrink}:</b> ${toFraction(shrink)} <br><b>${t.spacing}:</b> ${toFraction(step)}<br><br>${t.tipSaddle4}`;
-                    maxMark = m4;
+                    resHTML = `<div class="mark"><span class="highlight">M1:</span> ${toFraction(m1)}</div><div class="mark"><span class="highlight">M2:</span> ${toFraction(m2)}</div><div class="mark"><span class="highlight">M3:</span> ${toFraction(m3)}</div><div class="mark"><span class="highlight">M4:</span> ${toFraction(m4)}</div>`; infoHTML += `<b>${t.shrink}:</b> ${toFraction(shrink)} <br><b>${t.spacing}:</b> ${toFraction(step)}<br><br>${t.tipSaddle4}`; maxMark = m4;
                 }
             }
-
-            if (maxMark > 120) {
-                infoHTML += `<div class="limit-warning">${t.limitWarn}</div>`;
-            }
-
-            document.getElementById('marks').innerHTML = resHTML;
-            document.getElementById('extraInfo').innerHTML = infoHTML;
-            document.getElementById('resultBox').style.display = 'block';
+            if (maxMark > 120) infoHTML += `<div class="limit-warning">${t.limitWarn}</div>`;
+            document.getElementById('marks').innerHTML = resHTML; document.getElementById('extraInfo').innerHTML = infoHTML; document.getElementById('resultBox').style.display = 'block';
         }
 
-        initDropdowns();
-        updateUI();
+        initDropdowns(); updateUI();
     </script>
 </body>
 </html>
