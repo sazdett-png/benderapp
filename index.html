@@ -433,10 +433,24 @@
             let fracStr = num + '/' + den; return whole > 0 ? whole + ' ' + fracStr + '"' : fracStr + '"';
         }
 
-        function calculate() {
-            const type = document.getElementById('bendType').value; const dist = getFullVal('distance'); const t = dict[currentLang];
-            if (!dist) { alert("Distance/Span required!"); return; }
-            let resHTML = "", infoHTML = "", maxMark = 0; 
+       function calculate() {
+    const type = document.getElementById('bendType').value; 
+    const dist = getFullVal('distance'); 
+    const t = dict[currentLang];
+
+    // --- ОТСЛЕЖИВАНИЕ КЛИКА В GOOGLE ANALYTICS ---
+    if (typeof gtag === 'function') {
+        gtag('event', 'calculate_click', {
+            'bend_type': type,
+            'conduit_size': document.getElementById('conduitSize').value
+        });
+    }
+    // ---------------------------------------------
+
+    if (!dist) { alert("Distance/Span required!"); return; }
+    let resHTML = "", infoHTML = "", maxMark = 0; 
+
+    // ... дальше идет твой обычный код функции calculate() ...
 
             if (type === 'stub90') {
                 const takeup = parseFloat(document.getElementById('conduitSize').value); let mark = dist - takeup;
