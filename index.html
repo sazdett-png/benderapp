@@ -184,10 +184,10 @@
 
     <script>
         // --- GOOGLE SHEETS ANALYTICS (Оставь свою ссылку тут!) ---
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx1-WnxYagJAvJGzabxFzfxjOH0qdicOzsgm08JCqcV03XPPR1NRRQ6urrojdEaeauJ/exec";
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxyqcL91v3e2WTLV4LV-vPTDErGjf5OjFEoHUynu_6TCvufGIChA5GNVeNWZiAm8_L1/exec";
 
         function sendAnalytics(eventName, extraInfo = "") {
-            if(GOOGLE_SCRIPT_URL === "https://script.google.com/macros/s/AKfycbx1-WnxYagJAvJGzabxFzfxjOH0qdicOzsgm08JCqcV03XPPR1NRRQ6urrojdEaeauJ/exec") return;
+            if(GOOGLE_SCRIPT_URL === "https://script.google.com/macros/s/AKfycbxyqcL91v3e2WTLV4LV-vPTDErGjf5OjFEoHUynu_6TCvufGIChA5GNVeNWZiAm8_L1/exec") return;
             let tg = window.Telegram.WebApp;
             let user = tg.initDataUnsafe?.user;
             let userId = user ? user.id : "No ID";
