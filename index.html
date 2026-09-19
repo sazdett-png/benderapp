@@ -10,36 +10,6 @@
     <link rel="manifest" href="manifest.json">
     
     <title>BEND IT⚡️</title>
-    function sendAnalytics(event, data = "") {
-    try {
-        const tg = window.Telegram?.WebApp;
-        const user = tg?.initDataUnsafe?.user;
-
-        if (!user) {
-            console.log("Telegram user not available");
-            return;
-        }
-
-        fetch("https://script.google.com/macros/s/AKfycbzltbcD7YF_5kimfs4Ve5EZN9bkDGe3fxO1jNhes4HRI68zCdNDi4KCSd2p0fYuCOMM/exec", {
-            method: "POST",
-            mode: "no-cors",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                user_id: user.id,
-                username: user.username || "",
-                event: event,
-                platform: tg.platform || "",
-                language: tg.initDataUnsafe?.user?.language_code || "",
-                data: data
-            })
-        });
-
-    } catch (error) {
-        console.log("Analytics error:", error);
-    }
-}
     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-1R9B204RWW"></script>
 <script>
@@ -533,7 +503,6 @@
         }
 
         initDropdowns(); updateUI();
-        sendAnalytics("OPEN");
     </script>
 </body>
 </html>
