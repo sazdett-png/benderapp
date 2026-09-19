@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <!-- PWA Meta Tags -->
@@ -13,6 +14,42 @@
     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-1R9B204RWW"></script>
 <script>
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxyqcL91v3e2WTLV4LV-vPTDErGjf5OjFEoHUynu_6TCvufGIChA5GNVeNWZiAm8_L1/exec";
+
+function sendAnalytics(eventName, extraInfo = "") {
+    let tg = window.Telegram.WebApp;
+    
+    // Пытаемся вытащить данные юзера из Телеграма
+    let user = tg.initDataUnsafe?.user;
+    let userId = user ? user.id : "No ID";
+    let username = user ? (user.username ? "@" + user.username : user.first_name) : "Web Browser";
+    let platform = tg.platform || "Unknown"; // Покажет ios, android, desktop или web
+    
+    let payload = {
+        userId: userId,
+        username: username,
+        event: eventName,
+        platform: platform,
+        language: currentLang,
+        extraData: extraInfo
+    };
+
+    // Отправляем данные в фоне (чтобы не тормозить аппку)
+    fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors", // Важно, чтобы браузер не блокировал запрос
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+    }).catch(err => console.error("Analytics error:", err));
+}
+
+// Запускаем событие "Открытие аппки" при загрузке страницы
+window.onload = function() {
+    window.Telegram.WebApp.expand(); // Разворачиваем аппку на весь экран ТГ
+    sendAnalytics("App_Opened");
+};
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
@@ -434,7 +471,10 @@
         }
 
        function calculate() {
-    const type = document.getElementById('bendType').value; 
+   // Отправляем данные в Google Sheets
+    const type = document.getElementById('bendType').value;
+    const size = document.getElementById('conduitSize').value;
+    sendAnalytics("Calculate_Click", `Type: ${type}, Size: ${size}`);
     const dist = getFullVal('distance'); 
     const t = dict[currentLang];
 
