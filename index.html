@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <!-- PWA Meta Tags -->
@@ -11,82 +10,24 @@
     <link rel="manifest" href="manifest.json">
     
     <title>BEND IT⚡️</title>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-1R9B204RWW"></script>
-<script>
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx1-WnxYagJAvJGzabxFzfxjOH0qdicOzsgm08JCqcV03XPPR1NRRQ6urrojdEaeauJ/exec";
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-function sendAnalytics(eventName, extraInfo = "") {
-    let tg = window.Telegram.WebApp;
-    
-    // Пытаемся вытащить данные юзера из Телеграма
-    let user = tg.initDataUnsafe?.user;
-    let userId = user ? user.id : "No ID";
-    let username = user ? (user.username ? "@" + user.username : user.first_name) : "Web Browser";
-    let platform = tg.platform || "Unknown"; // Покажет ios, android, desktop или web
-    
-    let payload = {
-        userId: userId,
-        username: username,
-        event: eventName,
-        platform: platform,
-        language: currentLang,
-        extraData: extraInfo
-    };
-
-    // Отправляем данные в фоне (чтобы не тормозить аппку)
-    fetch(GOOGLE_SCRIPT_URL, {
-        method: "POST",
-        mode: "no-cors", // Важно, чтобы браузер не блокировал запрос
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-    }).catch(err => console.error("Analytics error:", err));
-}
-
-// Запускаем событие "Открытие аппки" при загрузке страницы
-window.onload = function() {
-    window.Telegram.WebApp.expand(); // Разворачиваем аппку на весь экран ТГ
-    sendAnalytics("App_Opened");
-};
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-1R9B204RWW');
-</script>
     <style>
-        /* --- ЦВЕТОВЫЕ ТЕМЫ (CSS Переменные) --- */
+        /* --- ЦВЕТОВЫЕ ТЕМЫ --- */
         :root {
-            --bg-main: #121211;
-            --bg-sec: #1e1e1e;
-            --primary: #ff3333; /* Default: Milwaukee Red */
-            --primary-hover: #cc0000;
-            --text-main: #ffffff;
-            --border: #333;
-            --highlight: #4da6ff;
+            --bg-main: #121211; --bg-sec: #1e1e1e;
+            --primary: #ff3333; --primary-hover: #cc0000;
+            --text-main: #ffffff; --border: #333; --highlight: #4da6ff;
         }
-
-        body.theme-orange {
-            --primary: #ff8c00; /* Klein Orange */
-            --primary-hover: #e07b00;
-            --highlight: #ffb84d;
-        }
-
-        body.theme-blue {
-            --primary: #0077ff; /* Makita Blue */
-            --primary-hover: #005ce6;
-            --highlight: #00d4ff;
-        }
+        body.theme-orange { --primary: #ff8c00; --primary-hover: #e07b00; --highlight: #ffb84d; }
+        body.theme-blue { --primary: #0077ff; --primary-hover: #005ce6; --highlight: #00d4ff; }
 
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-main); color: var(--text-main); padding: 20px; margin: 0; }
         .logo-container { display: flex; justify-content: center; margin-bottom: 10px; }
         .logo-container img { max-width: 300px; height: auto; border-radius: 45px; }
         
-        /* НОВАЯ ШАПКА: Лампочка слева, текст по центру, кнопки справа */
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; position: relative; width: 100%; }
-        .left-controls { display: flex; z-index: 2; }
+        .left-controls { display: flex; gap: 8px; z-index: 2; }
         .right-controls { display: flex; gap: 8px; z-index: 2; }
         h2 { color: #B04D3A; margin: 0; text-transform: uppercase; letter-spacing: 1px; font-style: italic; font-size: 22px; position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; z-index: 1; }
         
@@ -100,7 +41,6 @@ window.onload = function() {
         .input-row input { flex: 2; }
         .input-row select { flex: 1; text-align: center; }
         
-        /* FAT-FINGER DESIGN: Увеличенные инпуты */
         select, input { width: 100%; height: 52px; padding: 12px; border: 1px solid var(--border); border-radius: 10px; background-color: var(--bg-sec); color: var(--text-main); font-size: 17px; box-sizing: border-box; outline: none; }
         select:focus, input:focus { border-color: var(--primary); }
         
@@ -120,22 +60,24 @@ window.onload = function() {
         .highlight { color: var(--highlight); font-weight: bold; }
         .limit-warning { color: #ff9900; font-weight: bold; margin-top: 15px; display: block; border-top: 1px dashed #ff9900; padding-top: 10px; }
 
-        /* Стили для модального окна */
+        /* Share Button */
+        #btnShare { background-color: #0088cc; font-size: 16px; margin-top: 20px; display: none; }
+        #btnShare:active { background-color: #006699; }
+
+        /* Стили модальных окон */
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); overflow: auto; }
         .modal-content { background-color: var(--bg-sec); margin: 80px auto 20px; padding: 20px; border: 1px solid #444; border-radius: 14px; width: 92%; max-width: 500px; position: relative; color: white; box-sizing: border-box; }
         .close-modal { position: absolute; right: 15px; top: 15px; width: 40px; height: 40px; background-color: #333; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; cursor: pointer; z-index: 10; }
         .close-modal:active { background-color: var(--primary); }
-        .modal h3 { margin-top: 0; color: var(--highlight); padding-right: 45px; font-size: 20px; }
+        .modal h3 { margin-top: 0; color: var(--highlight); padding-right: 45px; font-size: 20px; margin-bottom: 20px; }
         
         .slider-img { width: 100%; height: auto; border-radius: 10px; margin-top: 15px; border: 1px solid var(--border); }
         .slider-text { font-size: 16px; color: #ddd; margin-top: 15px; line-height: 1.5; min-height: 50px; }
-        
         .slider-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 25px; }
         .slider-btn { background: var(--primary); border: none; color: white; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; }
         .slider-btn:active { background: var(--primary-hover); }
         .slider-btn:disabled { background: #555; color: #888; cursor: not-allowed; }
         .slide-counter { font-weight: bold; color: #aaa; font-size: 16px; }
-
         .marker-tabs { display: flex; gap: 8px; margin-top: 15px; }
         .marker-tabs button { flex: 1; padding: 14px 5px; background: #2a2a2a; color: #fff; border: 1px solid #444; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 15px; }
         .marker-tabs button.active { background: var(--primary); border-color: var(--primary); }
@@ -145,10 +87,10 @@ window.onload = function() {
 
     <div class="logo-container"><img src="https://i.imgur.com/vUB7xdz.png" alt="Logo"></div>
     
-    <!-- ОБНОВЛЕННАЯ ШАПКА -->
     <div class="header">
         <div class="left-controls">
             <button class="icon-btn" id="wakeLockBtn" onclick="toggleWakeLock()" title="Keep Screen On">💡</button>
+            <button class="icon-btn" id="fracBtn" onclick="openFracCalc()" title="Fraction Calculator">🧮</button>
         </div>
         <h2>BEND IT⚡️</h2>
         <div class="right-controls">
@@ -182,12 +124,13 @@ window.onload = function() {
         <div class="result-title" id="resTitle">Layout Marks:</div>
         <div id="marks"></div>
         <div class="info" id="extraInfo"></div>
+        <button id="btnShare" class="calc-btn" onclick="shareToTelegram()">✈️ Надіслати в чат</button>
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО -->
-    <div id="modalOverlay" class="modal" onclick="closeModalOutside(event)">
+    <!-- МОДАЛЬНОЕ ОКНО ДЛЯ ФОТО -->
+    <div id="modalOverlay" class="modal" onclick="closeModalOutside(event, 'modalOverlay')">
         <div class="modal-content">
-            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <span class="close-modal" onclick="closeModal('modalOverlay')">&times;</span>
             <h3 id="modalTitle">Guide</h3>
             <div id="markerTabsContainer" class="marker-tabs" style="display: none;">
                 <button id="tabArrow" onclick="switchMarker('arrow')">➔ Стрілка</button>
@@ -204,7 +147,65 @@ window.onload = function() {
         </div>
     </div>
 
+    <!-- МОДАЛЬНОЕ ОКНО ДЛЯ ДРОБЕЙ -->
+    <div id="fracModal" class="modal" onclick="closeModalOutside(event, 'fracModal')">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('fracModal')">&times;</span>
+            <h3 id="fracTitle">📏 Калькулятор дробів</h3>
+            
+            <div class="form-group">
+                <div class="input-row">
+                    <input type="number" id="f1Whole" placeholder="Ціле (Whole)">
+                    <select id="f1Frac" class="frac-select"></select>
+                </div>
+            </div>
+            
+            <div class="form-group" style="text-align: center;">
+                <select id="fOp" style="width: 80px; display: inline-block; font-size: 24px; font-weight: bold;">
+                    <option value="+">+</option>
+                    <option value="-">-</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <div class="input-row">
+                    <input type="number" id="f2Whole" placeholder="Ціле (Whole)">
+                    <select id="f2Frac" class="frac-select"></select>
+                </div>
+            </div>
+
+            <button class="calc-btn" onclick="calcFractionResult()">Рахувати</button>
+            
+            <div class="result-box" id="fracResultBox" style="display: none; border-left-color: #4da6ff; margin-top: 15px; padding: 15px;">
+                <div class="mark" style="text-align: center; font-size: 26px; color: #4da6ff; border-bottom: none; margin: 0;" id="fracResText">0"</div>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // --- GOOGLE SHEETS ANALYTICS (Оставь свою ссылку тут!) ---
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx1-WnxYagJAvJGzabxFzfxjOH0qdicOzsgm08JCqcV03XPPR1NRRQ6urrojdEaeauJ/exec";
+
+        function sendAnalytics(eventName, extraInfo = "") {
+            if(GOOGLE_SCRIPT_URL === "https://script.google.com/macros/s/AKfycbx1-WnxYagJAvJGzabxFzfxjOH0qdicOzsgm08JCqcV03XPPR1NRRQ6urrojdEaeauJ/exec") return;
+            let tg = window.Telegram.WebApp;
+            let user = tg.initDataUnsafe?.user;
+            let userId = user ? user.id : "No ID";
+            let username = user ? (user.username ? "@" + user.username : user.first_name) : "Web Browser";
+            let platform = tg.platform || "Unknown"; 
+            
+            let payload = { userId: userId, username: username, event: eventName, platform: platform, language: currentLang, extraData: extraInfo };
+
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload)
+            }).catch(err => console.error(err));
+        }
+
+        window.onload = function() {
+            if(window.Telegram && window.Telegram.WebApp) window.Telegram.WebApp.expand();
+            sendAnalytics("App_Opened");
+        };
+
         // --- ЛОГИКА ТЕМ ---
         const themes = ['red', 'orange', 'blue'];
         const themeIcons = ['🔴', '🟠', '🔵'];
@@ -214,78 +215,43 @@ window.onload = function() {
             currentThemeIdx = (currentThemeIdx + 1) % themes.length;
             document.body.className = 'theme-' + themes[currentThemeIdx];
             document.getElementById('themeBtn').innerText = themeIcons[currentThemeIdx];
+            sendAnalytics("Theme_Changed", themes[currentThemeIdx]);
         }
 
-        // --- ЛОГИКА WAKE LOCK (ЗАЩИТА ОТ ЗАСЫПАНИЯ ЭКРАНА) ---
+        // --- ЛОГИКА WAKE LOCK ---
         let wakeLock = null;
         async function toggleWakeLock() {
-            if (!('wakeLock' in navigator)) {
-                alert('Твій браузер не підтримує функцію незгасаючого екрану (Wake Lock API). / Your browser does not support Wake Lock.');
-                return;
-            }
+            if (!('wakeLock' in navigator)) { alert('Wake Lock API not supported.'); return; }
             try {
                 const btn = document.getElementById('wakeLockBtn');
                 if (wakeLock !== null) {
-                    await wakeLock.release();
-                    wakeLock = null;
-                    btn.classList.remove('active');
+                    await wakeLock.release(); wakeLock = null; btn.classList.remove('active');
                 } else {
-                    wakeLock = await navigator.wakeLock.request('screen');
-                    btn.classList.add('active');
-                    
+                    wakeLock = await navigator.wakeLock.request('screen'); btn.classList.add('active');
                     document.addEventListener('visibilitychange', async () => {
-                        if (wakeLock !== null && document.visibilityState === 'visible') {
-                            wakeLock = await navigator.wakeLock.request('screen');
-                        }
+                        if (wakeLock !== null && document.visibilityState === 'visible') wakeLock = await navigator.wakeLock.request('screen');
                     });
                 }
-            } catch (err) {
-                console.error(`Wake Lock error: ${err.name}, ${err.message}`);
-            }
+            } catch (err) { console.error(err); }
         }
 
         const IMAGES = {
-            marks: {
-                arrow: "https://i.imgur.com/HHSrJVC.jpeg",
-                star: "https://i.imgur.com/CcudLLq.png",
-                notch: "https://i.imgur.com/ebHsMGB.png"
-            },
+            marks: { arrow: "https://i.imgur.com/HHSrJVC.jpeg", star: "https://i.imgur.com/CcudLLq.png", notch: "https://i.imgur.com/ebHsMGB.png" },
             stub90: [ "https://i.imgur.com/XItJ8jQ.jpeg" , "https://i.imgur.com/1LnHbWK.jpeg" , "https://i.imgur.com/rvSwDTH.jpeg" , "https://i.imgur.com/sEvoENj.jpeg" , "https://i.imgur.com/aGJ3Nbj.jpeg" , "https://i.imgur.com/NLiSnx0.jpeg" , "https://i.imgur.com/ttWQSA6.jpeg" ],
             backToBack: [ "https://i.imgur.com/gTIWepT.png" , "https://i.imgur.com/61ZFKdF.jpeg" , "https://i.imgur.com/R3WxhEg.png" , "https://i.imgur.com/fv02nyO.png" , "https://i.imgur.com/zmNoxls.png" ],
             fullB2B: [ "https://i.imgur.com/TYDrhDk.png" ],
             offset: [ "https://i.imgur.com/jwLb4pg.jpeg" , "https://i.imgur.com/t4ALF82.jpeg" , "https://i.imgur.com/NI2iCS9.jpeg" , "https://i.imgur.com/FTO2m3v.jpeg" , "https://i.imgur.com/a2ch6Vb.jpeg" , "https://i.imgur.com/eJkZf2Y.jpeg" , "https://i.imgur.com/9QkF7ZI.jpeg" , "https://i.imgur.com/BUzJWJd.jpeg" , "https://i.imgur.com/HC9oM3d.jpeg" , "https://i.imgur.com/jEes8IZ.jpeg" , "https://i.imgur.com/025sWMx.jpeg" , "https://i.imgur.com/qJZaauH.jpeg" ],
-            parallelOffset: [ "ссылка на фото" ],
-            rolling: [ "https://i.imgur.com/jwLb4pg.jpeg" , "https://i.imgur.com/t4ALF82.jpeg" , "https://i.imgur.com/NI2iCS9.jpeg" , "https://i.imgur.com/FTO2m3v.jpeg" , "https://i.imgur.com/a2ch6Vb.jpeg" , "https://i.imgur.com/eJkZf2Y.jpeg" , "https://i.imgur.com/9QkF7ZI.jpeg" , "https://i.imgur.com/BUzJWJd.jpeg" , "https://i.imgur.com/HC9oM3d.jpeg" , "https://i.imgur.com/jEes8IZ.jpeg" , "https://i.imgur.com/025sWMx.jpeg" , "https://i.imgur.com/qJZaauH.jpeg" ],
+            parallelOffset: [ "ссылка на фото" ], rolling: [ "https://i.imgur.com/jwLb4pg.jpeg" , "https://i.imgur.com/t4ALF82.jpeg" , "https://i.imgur.com/NI2iCS9.jpeg" , "https://i.imgur.com/FTO2m3v.jpeg" , "https://i.imgur.com/a2ch6Vb.jpeg" , "https://i.imgur.com/eJkZf2Y.jpeg" , "https://i.imgur.com/9QkF7ZI.jpeg" , "https://i.imgur.com/BUzJWJd.jpeg" , "https://i.imgur.com/HC9oM3d.jpeg" , "https://i.imgur.com/jEes8IZ.jpeg" , "https://i.imgur.com/025sWMx.jpeg" , "https://i.imgur.com/qJZaauH.jpeg" ],
             saddle3: [ "https://i.imgur.com/5PSTYp2.png" , "https://i.imgur.com/PMRtfbj.jpeg" , "https://i.imgur.com/ebHsMGB.png" , "https://i.imgur.com/IohvGlc.png" , "https://i.imgur.com/kL5hvlq.png" , "https://i.imgur.com/QdlexX5.png" , "https://i.imgur.com/hhQVf5J.png" , "https://i.imgur.com/YsIl4YX.png" , "https://i.imgur.com/qU3geYR.png" , "https://i.imgur.com/d7AhHCA.png" ],
-            saddle4: [ "https://i.imgur.com/BAGW9lk.jpeg" ,
-                "https://i.imgur.com/ijvbKFO.jpeg" ,
-                "https://i.imgur.com/JUjFT5z.jpeg" ,
-                "https://i.imgur.com/08zMVrJ.jpeg" ,
-                "https://i.imgur.com/XJ9UAaV.jpeg" ,
-                "https://i.imgur.com/Q7Omf69.jpeg" ,
-                "https://i.imgur.com/IA7Y7U8.jpeg" ,
-                "https://i.imgur.com/55rCLMq.jpeg" ,
-                "https://i.imgur.com/v95hFXN.jpeg" ,
-                "https://i.imgur.com/8hbnL8r.jpeg" ,
-                "https://i.imgur.com/xyVqWx2.jpeg" ,
-                "https://i.imgur.com/wzjEbkc.jpeg" ,
-                "https://i.imgur.com/cf8ShtP.jpeg" ,
-                "https://i.imgur.com/c6Wroib.jpeg" ,
-                "https://i.imgur.com/RMvoGcp.jpeg" ,
-                "https://i.imgur.com/iZyZnan.jpeg" ,
-                "https://i.imgur.com/Htykh91.jpeg"
-             ],
-            concentric: [ "ссылка на фото" ]
+            saddle4: [ "ссылка на фото" ], concentric: [ "ссылка на фото" ]
         };
 
-        let currentLang = 'ua';
-        let currentGuideType = ''; 
-        let currentSlideIdx = 0;
-        let isMarkerView = false;
+        let currentLang = 'ua'; let currentGuideType = ''; let currentSlideIdx = 0; let isMarkerView = false;
 
         const dict = {
             ua: {
                 btnText: "UA", typeLabel: "Тип вигину (Bend Type)", sizeLabel: "Розмір труби (EMT Size)", angleLabel: "Кут вигину (Bend Angle)", btnCalc: "Розрахувати", resTitle: "Мітки (Layout Marks):", btnPhotoGuide: "📸 Фото-Гайд", btnMarks: "🔍 Значки трубогиба", modalTitleGuide: "Покроковий Гайд", modalTitleMarks: "Значки трубогиба", btnPrev: "❮ Назад", btnNext: "Вперед ❯", tabArrow: "➔ Стрілка", tabStar: "★ Зірка", tabNotch: "⯎ Насічка",
+                btnShare: "✈️ Відправити в чат", fracTitle: "📏 Калькулятор дробів",
                 types: { stub90: "90° Stub-up", backToBack: "Back-to-Back 90° (Другий кінець)", fullB2B: "Full Back-to-Back (X / Y повний розмір)", offset: "Offset (Зміщення / Утка)", parallelOffset: "Parallel Offset (Паралельні утки)", rolling: "Rolling Offset (Діагональна утка)", saddle3: "3-Point Saddle (Сідло 3 точки)", saddle4: "4-Point Saddle (Сідло 4 точки / Короб)", concentric: "Concentric 90° (Багатошаговий радіус)" },
                 sizes: { "5": '1/2" (Take-up 5")', "6": '3/4" (Take-up 6")', "8": '1" (Take-up 8")' },
                 anglesOffset: { 10: '10° (Множник 6)', 22.5: '22.5° (Множник 2.6)', 30: '30° (Множник 2)', 45: '45° (Множник 1.4)' },
@@ -295,16 +261,11 @@ window.onload = function() {
                 tipStub: "👉 Мітку на Стрілку [ ➔ ]. Гни до 90°.", tipB2B: "👉 Стрілка [ ➔ ] для M1. Зірка [ ★ ] для M2.", tipFullB2B: "👉 Обидва гиби по Стрілці [ ➔ ].", tipOffset: "👉 Обидві мітки по Стрілці [ ➔ ]. Розверни трубу.", tipParallel: "👉 Згинай по Стрілці [ ➔ ].", tipSaddle3: "👉 Центр по Насічці [ ⯎ ]. Боки по Стрілці [ ➔ ].", tipSaddle4: "👉 Усі 4 вигини по Стрілці [ ➔ ].", tipConcentric: "👉 Всі мітки по Стрілці, гнути в один бік.",
                 markStart: "(Початок)", markEnd: "(Кінець)", markSide: "(Боковий)", markCenter: "ЦЕНТР", shrink: "Усадка (Shrink)", spacing: "Крок (Spacing)", trueOffset: "Реальна висота", limitWarn: "⚠️ Потрібна муфта (Coupling)!",
                 markDesc: { arrow: "Стрілка (Arrow) - використовується для більшості стандартних вигинів (Stub, Offset).", star: "Зірка (Star) - використовується для Back-to-Back, коли труба дивиться в інший бік.", notch: "Насічка (Notch / Tear Drop) - використовується ТІЛЬКИ для центру 3-Point Saddle." },
-                steps: {
-                    stub90: [ "Текст 1", "Текст 2", "Текст 3", "Текст 4", "Текст 5", "Текст 6", "Текст 7" ],
-                    backToBack: [ "Виміряй точну відстань між двома стінами (від упору до упору).", "Зроби перший гиб 90° (по Стрілці). Від його зовнішньої спинки відміряй відстань із Кроку 1 і постав мітку М2.", "Розверни трубогиб гаком до вільного кінця труби. Вирівняй мітку М2 рівно по Зірці [ ★ ].", "Зігни трубу до 90°. Важливо: стеж, щоб обидва гиби лежали строго в одній площині, без перекосу (вертольота).", "Готово. U-подібна труба має ідеально стати врозпір між поверхнями." ],
-                    fullB2B: [ "Текст для кроку 1" ], offset: [ "Текст для кроку 1" ], parallelOffset: [ "Текст для кроку 1" ], rolling: [ "Текст для кроку 1" ],
-                    saddle3: [ "Виміряй висоту перешкоди та відстань рівно до її центру.", "Нанеси 3 мітки: М2 (центр) та бічні М1, М3.", "Для центрального гибу завжди використовується Насічка (Notch / Tear Drop).", "Постав центральну мітку М2 рівно на Насічку.", "Зігни трубу до кута 45° (або 60°).", "Переверни трубогиб. Прокрути трубу на 180° і вирівняй мітку М1 по Стрілці [ ➔ ].", "Зігни трубу в повітрі до 22.5° (або 30°).", "Зсунь трубогиб на мітку М3. Гак дивиться до центру. Вирівняй М3 по Стрілці [ ➔ ].", "Знову зігни трубу в повітрі до 22.5° (або 30°).", "Готово. Сідло має лежати в одній площині і обходити перешкоду." ],
-                    saddle4: [ "Текст для кроку 1" ], concentric: [ "Текст для кроку 1" ]
-                }
+                steps: { stub90: ["Текст 1", "Текст 2"], backToBack: ["Крок 1", "Крок 2"], fullB2B: ["Крок 1"], offset: ["Крок 1"], parallelOffset: ["Крок 1"], rolling: ["Крок 1"], saddle3: ["Крок 1", "Крок 2"], saddle4: ["Крок 1"], concentric: ["Крок 1"] }
             },
             ru: {
                 btnText: "RU", typeLabel: "Вид изгиба (Bend Type)", sizeLabel: "Размер трубы (EMT Size)", angleLabel: "Угол изгиба (Bend Angle)", btnCalc: "Рассчитать", resTitle: "Метки (Layout Marks):", btnPhotoGuide: "📸 Фото-Гайд", btnMarks: "🔍 Значки трубогиба", modalTitleGuide: "Пошаговый Гайд", modalTitleMarks: "Значки трубогиба", btnPrev: "❮ Назад", btnNext: "Вперед ❯", tabArrow: "➔ Стрелка", tabStar: "★ Звезда", tabNotch: "⯎ Насечка",
+                btnShare: "✈️ Отправить в чат", fracTitle: "📏 Калькулятор дробей",
                 types: { stub90: "90° Stub-up", backToBack: "Back-to-Back 90° (Второй конец)", fullB2B: "Full Back-to-Back (X / Y полный размер)", offset: "Offset (Утка)", parallelOffset: "Parallel Offset (Параллельные утки)", rolling: "Rolling Offset (Диагональная утка)", saddle3: "3-Point Saddle (Седло 3 точки)", saddle4: "4-Point Saddle (Седло 4 точки / Короб)", concentric: "Concentric 90° (Многошаговый радиус)" },
                 sizes: { "5": '1/2" (Take-up 5")', "6": '3/4" (Take-up 6")', "8": '1" (Take-up 8")' },
                 anglesOffset: { 10: '10° (Множитель 6)', 22.5: '22.5° (Множитель 2.6)', 30: '30° (Множитель 2)', 45: '45° (Множитель 1.4)' },
@@ -314,16 +275,11 @@ window.onload = function() {
                 tipStub: "👉 Метку на Стрелку [ ➔ ]. Гни до 90°.", tipB2B: "👉 Стрелка [ ➔ ] для M1. Звезда [ ★ ] для M2.", tipFullB2B: "👉 Оба гиба по Стрелке [ ➔ ].", tipOffset: "👉 Обе метки по Стрелке [ ➔ ]. Разверни трубу.", tipParallel: "👉 Гни по Стрелке [ ➔ ].", tipSaddle3: "👉 Центр по Насечке [ ⯎ ]. Бока по Стрелке [ ➔ ].", tipSaddle4: "👉 Все 4 гиба по Стрелке [ ➔ ].", tipConcentric: "👉 Все метки по Стрелке, гнуть в одну сторону.",
                 markStart: "(Начало)", markEnd: "(Конец)", markSide: "(Боковий)", markCenter: "ЦЕНТР", shrink: "Усадка (Shrink)", spacing: "Шаг (Spacing)", trueOffset: "Реальная высота", limitWarn: "⚠️ Потребуется муфта (Coupling)!",
                 markDesc: { arrow: "Стрелка (Arrow) - используется для большинства гибов (Stub, Offset).", star: "Звезда (Star) - используется для Back-to-Back, когда труба смотрит в другую сторону.", notch: "Насечка (Notch / Tear Drop) - используется ТОЛЬКО для центра 3-Point Saddle." },
-                steps: {
-                    stub90: [ "Текст для шага 1" ],
-                    backToBack: [ "Измерь точное расстояние между двумя стенами (от упора до упора).", "Сделай первый гиб 90° (по Стрелке). От его наружной спинки отмерь расстояние из Шага 1 и поставь метку М2.", "Разверни трубогиб крюком к свободному концу трубы. Выровняй метку М2 ровно по Звезде [ ★ ].", "Согни трубу до 90°. Важно: следи, чтобы оба гиба лежали строго в одной плоскости, без перекоса (вертолета).", "Готово. U-образная труба должна идеально встать враспор между поверхностями." ],
-                    fullB2B: [ "Текст для шага 1" ], offset: [ "Текст для шага 1" ], parallelOffset: [ "Текст для шага 1" ], rolling: [ "Текст для шага 1" ],
-                    saddle3: [ "Измерь высоту препятствия и расстояние ровно до его центра.", "Нанеси 3 метки: М2 (центр) и боковые М1, М3.", "Для центрального гиба всегда используется Насечка (Notch / Tear Drop).", "Поставь центральную метку М2 ровно на Насечку.", "Согни трубу до угла 45° (или 60°).", "Переверни трубогиб. Прокрути трубу на 180° и выровняй метку М1 по Стрелке [ ➔ ].", "Согни трубу в воздухе до 22.5° (или 30°).", "Сдвинь трубогиб на метку М3. Крюк смотрит к центру. Выровняй М3 по Стрелке [ ➔ ].", "Снова согни трубу в воздухе до 22.5° (или 30°).", "Готово. Седло должно лежать в одной плоскости и обходить препятствие." ],
-                    saddle4: [ "Текст для шага 1" ], concentric: [ "Текст для шага 1" ]
-                }
+                steps: { stub90: ["Текст 1"], backToBack: ["Крок 1"], fullB2B: ["Крок 1"], offset: ["Крок 1"], parallelOffset: ["Крок 1"], rolling: ["Крок 1"], saddle3: ["Крок 1"], saddle4: ["Крок 1"], concentric: ["Крок 1"] }
             },
             en: {
                 btnText: "EN", typeLabel: "Bend Type", sizeLabel: "Conduit Size (EMT Size)", angleLabel: "Bend Angle", btnCalc: "Calculate", resTitle: "Layout Marks:", btnPhotoGuide: "📸 Photo Guide", btnMarks: "🔍 Bender Marks", modalTitleGuide: "Step-by-Step Guide", modalTitleMarks: "Bender Marks", btnPrev: "❮ Prev", btnNext: "Next ❯", tabArrow: "➔ Arrow", tabStar: "★ Star", tabNotch: "⯎ Notch",
+                btnShare: "✈️ Share to Chat", fracTitle: "📏 Fraction Helper",
                 types: { stub90: "90° Stub-up", backToBack: "Back-to-Back 90°", fullB2B: "Full Back-to-Back (X / Y)", offset: "Offset", parallelOffset: "Parallel Offset", rolling: "Rolling Offset", saddle3: "3-Point Saddle", saddle4: "4-Point Saddle", concentric: "Concentric 90°" },
                 sizes: { "5": '1/2" (Take-up 5")', "6": '3/4" (Take-up 6")', "8": '1" (Take-up 8")' },
                 anglesOffset: { 10: '10° (Multiplier 6)', 22.5: '22.5° (Multiplier 2.6)', 30: '30° (Multiplier 2)', 45: '45° (Multiplier 1.4)' },
@@ -333,13 +289,7 @@ window.onload = function() {
                 tipStub: "👉 Mark on Arrow [ ➔ ]. Bend to 90°.", tipB2B: "👉 Arrow [ ➔ ] for M1. Star [ ★ ] for M2.", tipFullB2B: "👉 Both bends on Arrow [ ➔ ].", tipOffset: "👉 Both marks on Arrow [ ➔ ]. Roll conduit 180°.", tipParallel: "👉 Bend on Arrow [ ➔ ].", tipSaddle3: "👉 Center on Notch [ ⯎ ]. Sides on Arrow [ ➔ ].", tipSaddle4: "👉 All 4 bends on Arrow [ ➔ ].", tipConcentric: "👉 Bend all marks on Arrow.",
                 markStart: "(Start)", markEnd: "(End)", markSide: "(Side bend)", markCenter: "CENTER", shrink: "Shrink", spacing: "Spacing", trueOffset: "True Offset", limitWarn: "⚠️ Coupling required!",
                 markDesc: { arrow: "Arrow - Used for standard bends like Stubs and Offsets.", star: "Star - Used for Back-to-Back bends when bender is reversed.", notch: "Tear Drop (Notch) - Used ONLY for the center of a 3-Point Saddle." },
-                steps: {
-                    stub90: [ "Text 1", "Text 2", "Text 3", "Text 4", "Text 5", "Text 6", "Text 7" ],
-                    backToBack: [ "Measure the exact distance between the two parallel walls (span).", "Make the first 90° bend (on the Arrow). Measure from its back edge and place mark M2.", "Face the bender hook towards the free end. Align mark M2 exactly with the Star [ ★ ].", "Bend to 90°. Important: keep both bends in the exact same plane to avoid skewing.", "Done. The U-shaped conduit should fit perfectly between the two surfaces." ],
-                    fullB2B: [ "Text for step 1" ], offset: [ "Text for step 1" ], parallelOffset: [ "Text for step 1" ], rolling: [ "Text for step 1" ],
-                    saddle3: [ "Measure the obstacle height and the distance directly to its center.", "Mark the conduit: M2 (center), and side marks M1, M3.", "The Center Notch (Tear Drop) is always used for the center bend.", "Align the center mark M2 exactly with the Center Notch.", "Bend the conduit to the 45° (or 60°) mark.", "Flip the bender. Rotate conduit 180° and align M1 with the Arrow [ ➔ ].", "Air bend the conduit to the 22.5° (or 30°) mark.", "Slide the bender to M3. Hook faces the center. Align M3 with the Arrow [ ➔ ].", "Air bend again to the 22.5° (or 30°) mark.", "Done. The saddle should lay flat on the same plane and clear the obstacle." ],
-                    saddle4: [ "Text for step 1" ], concentric: [ "Text for step 1" ]
-                }
+                steps: { stub90: ["Step 1"], backToBack: ["Step 1"], fullB2B: ["Step 1"], offset: ["Step 1"], parallelOffset: ["Step 1"], rolling: ["Step 1"], saddle3: ["Step 1"], saddle4: ["Step 1"], concentric: ["Step 1"] }
             }
         };
 
@@ -352,6 +302,7 @@ window.onload = function() {
             if (currentLang === 'ua') currentLang = 'ru'; else if (currentLang === 'ru') currentLang = 'en'; else currentLang = 'ua';
             document.getElementById('langBtn').innerText = dict[currentLang].btnText;
             initDropdowns(); updateUI(); document.getElementById('resultBox').style.display = 'none';
+            document.getElementById('btnShare').style.display = 'none';
         }
 
         function initDropdowns() {
@@ -377,11 +328,14 @@ window.onload = function() {
             document.getElementById('btnPhotoGuide').innerText = dict[currentLang].btnPhotoGuide; document.getElementById('btnBenderMarks').innerText = dict[currentLang].btnMarks;
             document.getElementById('btnPrev').innerText = dict[currentLang].btnPrev; document.getElementById('btnNext').innerText = dict[currentLang].btnNext;
             document.getElementById('tabArrow').innerText = dict[currentLang].tabArrow; document.getElementById('tabStar').innerText = dict[currentLang].tabStar; document.getElementById('tabNotch').innerText = dict[currentLang].tabNotch;
+            
+            // Тексты для новых кнопок
+            document.getElementById('btnShare').innerText = dict[currentLang].btnShare;
+            document.getElementById('fracTitle').innerText = dict[currentLang].fracTitle;
         }
 
         function updateUI() {
-            const type = document.getElementById('bendType').value;
-            const angleSel = document.getElementById('bendAngle');
+            const type = document.getElementById('bendType').value; const angleSel = document.getElementById('bendAngle');
             const dLabel = document.getElementById('lblDist'), hLabel = document.getElementById('lblHeight'), guide = document.getElementById('guideText'), t = dict[currentLang];
             
             document.getElementById('conduitSizeGroup').style.display = 'block';
@@ -390,12 +344,10 @@ window.onload = function() {
             document.getElementById('widthGroup').style.display = (type === 'saddle4') ? 'block' : 'none';
             document.getElementById('shiftGroup').style.display = (type === 'rolling') ? 'block' : 'none';
             document.getElementById('bendsCountGroup').style.display = (type === 'concentric') ? 'block' : 'none';
-            
             const isParallel = (type === 'parallelOffset');
             document.getElementById('pipesGroup').style.display = isParallel ? 'block' : 'none'; document.getElementById('spacingGroup').style.display = isParallel ? 'block' : 'none';
 
-            angleSel.innerHTML = '';
-            document.getElementById('btnPhotoGuide').style.display = 'flex';
+            angleSel.innerHTML = ''; document.getElementById('btnPhotoGuide').style.display = 'flex';
 
             if (type === 'stub90') { dLabel.innerText = t.lblDistStub; guide.innerHTML = t.guideStub; } 
             else if (type === 'backToBack') { dLabel.innerText = t.lblDistB2B; guide.innerHTML = t.guideB2B; } 
@@ -410,55 +362,47 @@ window.onload = function() {
             }
         }
 
+        // Управление окнами
         function openPhotoGuide() {
             currentGuideType = document.getElementById('bendType').value;
-            if(!IMAGES[currentGuideType] || IMAGES[currentGuideType].length === 0) {
-                alert("Ссылки на фото еще не добавлены!"); return;
-            }
             isMarkerView = false; currentSlideIdx = 0;
             document.getElementById('modalTitle').innerText = dict[currentLang].modalTitleGuide;
-            document.getElementById('markerTabsContainer').style.display = 'none';
-            document.getElementById('sliderControls').style.display = 'flex';
-            document.getElementById('modalOverlay').style.display = 'block';
-            renderSlide();
+            document.getElementById('markerTabsContainer').style.display = 'none'; document.getElementById('sliderControls').style.display = 'flex';
+            document.getElementById('modalOverlay').style.display = 'block'; renderSlide();
+            sendAnalytics("Photo_Guide_Opened", currentGuideType);
         }
-
         function openBenderMarks() {
             isMarkerView = true; document.getElementById('modalTitle').innerText = dict[currentLang].modalTitleMarks;
             document.getElementById('sliderControls').style.display = 'none'; document.getElementById('markerTabsContainer').style.display = 'flex';
             document.getElementById('modalOverlay').style.display = 'block'; switchMarker('arrow');
         }
+        
+        function openFracCalc() {
+            document.getElementById('fracResultBox').style.display = 'none';
+            document.getElementById('fracModal').style.display = 'block';
+            sendAnalytics("Fraction_Calculator_Opened");
+        }
 
-        function closeModal() { document.getElementById('modalOverlay').style.display = 'none'; }
-        function closeModalOutside(e) { if(e.target.id === 'modalOverlay') closeModal(); }
+        function closeModal(modalId) { document.getElementById(modalId).style.display = 'none'; }
+        function closeModalOutside(e, modalId) { if(e.target.id === modalId) closeModal(modalId); }
 
         function changeSlide(direction) {
-            const maxIdx = IMAGES[currentGuideType].length - 1;
-            currentSlideIdx += direction;
-            if (currentSlideIdx < 0) currentSlideIdx = 0;
-            if (currentSlideIdx > maxIdx) currentSlideIdx = maxIdx;
+            const maxIdx = IMAGES[currentGuideType].length - 1; currentSlideIdx += direction;
+            if (currentSlideIdx < 0) currentSlideIdx = 0; if (currentSlideIdx > maxIdx) currentSlideIdx = maxIdx;
             renderSlide();
         }
 
         function renderSlide() {
-            const imgs = IMAGES[currentGuideType];
-            const texts = dict[currentLang].steps[currentGuideType];
-            
-            document.getElementById('modalImg').src = imgs[currentSlideIdx] || "";
-            document.getElementById('modalText').innerText = texts[currentSlideIdx] || "Опис відсутній / Описание отсутствует / No description";
-            
+            const imgs = IMAGES[currentGuideType]; const texts = dict[currentLang].steps[currentGuideType];
+            document.getElementById('modalImg').src = imgs[currentSlideIdx] || ""; document.getElementById('modalText').innerText = texts[currentSlideIdx] || "No description";
             document.getElementById('slideCounter').innerText = (currentSlideIdx + 1) + " / " + imgs.length;
-            document.getElementById('btnPrev').disabled = (currentSlideIdx === 0);
-            document.getElementById('btnNext').disabled = (currentSlideIdx === imgs.length - 1);
+            document.getElementById('btnPrev').disabled = (currentSlideIdx === 0); document.getElementById('btnNext').disabled = (currentSlideIdx === imgs.length - 1);
         }
 
         function switchMarker(markerType) {
             document.getElementById('tabArrow').classList.remove('active'); document.getElementById('tabStar').classList.remove('active'); document.getElementById('tabNotch').classList.remove('active');
-            if(markerType === 'arrow') document.getElementById('tabArrow').classList.add('active');
-            if(markerType === 'star') document.getElementById('tabStar').classList.add('active');
-            if(markerType === 'notch') document.getElementById('tabNotch').classList.add('active');
-            document.getElementById('modalImg').src = IMAGES.marks[markerType] || "";
-            document.getElementById('modalText').innerText = dict[currentLang].markDesc[markerType];
+            document.getElementById('tab' + markerType.charAt(0).toUpperCase() + markerType.slice(1)).classList.add('active');
+            document.getElementById('modalImg').src = IMAGES.marks[markerType] || ""; document.getElementById('modalText').innerText = dict[currentLang].markDesc[markerType];
         }
 
         function getFullVal(idPrefix) { let w = parseFloat(document.getElementById(idPrefix + 'Whole').value) || 0; let f = parseFloat(document.getElementById(idPrefix + 'Frac').value) || 0; return w > 0 || f > 0 ? w + f : 0; }
@@ -470,36 +414,63 @@ window.onload = function() {
             let fracStr = num + '/' + den; return whole > 0 ? whole + ' ' + fracStr + '"' : fracStr + '"';
         }
 
-       function calculate() {
-   // Отправляем данные в Google Sheets
-    const type = document.getElementById('bendType').value;
-    const size = document.getElementById('conduitSize').value;
-    sendAnalytics("Calculate_Click", `Type: ${type}, Size: ${size}`);
-    const dist = getFullVal('distance'); 
-    const t = dict[currentLang];
+        // --- ЛОГИКА ДРОБЕЙ ---
+        function calcFractionResult() {
+            let w1 = parseFloat(document.getElementById('f1Whole').value) || 0;
+            let fr1 = parseFloat(document.getElementById('f1Frac').value) || 0;
+            let val1 = w1 + fr1;
 
-    // --- ОТСЛЕЖИВАНИЕ КЛИКА В GOOGLE ANALYTICS ---
-    if (typeof gtag === 'function') {
-        gtag('event', 'calculate_click', {
-            'bend_type': type,
-            'conduit_size': document.getElementById('conduitSize').value
-        });
-    }
-    // ---------------------------------------------
+            let w2 = parseFloat(document.getElementById('f2Whole').value) || 0;
+            let fr2 = parseFloat(document.getElementById('f2Frac').value) || 0;
+            let val2 = w2 + fr2;
 
-    if (!dist) { alert("Distance/Span required!"); return; }
-    let resHTML = "", infoHTML = "", maxMark = 0; 
+            let op = document.getElementById('fOp').value;
+            let res = (op === '+') ? (val1 + val2) : (val1 - val2);
+            
+            if (res < 0) {
+                document.getElementById('fracResText').innerText = "Менше нуля! (Below 0)";
+            } else {
+                document.getElementById('fracResText').innerText = "= " + toFraction(res);
+            }
+            document.getElementById('fracResultBox').style.display = 'block';
+            sendAnalytics("Fraction_Calculated", `${val1} ${op} ${val2} = ${res}`);
+        }
 
-    // ... дальше идет твой обычный код функции calculate() ...
+        // --- ЛОГИКА ТЕЛЕГРАМ ШЕЙРА ---
+        function shareToTelegram() {
+            const typeText = document.getElementById('bendType').options[document.getElementById('bendType').selectedIndex].text;
+            const sizeText = document.getElementById('conduitSize').options[document.getElementById('conduitSize').selectedIndex].text;
+            
+            let marksNodes = document.querySelectorAll('#marks .mark');
+            let marksList = Array.from(marksNodes).map(node => node.innerText).join('\n');
+            
+            let textToShare = `⚡️ BEND IT: ${typeText}\nТруба: ${sizeText}\n\n📏 Мітки:\n${marksList}`;
+            let shareUrl = `https://t.me/share/url?url=&text=${encodeURIComponent(textToShare)}`;
+            
+            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openTelegramLink) {
+                window.Telegram.WebApp.openTelegramLink(shareUrl);
+                sendAnalytics("Share_Telegram_Clicked", typeText);
+            } else {
+                window.open(shareUrl, '_blank');
+            }
+        }
+
+        function calculate() {
+            const type = document.getElementById('bendType').value; const dist = getFullVal('distance'); const t = dict[currentLang];
+            const size = document.getElementById('conduitSize').value;
+            sendAnalytics("Calculate_Click", `Type: ${type}, Size: ${size}`);
+
+            if (!dist) { alert("Distance/Span required!"); return; }
+            let resHTML = "", infoHTML = "", maxMark = 0; 
 
             if (type === 'stub90') {
-                const takeup = parseFloat(document.getElementById('conduitSize').value); let mark = dist - takeup;
+                const takeup = parseFloat(size); let mark = dist - takeup;
                 resHTML = `<div class="mark"><span class="highlight">Mark:</span> ${toFraction(mark)}</div>`; infoHTML = t.tipStub; maxMark = dist;
             } else if (type === 'backToBack') {
-                const takeup = parseFloat(document.getElementById('conduitSize').value); let m1 = dist - takeup, m2 = dist;
+                const takeup = parseFloat(size); let m1 = dist - takeup, m2 = dist;
                 resHTML = `<div class="mark"><span class="highlight">M1 (Arrow / ➔):</span> ${toFraction(m1)}</div><div class="mark"><span class="highlight">M2 (Star / ★):</span> ${toFraction(m2)}</div>`; infoHTML = t.tipB2B; maxMark = dist;
             } else if (type === 'fullB2B') {
-                const takeup = parseFloat(document.getElementById('conduitSize').value); let stubX = getFullVal('height');
+                const takeup = parseFloat(size); let stubX = getFullVal('height');
                 if (!stubX) { alert("First stub height (X) required!"); return; }
                 let m1 = stubX - takeup, m2 = dist - takeup;
                 resHTML = `<div class="mark"><span class="highlight">M1 (1st Stub-up):</span> ${toFraction(m1)} (на Стрілці)</div><div class="mark"><span class="highlight">M2 (2nd Back-to-Back):</span> ${toFraction(m2)} (на Стрілці)</div>`; infoHTML = t.tipFullB2B; maxMark = dist;
@@ -539,7 +510,10 @@ window.onload = function() {
                 }
             }
             if (maxMark > 120) infoHTML += `<div class="limit-warning">${t.limitWarn}</div>`;
-            document.getElementById('marks').innerHTML = resHTML; document.getElementById('extraInfo').innerHTML = infoHTML; document.getElementById('resultBox').style.display = 'block';
+            document.getElementById('marks').innerHTML = resHTML; 
+            document.getElementById('extraInfo').innerHTML = infoHTML; 
+            document.getElementById('resultBox').style.display = 'block';
+            document.getElementById('btnShare').style.display = 'block'; // Показываем кнопку отправки
         }
 
         initDropdowns(); updateUI();
