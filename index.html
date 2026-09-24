@@ -19,13 +19,11 @@
         function sendAnalytics(eventName, extraInfo = "") {
             let tg = window.Telegram.WebApp;
             
-            // Пытаемся вытащить данные юзера из Телеграма
             let user = tg.initDataUnsafe?.user;
             let userId = user ? user.id : "No ID";
             let username = user ? (user.username ? "@" + user.username : user.first_name) : "Web Browser";
-            let platform = tg.platform || "Unknown"; // Покажет ios, android, desktop или web
+            let platform = tg.platform || "Unknown"; 
             
-            // Если язык еще не определен, берем дефолтный ua
             let lang = (typeof currentLang !== 'undefined') ? currentLang : 'ua';
 
             let payload = {
@@ -37,18 +35,14 @@
                 extraData: extraInfo
             };
 
-            // Отправляем данные в фоне
             fetch(GOOGLE_SCRIPT_URL, {
                 method: "POST",
                 mode: "no-cors",
-                headers: {
-                    "Content-Type": "application/json"
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload)
             }).catch(err => console.error("Analytics error:", err));
         }
 
-        // Запускаем событие "Открытие аппки" при загрузке страницы
         window.onload = function() {
             if (window.Telegram && window.Telegram.WebApp) {
                 window.Telegram.WebApp.expand();
@@ -62,34 +56,18 @@
         gtag('config', 'G-1R9B204RWW');
     </script>
     <style>
-        /* --- ЦВЕТОВЫЕ ТЕМЫ (CSS Переменные) --- */
         :root {
-            --bg-main: #121211;
-            --bg-sec: #1e1e1e;
-            --primary: #ff3333; /* Default: Milwaukee Red */
-            --primary-hover: #cc0000;
-            --text-main: #ffffff;
-            --border: #333;
-            --highlight: #4da6ff;
+            --bg-main: #121211; --bg-sec: #1e1e1e;
+            --primary: #ff3333; --primary-hover: #cc0000;
+            --text-main: #ffffff; --border: #333; --highlight: #4da6ff;
         }
-
-        body.theme-orange {
-            --primary: #ff8c00; /* Klein Orange */
-            --primary-hover: #e07b00;
-            --highlight: #ffb84d;
-        }
-
-        body.theme-blue {
-            --primary: #0077ff; /* Makita Blue */
-            --primary-hover: #005ce6;
-            --highlight: #00d4ff;
-        }
+        body.theme-orange { --primary: #ff8c00; --primary-hover: #e07b00; --highlight: #ffb84d; }
+        body.theme-blue { --primary: #0077ff; --primary-hover: #005ce6; --highlight: #00d4ff; }
 
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-main); color: var(--text-main); padding: 20px; margin: 0; }
         .logo-container { display: flex; justify-content: center; margin-bottom: 10px; }
         .logo-container img { max-width: 300px; height: auto; border-radius: 45px; }
         
-        /* НОВАЯ ШАПКА */
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; position: relative; width: 100%; }
         .left-controls { display: flex; gap: 8px; z-index: 2; }
         .right-controls { display: flex; gap: 8px; z-index: 2; }
@@ -105,7 +83,6 @@
         .input-row input { flex: 2; }
         .input-row select { flex: 1; text-align: center; }
         
-        /* FAT-FINGER DESIGN */
         select, input { width: 100%; height: 52px; padding: 12px; border: 1px solid var(--border); border-radius: 10px; background-color: var(--bg-sec); color: var(--text-main); font-size: 17px; box-sizing: border-box; outline: none; }
         select:focus, input:focus { border-color: var(--primary); }
         
@@ -125,11 +102,9 @@
         .highlight { color: var(--highlight); font-weight: bold; }
         .limit-warning { color: #ff9900; font-weight: bold; margin-top: 15px; display: block; border-top: 1px dashed #ff9900; padding-top: 10px; }
 
-        /* Share Button */
         #btnShare { background-color: #0088cc; font-size: 16px; margin-top: 20px; display: none; }
         #btnShare:active { background-color: #006699; }
 
-        /* Стили для модального окна */
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); overflow: auto; }
         .modal-content { background-color: var(--bg-sec); margin: 80px auto 20px; padding: 20px; border: 1px solid #444; border-radius: 14px; width: 92%; max-width: 500px; position: relative; color: white; box-sizing: border-box; }
         .close-modal { position: absolute; right: 15px; top: 15px; width: 40px; height: 40px; background-color: #333; color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; cursor: pointer; z-index: 10; }
@@ -154,7 +129,6 @@
 
     <div class="logo-container"><img src="https://i.imgur.com/vUB7xdz.png" alt="Logo"></div>
     
-    <!-- ОБНОВЛЕННАЯ ШАПКА -->
     <div class="header">
         <div class="left-controls">
             <button class="icon-btn" id="wakeLockBtn" onclick="toggleWakeLock()" title="Keep Screen On">💡</button>
@@ -251,52 +225,46 @@
     </div>
 
     <script>
-        // --- ЛОГИКА ТЕМ ---
+        // --- ВИБРАЦИЯ ПРИ КЛИКАХ ---
+        function vibro() {
+            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
+                window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+            } else if (navigator.vibrate) {
+                navigator.vibrate(40);
+            }
+        }
+
         const themes = ['red', 'orange', 'blue'];
         const themeIcons = ['🔴', '🟠', '🔵'];
         let currentThemeIdx = 0;
         
         function cycleTheme() {
+            vibro();
             currentThemeIdx = (currentThemeIdx + 1) % themes.length;
             document.body.className = 'theme-' + themes[currentThemeIdx];
             document.getElementById('themeBtn').innerText = themeIcons[currentThemeIdx];
             sendAnalytics("Theme_Changed", themes[currentThemeIdx]);
         }
 
-        // --- ЛОГИКА WAKE LOCK ---
         let wakeLock = null;
         async function toggleWakeLock() {
-            if (!('wakeLock' in navigator)) {
-                alert('Твій браузер не підтримує функцію незгасаючого екрану (Wake Lock API).');
-                return;
-            }
+            vibro();
+            if (!('wakeLock' in navigator)) { alert('Твій браузер не підтримує функцію незгасаючого екрану (Wake Lock API).'); return; }
             try {
                 const btn = document.getElementById('wakeLockBtn');
                 if (wakeLock !== null) {
-                    await wakeLock.release();
-                    wakeLock = null;
-                    btn.classList.remove('active');
+                    await wakeLock.release(); wakeLock = null; btn.classList.remove('active');
                 } else {
-                    wakeLock = await navigator.wakeLock.request('screen');
-                    btn.classList.add('active');
-                    
+                    wakeLock = await navigator.wakeLock.request('screen'); btn.classList.add('active');
                     document.addEventListener('visibilitychange', async () => {
-                        if (wakeLock !== null && document.visibilityState === 'visible') {
-                            wakeLock = await navigator.wakeLock.request('screen');
-                        }
+                        if (wakeLock !== null && document.visibilityState === 'visible') wakeLock = await navigator.wakeLock.request('screen');
                     });
                 }
-            } catch (err) {
-                console.error(`Wake Lock error: ${err.name}, ${err.message}`);
-            }
+            } catch (err) { console.error(`Wake Lock error: ${err.name}, ${err.message}`); }
         }
 
         const IMAGES = {
-            marks: {
-                arrow: "https://i.imgur.com/HHSrJVC.jpeg",
-                star: "https://i.imgur.com/CcudLLq.png",
-                notch: "https://i.imgur.com/ebHsMGB.png"
-            },
+            marks: { arrow: "https://i.imgur.com/HHSrJVC.jpeg", star: "https://i.imgur.com/CcudLLq.png", notch: "https://i.imgur.com/ebHsMGB.png" },
             stub90: [ "https://i.imgur.com/XItJ8jQ.jpeg" , "https://i.imgur.com/1LnHbWK.jpeg" , "https://i.imgur.com/rvSwDTH.jpeg" , "https://i.imgur.com/sEvoENj.jpeg" , "https://i.imgur.com/aGJ3Nbj.jpeg" , "https://i.imgur.com/NLiSnx0.jpeg" , "https://i.imgur.com/ttWQSA6.jpeg" ],
             backToBack: [ "https://i.imgur.com/gTIWepT.png" , "https://i.imgur.com/61ZFKdF.jpeg" , "https://i.imgur.com/R3WxhEg.png" , "https://i.imgur.com/fv02nyO.png" , "https://i.imgur.com/zmNoxls.png" ],
             fullB2B: [ "https://i.imgur.com/TYDrhDk.png" ],
@@ -342,7 +310,7 @@
                 anglesOffset: { 10: '10° (Множитель 6)', 22.5: '22.5° (Множитель 2.6)', 30: '30° (Множитель 2)', 45: '45° (Множитель 1.4)' },
                 anglesSaddle: { 22.5: 'Центр 45° / Бока 22.5°', 30: 'Центр 60° / Бока 30°' },
                 lblDistStub: "Высота от пола до края трубы (Height)", lblDistB2B: "Расстояние от первого гиба до упора (Span Y)", lblFullB2B_Y: "Общая длина до упора (Span Y)", lblFullB2B_X: "Высота первой стойки (Stub X)", lblDistStart: "Расстояние до НАЧАЛА препятствия", lblDistCenter: "Расстояние до ЦЕНТРА препятствия", lblDistRadius: "Радиус препятствия (Radius)", lblHeight: "Высота препятствия (Rise)", lblWidth: "Ширина препятствия", lblShift: "Смещение вбок (Roll)", lblPipes: "Количество труб в пучке", lblSpacing: "Шаг между осями труб", lblBends: "Количество мелких изгибов",
-                guideStub: "📏 Гайд: Отмерь от пола до нужной спинки 90°.", guideB2B: "📏 Гайд: Укажи расстояние от спинки готового 90° до упора.", guideFullB2B: "📏 Гайд (X / Y):<br>1. X: Высота первого 90° изгиба (до спинки).<br>2. Y: Длина вдоль стены до упора.", guideOffset: "📏 Гайд: Отмерь прямо до начала препятствия.", guideParallel: "📏 Гайд: Укажи шаг между трубами.", guideRolling: "📏 Гайд: Rise — подъем, Roll — уход вбок.", guideSaddle3: "📏 Гайд: Отмерь ровно до ЦЕНТРА препятствия.", guideSaddle4: "📏 Гайд: Расстояние меряй до НАЧАЛА короба.", guideConcentric: "📏 Гайд: Укажи радиус обхода.",
+                guideStub: "📏 Гайд: Отмерь от пола до нужной спинки 90°.", guideB2B: "📏 Гайд: Укажи расстояние от спинки готового 90° до упора.", guideFullB2B: "📏 Гайд (X / Y):<br>1. X: Высота первого 90° изгиба (до спинки).<br>2. Y: Длина вдоль стены до упора.", guideOffset: "📏 Гайд: Отмерь прямо до начала препятствия.", guideParallel: "📏 Гайд: Укажи шаг между трубами.", guideRolling: "📏 Гайд: Rise — подъем, Roll — уход вбок.", guideSaddle3: "📏 Гайд: Отмерь ровно до ЦЕНТРУ препятствия.", guideSaddle4: "📏 Гайд: Расстояние меряй до НАЧАЛА короба.", guideConcentric: "📏 Гайд: Укажи радиус обхода.",
                 tipStub: "👉 Метку на Стрелку [ ➔ ]. Гни до 90°.", tipB2B: "👉 Стрелка [ ➔ ] для M1. Звезда [ ★ ] для M2.", tipFullB2B: "👉 Оба гиба по Стрелке [ ➔ ].", tipOffset: "👉 Обе метки по Стрелке [ ➔ ]. Разверни трубу.", tipParallel: "👉 Гни по Стрелке [ ➔ ].", tipSaddle3: "👉 Центр по Насечке [ ⯎ ]. Бока по Стрелке [ ➔ ].", tipSaddle4: "👉 Размечай по порядку. Гни в последовательности: M2 ➔ M1 ➔ M3 ➔ M4 (все по Стрелке ➔).", tipConcentric: "👉 Все метки по Стрелке, гнуть в одну сторону.",
                 markStart: "(Начало)", markEnd: "(Конец)", markSide: "(Боковий)", markCenter: "ЦЕНТР", shrink: "Усадка (Shrink)", spacing: "Шаг (Spacing)", trueOffset: "Реальная высота", limitWarn: "⚠️ Потребуется муфта (Coupling)!",
                 markDesc: { arrow: "Стрелка (Arrow) - используется для большинства гибов (Stub, Offset).", star: "Звезда (Star) - используется для Back-to-Back, когда труба смотрит в другую сторону.", notch: "Насечка (Notch / Tear Drop) - используется ТОЛЬКО для центра 3-Point Saddle." },
@@ -350,7 +318,7 @@
                     stub90: [ "Текст для шага 1" ],
                     backToBack: [ "Измерь точное расстояние между двумя стенами (от упора до упора).", "Сделай первый гиб 90° (по Стрелке). От его наружной спинки отмерь расстояние из Шага 1 и поставь метку М2.", "Разверни трубогиб крюком к свободному концу трубы. Выровняй метку М2 ровно по Звезде [ ★ ].", "Согни трубу до 90°. Важно: следи, чтобы оба гиба лежали строго в одной плоскости, без перекоса (вертолета).", "Готово. U-образная труба должна идеально встать враспор между поверхностями." ],
                     fullB2B: [ "Текст для шага 1" ], offset: [ "Текст для шага 1" ], parallelOffset: [ "Текст для шага 1" ], rolling: [ "Текст для шага 1" ],
-                    saddle3: [ "Измерь высоту препятствия и расстояние ровно до его центра.", "Нанеси 3 метки: М2 (центр) и боковые М1, М3.", "Для центрального гиба всегда используется Насечка (Notch / Tear Drop).", "Поставь центральную метку М2 ровно на Насечку.", "Согни трубу до угла 45° (или 60°).", "Переверни трубогиб. Прокрути трубу на 180° и выровняй метку М1 по Стрелке [ ➔ ].", "Согни трубу в воздухе до 22.5° (или 30°).", "Сдвинь трубогиб на метку М3. Крюк смотрит к центру. Выровняй М3 по Стрелке [ ➔ ].", "Снова согни трубу в воздухе до 22.5° (или 30°).", "Готово. Седло должно лежать в одной плоскости и обходить препятствие." ],
+                    saddle3: [ "Измерь высоту препятствия и расстояние ровно до его центра.", "Нанеси 3 метки: М2 (центр) и боковые М1, М3.", "Для центрального гиба всегда используется Насечка (Notch / Tear Drop).", "Поставь центральную метку М2 ровно на Насечку.", "Согни трубу до угла 45° (или 60°).", "Переверни трубогиб. Прокрути трубу на 180° и выровняй метку М1 по Стрелке [ ➔ ].", "Согни трубу в воздухе до 22.5° (или 30°).", "Сдвинь трубогиб на метку М3. Крюк смотрит к центра. Выровняй М3 по Стрелке [ ➔ ].", "Снова согни трубу в воздухе до 22.5° (или 30°).", "Готово. Седло должно лежать в одной плоскости и обходить препятствие." ],
                     saddle4: [ "Текст для шага 1" ], concentric: [ "Текст для шага 1" ]
                 }
             },
@@ -382,6 +350,7 @@
         ];
 
         function toggleLang() {
+            vibro();
             if (currentLang === 'ua') currentLang = 'ru'; else if (currentLang === 'ru') currentLang = 'en'; else currentLang = 'ua';
             document.getElementById('langBtn').innerText = dict[currentLang].btnText;
             initDropdowns(); updateUI(); 
@@ -390,20 +359,26 @@
         }
 
         function initDropdowns() {
-            const typeSel = document.getElementById('bendType'), prevType = typeSel.value;
+            const typeSel = document.getElementById('bendType');
+            const sizeSel = document.getElementById('conduitSize');
+            
             typeSel.innerHTML = '';
             for (const [key, val] of Object.entries(dict[currentLang].types)) { typeSel.add(new Option(val, key)); }
-            if (prevType && dict[currentLang].types[prevType]) typeSel.value = prevType;
-
-            const sizeSel = document.getElementById('conduitSize'); sizeSel.innerHTML = '';
+            
+            sizeSel.innerHTML = '';
             for (const [key, val] of Object.entries(dict[currentLang].sizes)) { sizeSel.add(new Option(val, key)); }
-            sizeSel.value = "6";
             
             document.querySelectorAll('.frac-select').forEach(sel => {
                 const prev = sel.value; sel.innerHTML = '';
                 fracOptions.forEach(f => sel.add(new Option(f.t, f.v))); if(prev) sel.value = prev;
             });
 
+            // --- ВОССТАНАВЛИВАЕМ ПАМЯТЬ ---
+            let savedType = localStorage.getItem('savedBendType');
+            let savedSize = localStorage.getItem('savedConduitSize');
+            if (savedType && dict[currentLang].types[savedType]) typeSel.value = savedType;
+            if (savedSize && dict[currentLang].sizes[savedSize]) sizeSel.value = savedSize;
+            
             document.getElementById('lblType').innerText = dict[currentLang].typeLabel; document.getElementById('lblSize').innerText = dict[currentLang].sizeLabel;
             document.getElementById('lblAngle').innerText = dict[currentLang].angleLabel; document.getElementById('btnCalc').innerText = dict[currentLang].btnCalc;
             document.getElementById('resTitle').innerText = dict[currentLang].resTitle; document.getElementById('lblWidth').innerText = dict[currentLang].lblWidth;
@@ -418,6 +393,10 @@
         }
 
         function updateUI() {
+            // Сохраняем выбор в память телефона
+            localStorage.setItem('savedBendType', document.getElementById('bendType').value);
+            localStorage.setItem('savedConduitSize', document.getElementById('conduitSize').value);
+
             const type = document.getElementById('bendType').value;
             const angleSel = document.getElementById('bendAngle');
             const dLabel = document.getElementById('lblDist'), hLabel = document.getElementById('lblHeight'), guide = document.getElementById('guideText'), t = dict[currentLang];
@@ -449,6 +428,7 @@
         }
 
         function openPhotoGuide() {
+            vibro();
             currentGuideType = document.getElementById('bendType').value;
             if(!IMAGES[currentGuideType] || IMAGES[currentGuideType].length === 0) {
                 alert("Ссылки на фото еще не добавлены!"); return;
@@ -463,12 +443,14 @@
         }
 
         function openBenderMarks() {
+            vibro();
             isMarkerView = true; document.getElementById('modalTitle').innerText = dict[currentLang].modalTitleMarks;
             document.getElementById('sliderControls').style.display = 'none'; document.getElementById('markerTabsContainer').style.display = 'flex';
             document.getElementById('modalOverlay').style.display = 'block'; switchMarker('arrow');
         }
 
         function openFracCalc() {
+            vibro();
             document.getElementById('fracResultBox').style.display = 'none';
             document.getElementById('fracModal').style.display = 'block';
             sendAnalytics("Fraction_Calculator_Opened");
@@ -478,6 +460,7 @@
         function closeModalOutside(e, modalId = 'modalOverlay') { if(e.target.id === modalId) closeModal(modalId); }
 
         function changeSlide(direction) {
+            vibro();
             const maxIdx = IMAGES[currentGuideType].length - 1;
             currentSlideIdx += direction;
             if (currentSlideIdx < 0) currentSlideIdx = 0;
@@ -498,6 +481,7 @@
         }
 
         function switchMarker(markerType) {
+            vibro();
             document.getElementById('tabArrow').classList.remove('active'); document.getElementById('tabStar').classList.remove('active'); document.getElementById('tabNotch').classList.remove('active');
             if(markerType === 'arrow') document.getElementById('tabArrow').classList.add('active');
             if(markerType === 'star') document.getElementById('tabStar').classList.add('active');
@@ -515,8 +499,8 @@
             let fracStr = num + '/' + den; return whole > 0 ? whole + ' ' + fracStr + '"' : fracStr + '"';
         }
 
-        // --- ЛОГИКА ДРОБЕЙ ---
         function calcFractionResult() {
+            vibro();
             let w1 = parseFloat(document.getElementById('f1Whole').value) || 0;
             let fr1 = parseFloat(document.getElementById('f1Frac').value) || 0;
             let val1 = w1 + fr1;
@@ -537,8 +521,8 @@
             sendAnalytics("Fraction_Calculated", `${val1} ${op} ${val2} = ${res}`);
         }
 
-        // --- ЛОГИКА ТЕЛЕГРАМ ШЕЙРА ---
         function shareToTelegram() {
+            vibro();
             const typeText = document.getElementById('bendType').options[document.getElementById('bendType').selectedIndex].text;
             const sizeText = document.getElementById('conduitSize').options[document.getElementById('conduitSize').selectedIndex].text;
             
@@ -557,15 +541,14 @@
         }
 
         function calculate() {
+            vibro();
             const type = document.getElementById('bendType').value;
             const size = document.getElementById('conduitSize').value;
             const dist = getFullVal('distance'); 
             const t = dict[currentLang];
 
-            // Отправляем данные в Google Sheets
             sendAnalytics("Calculate_Click", `Type: ${type}, Size: ${size}`);
 
-            // Отправляем данные в Google Analytics
             if (typeof gtag === 'function') {
                 gtag('event', 'calculate_click', {
                     'bend_type': type,
@@ -630,7 +613,7 @@
         }
 
         initDropdowns(); updateUI();
-        // --- РЕГИСТРАЦИЯ ОФЛАЙН-РЕЖИМА (SERVICE WORKER) ---
+
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./service-worker.js')
@@ -638,6 +621,10 @@
                     .catch(err => console.error('Ошибка офлайн-режима:', err));
             });
         }
+
+        document.getElementById('conduitSize').addEventListener('change', function() {
+            localStorage.setItem('savedConduitSize', this.value);
+        });
     </script>
 </body>
 </html>
