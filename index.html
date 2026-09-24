@@ -491,13 +491,26 @@
         }
 
         function getFullVal(idPrefix) { let w = parseFloat(document.getElementById(idPrefix + 'Whole').value) || 0; let f = parseFloat(document.getElementById(idPrefix + 'Frac').value) || 0; return w > 0 || f > 0 ? w + f : 0; }
-        function toFraction(decimal) {
-            if (isNaN(decimal) || decimal === 0) return "0";
-            let whole = Math.floor(decimal), frac = decimal - whole, sixteenths = Math.round(frac * 16);
-            if (sixteenths === 0) return whole.toString() + '"'; if (sixteenths === 16) return (whole + 1).toString() + '"';
-            let num = sixteenths, den = 16; while (num % 2 === 0 && den % 2 === 0) { num /= 2; den /= 2; }
-            let fracStr = num + '/' + den; return whole > 0 ? whole + ' ' + fracStr + '"' : fracStr + '"';
-        }
+       function toFraction(decimal) {
+    if (isNaN(decimal) || decimal === 0) return "0";
+    let whole = Math.floor(decimal), frac = decimal - whole, sixteenths = Math.round(frac * 16);
+    if (sixteenths === 0) return whole.toString() + '"'; 
+    if (sixteenths === 16) return (whole + 1).toString() + '"';
+    
+    // Подсказки для неудобных 1/16 дробей
+    const hints = {
+        1: "між 0 і 1/8", 3: "між 1/8 і 1/4", 5: "між 1/4 і 3/8", 7: "між 3/8 і 1/2",
+        9: "між 1/2 і 5/8", 11: "між 5/8 і 3/4", 13: "між 3/4 і 7/8", 15: "між 7/8 і 1"
+    };
+
+    let num = sixteenths, den = 16; 
+    let hintStr = (den === 16 && hints[num]) ? ` <span style="font-size:14px; color:#a0a0a0;">(${hints[num]})</span>` : "";
+
+    while (num % 2 === 0 && den % 2 === 0) { num /= 2; den /= 2; }
+    let fracStr = num + '/' + den; 
+    
+    return whole > 0 ? whole + ' ' + fracStr + '"' + hintStr : fracStr + '"' + hintStr;
+}
 
         function calcFractionResult() {
             vibro();
