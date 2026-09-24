@@ -492,25 +492,36 @@
 
         function getFullVal(idPrefix) { let w = parseFloat(document.getElementById(idPrefix + 'Whole').value) || 0; let f = parseFloat(document.getElementById(idPrefix + 'Frac').value) || 0; return w > 0 || f > 0 ? w + f : 0; }
        function toFraction(decimal) {
-    if (isNaN(decimal) || decimal === 0) return "0";
-    let whole = Math.floor(decimal), frac = decimal - whole, sixteenths = Math.round(frac * 16);
-    if (sixteenths === 0) return whole.toString() + '"'; 
-    if (sixteenths === 16) return (whole + 1).toString() + '"';
-    
-    // Подсказки для неудобных 1/16 дробей
-    const hints = {
-        1: "між 0 і 1/8", 3: "між 1/8 і 1/4", 5: "між 1/4 і 3/8", 7: "між 3/8 і 1/2",
-        9: "між 1/2 і 5/8", 11: "між 5/8 і 3/4", 13: "між 3/4 і 7/8", 15: "між 7/8 і 1"
-    };
+            if (isNaN(decimal) || decimal === 0) return "0";
+            let whole = Math.floor(decimal), frac = decimal - whole, sixteenths = Math.round(frac * 16);
+            if (sixteenths === 0) return whole.toString() + '"'; 
+            if (sixteenths === 16) return (whole + 1).toString() + '"';
+            
+            // Границы для нечетных 1/16
+            const bounds = {
+                1: ["0", "1/8"], 3: ["1/8", "1/4"], 5: ["1/4", "3/8"], 7: ["3/8", "1/2"],
+                9: ["1/2", "5/8"], 11: ["5/8", "3/4"], 13: ["3/4", "7/8"], 15: ["7/8", "1"]
+            };
 
-    let num = sixteenths, den = 16; 
-    let hintStr = (den === 16 && hints[num]) ? ` <span style="font-size:14px; color:#a0a0a0;">(${hints[num]})</span>` : "";
+            let num = sixteenths, den = 16; 
+            let hintStr = "";
 
-    while (num % 2 === 0 && den % 2 === 0) { num /= 2; den /= 2; }
-    let fracStr = num + '/' + den; 
-    
-    return whole > 0 ? whole + ' ' + fracStr + '"' + hintStr : fracStr + '"' + hintStr;
-}
+            // Добавляем перевод подсказки
+            if (den === 16 && bounds[num]) {
+                let b = bounds[num];
+                let hintText = "";
+                if (currentLang === 'ua') hintText = `між ${b[0]} і ${b[1]}`;
+                else if (currentLang === 'ru') hintText = `между ${b[0]} и ${b[1]}`;
+                else hintText = `between ${b[0]} and ${b[1]}`;
+                
+                hintStr = ` <span style="font-size:14px; color:#a0a0a0;">(${hintText})</span>`;
+            }
+
+            while (num % 2 === 0 && den % 2 === 0) { num /= 2; den /= 2; }
+            let fracStr = num + '/' + den; 
+            
+            return whole > 0 ? whole + ' ' + fracStr + '"' + hintStr : fracStr + '"' + hintStr;
+        }
 
         function calcFractionResult() {
             vibro();
@@ -526,9 +537,11 @@
             let res = (op === '+') ? (val1 + val2) : (val1 - val2);
             
             if (res < 0) {
-                document.getElementById('fracResText').innerText = "Менше нуля! (Below 0)";
+                // Изменили innerText на innerHTML
+                document.getElementById('fracResText').innerHTML = "Менше нуля! (Below 0)";
             } else {
-                document.getElementById('fracResText').innerText = "= " + toFraction(res);
+                // Изменили innerText на innerHTML, чтобы теги <span> работали
+                document.getElementById('fracResText').innerHTML = "= " + toFraction(res);
             }
             document.getElementById('fracResultBox').style.display = 'block';
             sendAnalytics("Fraction_Calculated", `${val1} ${op} ${val2} = ${res}`);
