@@ -1,0 +1,21 @@
+{
+  "name": "BEND IT - Conduit Calculator",
+  "short_name": "BEND IT⚡️",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#121211",
+  "theme_color": "#ff3333",
+  "description": "Electrical conduit bending calculator for Calgary electricians.",
+  "icons": [
+    {
+      "src": "https://i.imgur.com/vUB7xdz.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://i.imgur.com/vUB7xdz.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
