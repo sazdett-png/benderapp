@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
+    <script>
+        window.onerror = function(msg, url, lineNo, columnNo, error) {
+            alert("⚠️ Сбой кода: " + msg + " (Строка: " + lineNo + ")");
+            return false;
+        };
+    </script>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -17,23 +23,25 @@
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx1-WnxYagJAvJGzabxFzfxjOH0qdicOzsgm08JCqcV03XPPR1NRRQ6urrojdEaeauJ/exec";
 
         function sendAnalytics(eventName, extraInfo = "") {
-            let tg = window.Telegram.WebApp;
-            let user = tg.initDataUnsafe?.user;
-            let userId = user ? user.id : "No ID";
-            let username = user ? (user.username ? "@" + user.username : user.first_name) : "Web Browser";
-            let platform = tg.platform || "Unknown"; 
-            let lang = (typeof currentLang !== 'undefined') ? currentLang : 'ua';
+            try {
+                let tg = window.Telegram.WebApp;
+                let user = tg.initDataUnsafe ? tg.initDataUnsafe.user : null;
+                let userId = user ? user.id : "No ID";
+                let username = user ? (user.username ? "@" + user.username : user.first_name) : "Web Browser";
+                let platform = tg.platform || "Unknown"; 
+                let lang = (typeof currentLang !== 'undefined') ? currentLang : 'ua';
 
-            let payload = {
-                userId: userId, username: username, event: eventName,
-                platform: platform, language: lang, extraData: extraInfo
-            };
+                let payload = {
+                    userId: userId, username: username, event: eventName,
+                    platform: platform, language: lang, extraData: extraInfo
+                };
 
-            fetch(GOOGLE_SCRIPT_URL, {
-                method: "POST", mode: "no-cors",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            }).catch(err => console.error("Analytics error:", err));
+                fetch(GOOGLE_SCRIPT_URL, {
+                    method: "POST", mode: "no-cors",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                }).catch(err => console.error("Analytics error:", err));
+            } catch (e) { console.error(e); }
         }
 
         window.onload = function() {
@@ -146,9 +154,7 @@
         </div>
     </div>
 
-    <!-- ГОРИЗОНТАЛЬНЫЕ КНОПКИ ДЛЯ ВЫБОРА ГИБА (Заменили select) -->
     <div id="bendTabs" class="bend-tabs-container"></div>
-    <!-- Скрытый select для сохранения логики работы формы -->
     <select id="bendType" style="display: none;" onchange="updateUI()"></select>
 
     <div class="form-group" id="conduitSizeGroup"><label id="lblSize">Conduit Size (EMT)</label><select id="conduitSize"></select></div>
@@ -313,11 +319,13 @@
 
     <script>
         function vibro() {
-            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
-                window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
-            } else if (navigator.vibrate) {
-                navigator.vibrate(40);
-            }
+            try {
+                if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
+                    window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+                } else if (navigator.vibrate) {
+                    navigator.vibrate(40);
+                }
+            } catch (e) {}
         }
 
         const CEC = {
@@ -379,13 +387,14 @@
             ua: {
                 btnText: "UA", sizeLabel: "Розмір труби (EMT Size)", angleLabel: "Кут вигину (Bend Angle)", btnCalc: "Розрахувати", resTitle: "Мітки (Layout Marks):", btnPhotoGuide: "📸 Фото-Гайд", btnMarks: "🔍 Значки трубогиба", modalTitleGuide: "Покроковий Гайд", modalTitleMarks: "Значки трубогиба", btnPrev: "❮ Назад", btnNext: "Вперед ❯", tabArrow: "➔ Стрілка", tabStar: "★ Зірка", tabNotch: "⯎ Насічка",
                 btnShare: "✈️ В чат", btnCopy: "📋 Копіювати", btnCopied: "✅ Скопійовано!", cheatTitle: "📋 Шпаргалка (Cheat Sheet)", thAngle: "Кут (Angle)", thMult: "Множник", thShrink: "Усадка/дюйм",
+                arbPoint: "Довільна точка (відступ)", fromM: "Від", distAlert: "Введіть відстань (Distance)!", shiftText: "Зсув старту на",
                 fracTitle: "📏 Калькулятор дробів", fillTitle: "📊 Заповнення труби (CEC)", fillSize: "Розмір труби (EMT)", wire1: "Провід 1 (Тип/Переріз):", wire2: "Провід 2 (Додатково):", occupied: "Зайнято:", limit: "Ліміт за CEC Table 8:", qty: "Шт", statusEnter: "Введіть кількість", statusOver: "⚠️ ПЕРЕБІР!", statusTight: "Впритул", statusOk: "Норма",
                 types: { stub90: "90° Stub", backToBack: "Back-to-Back", fullB2B: "Full B2B (X/Y)", offset: "Offset", parallelOffset: "Parallel Offset", rolling: "Rolling Offset", saddle3: "3-Point Saddle", saddle4: "4-Point Saddle", concentric: "Concentric 90°" },
                 sizes: { "5": '1/2" (Take-up 5")', "6": '3/4" (Take-up 6")', "8": '1" (Take-up 8")' },
                 anglesOffset: { 10: '10° (Множник 6)', 22.5: '22.5° (Множник 2.6)', 30: '30° (Множник 2)', 45: '45° (Множник 1.4)' },
                 anglesSaddle: { 22.5: 'Центр 45° / Боки 22.5°', 30: 'Центр 60° / Боки 30°' },
                 lblDistStub: "Висота від підлоги до краю труби (Height)", lblDistB2B: "Відстань від першого гибу до упору (Span Y)", lblFullB2B_Y: "Загальна довжина до упору (Span Y)", lblFullB2B_X: "Висота першої стійки (Stub X)", lblDistStart: "Відстань до ПОЧАТКУ перешкоди", lblDistCenter: "Відстань до ЦЕНТРУ перешкоди", lblDistRadius: "Радіус перешкоди (Radius)", lblHeight: "Висота перешкоди (Rise)", lblWidth: "Ширина перешкоди", lblShift: "Зсув убік (Roll)", lblPipes: "Кількість труб у пучку", lblSpacing: "Відстань між осями труб", lblBends: "Кількість дрібних вигинів",
-                guideStub: "📏 Гайд: Відміряй від підлоги до потрібної спинки 90°.", guideB2B: "📏 Гайд: Відстань від спинки вже готового 90° до упору.", guideFullB2B: "📏 Гайд (X / Y):<br>1. X: Висота першого 90° вигину (до спинки).<br>2. Y: Довжина вздовж стіни до упору.", guideOffset: "📏 Гайд: Відміряй прямо до початку перешкоди.", guideParallel: "📏 Гайд: Вкажи крок між трубами.", guideRolling: "📏 Гайд: Rise — підйом, Roll — зміщення вбік.", guideSaddle3: "📏 Гайд: Відміряй рівно до ЦЕНТРУ перешкоди.", guideSaddle4: "📏 Гайд: Відстань міряй до ПОЧАТКУ короба.", guideConcentric: "📏 Гайд: Вкажи радіус обходу. Згинай по центру і від нього.",
+                guideStub: "📏 Гайд: Відміряй від підлоги до потрібної спинки 90°.", guideB2B: "📏 Гайд: Відстань від спинки вже готового 90° до упору.", guideFullB2B: "📏 Гайд (X / Y):<br>1. X: Висота першого 90° вигину (до спинки).<br>2. Y: Довжина вздовж стіни до упору.", guideOffset: "📏 Гайд: Відміряй прямо до початку перешкоди (або залиш 0 для вільного різу).", guideParallel: "📏 Гайд: Вкажи крок між трубами.", guideRolling: "📏 Гайд: Rise — підйом, Roll — зміщення вбік. Відстань можна залишити 0.", guideSaddle3: "📏 Гайд: Відміряй рівно до ЦЕНТРУ перешкоди (або залиш 0).", guideSaddle4: "📏 Гайд: Відстань міряй до ПОЧАТКУ короба (або залиш 0).", guideConcentric: "📏 Гайд: Вкажи радіус обходу. Згинай по центру і від нього.",
                 tipStub: "👉 Мітку на Стрілку [ ➔ ]. Гни до 90°.", tipB2B: "👉 Стрілка [ ➔ ] для M1. Зірка [ ★ ] для M2.", tipFullB2B: "👉 Обидва гиби по Стрілці [ ➔ ].", tipOffset: "👉 Обидві мітки по Стрілці [ ➔ ]. Розверни трубу.", tipParallel: "👉 Згинай по Стрілці [ ➔ ].", tipSaddle3: "👉 Центр по Насічці [ ⯎ ]. Боки по Стрілці [ ➔ ].", tipSaddle4: "👉 Роби мітки по порядку. Гни у послідовності: M2 ➔ M1 ➔ M3 ➔ M4 (всі по Стрілці ➔).", tipConcentric: "👉 Всі мітки по Стрілці, гнути в один бік.",
                 markStart: "(Початок)", markEnd: "(Кінець)", markSide: "(Боковий)", markCenter: "ЦЕНТР", shrink: "Усадка (Shrink)", spacing: "Крок (Spacing)", trueOffset: "Реальна висота", limitWarn: "⚠️ Потрібна муфта (Coupling)!",
                 markDesc: { arrow: "Стрілка (Arrow) - використовується для більшості стандартних вигинів (Stub, Offset).", star: "Зірка (Star) - використовується для Back-to-Back, коли труба дивиться в інший бік.", notch: "Насічка (Notch / Tear Drop) - використовується ТІЛЬКИ для центру 3-Point Saddle." },
@@ -400,13 +409,14 @@
             ru: {
                 btnText: "RU", sizeLabel: "Размер трубы (EMT Size)", angleLabel: "Угол изгиба (Bend Angle)", btnCalc: "Рассчитать", resTitle: "Метки (Layout Marks):", btnPhotoGuide: "📸 Фото-Гайд", btnMarks: "🔍 Значки трубогиба", modalTitleGuide: "Пошаговый Гайд", modalTitleMarks: "Значки трубогиба", btnPrev: "❮ Назад", btnNext: "Вперед ❯", tabArrow: "➔ Стрелка", tabStar: "★ Звезда", tabNotch: "⯎ Насечка",
                 btnShare: "✈️ В чат", btnCopy: "📋 Копировать", btnCopied: "✅ Скопировано!", cheatTitle: "📋 Шпаргалка (Cheat Sheet)", thAngle: "Угол (Angle)", thMult: "Множитель", thShrink: "Усадка/дюйм",
+                arbPoint: "Произвольная точка (отступ)", fromM: "От", distAlert: "Введите расстояние (Distance)!", shiftText: "Сдвиг старта на",
                 fracTitle: "📏 Калькулятор дробей", fillTitle: "📊 Заполнение трубы (CEC)", fillSize: "Размер трубы (EMT)", wire1: "Провод 1 (Тип/Сечение):", wire2: "Провод 2 (Дополнительно):", occupied: "Занято:", limit: "Лимит по CEC Table 8:", qty: "Шт", statusEnter: "Введите количество", statusOver: "⚠️ ПЕРЕБОР!", statusTight: "Впритык", statusOk: "Норма",
                 types: { stub90: "90° Stub", backToBack: "Back-to-Back", fullB2B: "Full B2B (X/Y)", offset: "Offset", parallelOffset: "Parallel Offset", rolling: "Rolling Offset", saddle3: "3-Point Saddle", saddle4: "4-Point Saddle", concentric: "Concentric 90°" },
                 sizes: { "5": '1/2" (Take-up 5")', "6": '3/4" (Take-up 6")', "8": '1" (Take-up 8")' },
                 anglesOffset: { 10: '10° (Множитель 6)', 22.5: '22.5° (Множитель 2.6)', 30: '30° (Множитель 2)', 45: '45° (Множитель 1.4)' },
                 anglesSaddle: { 22.5: 'Центр 45° / Бока 22.5°', 30: 'Центр 60° / Бока 30°' },
                 lblDistStub: "Высота от пола до края трубы (Height)", lblDistB2B: "Расстояние от первого гиба до упора (Span Y)", lblFullB2B_Y: "Общая длина до упора (Span Y)", lblFullB2B_X: "Высота первой стойки (Stub X)", lblDistStart: "Расстояние до НАЧАЛА препятствия", lblDistCenter: "Расстояние до ЦЕНТРА препятствия", lblDistRadius: "Радиус препятствия (Radius)", lblHeight: "Высота препятствия (Rise)", lblWidth: "Ширина препятствия", lblShift: "Смещение вбок (Roll)", lblPipes: "Количество труб в пучке", lblSpacing: "Шаг между осями труб", lblBends: "Количество мелких изгибов",
-                guideStub: "📏 Гайд: Отмерь от пола до нужной спинки 90°.", guideB2B: "📏 Гайд: Укажи расстояние от спинки готового 90° до упора.", guideFullB2B: "📏 Гайд (X / Y):<br>1. X: Высота первого 90° изгиба (до спинки).<br>2. Y: Длина вдоль стены до упора.", guideOffset: "📏 Гайд: Отмерь прямо до начала препятствия.", guideParallel: "📏 Гайд: Укажи шаг между трубами.", guideRolling: "📏 Гайд: Rise — подъем, Roll — уход вбок.", guideSaddle3: "📏 Гайд: Отмерь ровно до ЦЕНТРУ препятствия.", guideSaddle4: "📏 Гайд: Расстояние меряй до НАЧАЛА короба.", guideConcentric: "📏 Гайд: Укажи радиус обхода.",
+                guideStub: "📏 Гайд: Отмерь от пола до нужной спинки 90°.", guideB2B: "📏 Гайд: Укажи расстояние от спинки готового 90° до упора.", guideFullB2B: "📏 Гайд (X / Y):<br>1. X: Высота первого 90° изгиба (до спинки).<br>2. Y: Длина вдоль стены до упора.", guideOffset: "📏 Гайд: Отмерь прямо до начала препятствия (или оставь 0).", guideParallel: "📏 Гайд: Укажи шаг между трубами.", guideRolling: "📏 Гайд: Rise — подъем, Roll — уход вбок. Расстояние можно оставить 0.", guideSaddle3: "📏 Гайд: Отмерь ровно до ЦЕНТРУ препятствия (или оставь 0).", guideSaddle4: "📏 Гайд: Расстояние меряй до НАЧАЛА короба (или оставь 0).", guideConcentric: "📏 Гайд: Укажи радиус обхода.",
                 tipStub: "👉 Метку на Стрелку [ ➔ ]. Гни до 90°.", tipB2B: "👉 Стрелка [ ➔ ] для M1. Звезда [ ★ ] для M2.", tipFullB2B: "👉 Оба гиба по Стрелке [ ➔ ].", tipOffset: "👉 Обе метки по Стрелке [ ➔ ]. Разверни трубу.", tipParallel: "👉 Гни по Стрелке [ ➔ ].", tipSaddle3: "👉 Центр по Насечке [ ⯎ ]. Бока по Стрелке [ ➔ ].", tipSaddle4: "👉 Размечай по порядку. Гни в последовательности: M2 ➔ M1 ➔ M3 ➔ M4 (все по Стрелке ➔).", tipConcentric: "👉 Все метки по Стрелке, гнуть в одну сторону.",
                 markStart: "(Начало)", markEnd: "(Конец)", markSide: "(Боковий)", markCenter: "ЦЕНТР", shrink: "Усадка (Shrink)", spacing: "Шаг (Spacing)", trueOffset: "Реальная высота", limitWarn: "⚠️ Потребуется муфта (Coupling)!",
                 markDesc: { arrow: "Стрелка (Arrow) - используется для большинства гибов (Stub, Offset).", star: "Звезда (Star) - используется для Back-to-Back, когда труба смотрит в другую сторону.", notch: "Насечка (Notch / Tear Drop) - используется ТОЛЬКО для центра 3-Point Saddle." },
@@ -421,13 +431,14 @@
             en: {
                 btnText: "EN", sizeLabel: "Conduit Size (EMT Size)", angleLabel: "Bend Angle", btnCalc: "Calculate", resTitle: "Layout Marks:", btnPhotoGuide: "📸 Photo Guide", btnMarks: "🔍 Bender Marks", modalTitleGuide: "Step-by-Step Guide", modalTitleMarks: "Bender Marks", btnPrev: "❮ Prev", btnNext: "Next ❯", tabArrow: "➔ Arrow", tabStar: "★ Star", tabNotch: "⯎ Notch",
                 btnShare: "✈️ Share", btnCopy: "📋 Copy", btnCopied: "✅ Copied!", cheatTitle: "📋 Cheat Sheet", thAngle: "Angle", thMult: "Multiplier", thShrink: "Shrink/inch",
+                arbPoint: "Arbitrary point (offset)", fromM: "From", distAlert: "Distance/Span required!", shiftText: "Stagger start by",
                 fracTitle: "📏 Fraction Helper", fillTitle: "📊 Conduit Fill (CEC)", fillSize: "Conduit Size (EMT)", wire1: "Wire 1 (Type/AWG):", wire2: "Wire 2 (Optional):", occupied: "Used:", limit: "CEC Table 8 Limit:", qty: "Qty", statusEnter: "Enter quantity", statusOver: "⚠️ OVERFILL!", statusTight: "Tight", statusOk: "Good",
                 types: { stub90: "90° Stub", backToBack: "Back-to-Back", fullB2B: "Full B2B (X/Y)", offset: "Offset", parallelOffset: "Parallel Offset", rolling: "Rolling Offset", saddle3: "3-Point Saddle", saddle4: "4-Point Saddle", concentric: "Concentric 90°" },
                 sizes: { "5": '1/2" (Take-up 5")', "6": '3/4" (Take-up 6")', "8": '1" (Take-up 8")' },
                 anglesOffset: { 10: '10° (Multiplier 6)', 22.5: '22.5° (Multiplier 2.6)', 30: '30° (Multiplier 2)', 45: '45° (Multiplier 1.4)' },
                 anglesSaddle: { 22.5: 'Center 45° / Sides 22.5°', 30: 'Center 60° / Sides 30°' },
                 lblDistStub: "Distance to back of 90° bend", lblDistB2B: "Distance from first bend to wall", lblFullB2B_Y: "Total span to wall (Span Y)", lblFullB2B_X: "First stub height (Stub X)", lblDistStart: "Distance to start of obstacle", lblDistCenter: "Distance to CENTER of obstacle", lblDistRadius: "Radius of curve", lblHeight: "Obstacle Height (Rise)", lblWidth: "Obstacle Width", lblShift: "Horizontal Shift (Roll)", lblPipes: "Number of Pipes", lblSpacing: "Pipe Spacing", lblBends: "Number of small bends",
-                guideStub: "📏 Guide: Measure to the back of the desired 90°.", guideB2B: "📏 Guide: Span from the back of first 90° to the wall.", guideFullB2B: "📏 Guide (X / Y):<br>1. X: 90° bend height (to back).<br>2. Y: Length to stopping point.", guideOffset: "📏 Guide: Measure straight to the beginning of obstacle.", guideParallel: "📏 Guide: Set pipe spacing.", guideRolling: "📏 Guide: Rise (up) and Roll (shift left/right).", guideSaddle3: "📏 Guide: Measure directly to the CENTER of obstacle.", guideSaddle4: "📏 Guide: Distance is to the START of the duct.", guideConcentric: "📏 Guide: Enter curve radius.",
+                guideStub: "📏 Guide: Measure to the back of the desired 90°.", guideB2B: "📏 Guide: Span from the back of first 90° to the wall.", guideFullB2B: "📏 Guide (X / Y):<br>1. X: 90° bend height (to back).<br>2. Y: Length to stopping point.", guideOffset: "📏 Guide: Measure straight to the beginning of obstacle (or leave 0).", guideParallel: "📏 Guide: Set pipe spacing.", guideRolling: "📏 Guide: Rise (up) and Roll (shift left/right). Distance can be 0.", guideSaddle3: "📏 Guide: Measure directly to the CENTER of obstacle (or leave 0).", guideSaddle4: "📏 Guide: Distance is to the START of the duct (or leave 0).", guideConcentric: "📏 Guide: Enter curve radius.",
                 tipStub: "👉 Mark on Arrow [ ➔ ]. Bend to 90°.", tipB2B: "👉 Arrow [ ➔ ] for M1. Star [ ★ ] for M2.", tipFullB2B: "👉 Both bends on Arrow [ ➔ ].", tipOffset: "👉 Both marks on Arrow [ ➔ ]. Roll conduit 180°.", tipParallel: "👉 Bend on Arrow [ ➔ ].", tipSaddle3: "👉 Center on Notch [ ⯎ ]. Sides on Arrow [ ➔ ].", tipSaddle4: "👉 Layout in order. Bend in sequence: M2 ➔ M1 ➔ M3 ➔ M4 (all on Arrow ➔).", tipConcentric: "👉 Bend all marks on Arrow.",
                 markStart: "(Start)", markEnd: "(End)", markSide: "(Side bend)", markCenter: "CENTER", shrink: "Shrink", spacing: "Spacing", trueOffset: "True Offset", limitWarn: "⚠️ Coupling required!",
                 markDesc: { arrow: "Arrow - Used for standard bends like Stubs and Offsets.", star: "Star - Used for Back-to-Back bends when bender is reversed.", notch: "Tear Drop (Notch) - Used ONLY for the center of a 3-Point Saddle." },
@@ -455,16 +466,17 @@
         }
 
         function initDropdowns() {
-            // Строим новые красивые табы вместо селекта
             const typeContainer = document.getElementById('bendTabs');
             const hiddenTypeSel = document.getElementById('bendType');
             
             typeContainer.innerHTML = '';
             hiddenTypeSel.innerHTML = '';
             
-            let savedType = localStorage.getItem('savedBendType') || 'stub90';
-            // Если сохраненный тип вдруг не существует в текущем словаре, сбросим
-            if(!dict[currentLang].types[savedType]) savedType = 'stub90';
+            let savedType = 'stub90';
+            try {
+                let s = localStorage.getItem('savedBendType');
+                if (s && dict[currentLang].types[s]) savedType = s;
+            } catch (e) { console.log("localStorage unavailable"); }
             
             for (const [key, val] of Object.entries(dict[currentLang].types)) { 
                 hiddenTypeSel.add(new Option(val, key)); 
@@ -486,8 +498,10 @@
             const sizeSel = document.getElementById('conduitSize');
             sizeSel.innerHTML = '';
             for (const [key, val] of Object.entries(dict[currentLang].sizes)) { sizeSel.add(new Option(val, key)); }
-            let savedSize = localStorage.getItem('savedConduitSize');
-            if (savedSize && dict[currentLang].sizes[savedSize]) sizeSel.value = savedSize;
+            try {
+                let savedSize = localStorage.getItem('savedConduitSize');
+                if (savedSize && dict[currentLang].sizes[savedSize]) sizeSel.value = savedSize;
+            } catch(e) {}
             
             document.querySelectorAll('.frac-select').forEach(sel => {
                 const prev = sel.value; sel.innerHTML = '';
@@ -508,7 +522,6 @@
             document.getElementById('fracTitle').innerText = dict[currentLang].fracTitle;
             document.getElementById('btnFracCalc').innerText = dict[currentLang].btnCalc;
             
-            // Заполнение труб CEC переводы
             document.getElementById('fillTitle').innerText = dict[currentLang].fillTitle;
             document.getElementById('lblFillSize').innerText = dict[currentLang].fillSize;
             document.getElementById('lblWire1').innerText = dict[currentLang].wire1;
@@ -518,7 +531,6 @@
             document.getElementById('wireQty1').placeholder = dict[currentLang].qty;
             document.getElementById('wireQty2').placeholder = dict[currentLang].qty;
 
-            // Cheat Sheet переводы
             document.getElementById('cheatTitle').innerText = dict[currentLang].cheatTitle;
             document.getElementById('thAngle').innerText = dict[currentLang].thAngle;
             document.getElementById('thMult').innerText = dict[currentLang].thMult;
@@ -528,8 +540,10 @@
         }
 
         function updateUI() {
-            localStorage.setItem('savedBendType', document.getElementById('bendType').value);
-            localStorage.setItem('savedConduitSize', document.getElementById('conduitSize').value);
+            try {
+                localStorage.setItem('savedBendType', document.getElementById('bendType').value);
+                localStorage.setItem('savedConduitSize', document.getElementById('conduitSize').value);
+            } catch(e) {}
 
             const type = document.getElementById('bendType').value;
             const angleSel = document.getElementById('bendAngle');
@@ -564,16 +578,13 @@
         function openPhotoGuide() {
             vibro();
             currentGuideType = document.getElementById('bendType').value;
-            if(!IMAGES[currentGuideType] || IMAGES[currentGuideType].length === 0) {
-                alert("Ссылки на фото еще не добавлены!"); return;
-            }
+            if(!IMAGES[currentGuideType] || IMAGES[currentGuideType].length === 0) { alert("Ссылки на фото еще не добавлены!"); return; }
             isMarkerView = false; currentSlideIdx = 0;
             document.getElementById('modalTitle').innerText = dict[currentLang].modalTitleGuide;
             document.getElementById('markerTabsContainer').style.display = 'none';
             document.getElementById('sliderControls').style.display = 'flex';
             document.getElementById('modalOverlay').style.display = 'block';
-            renderSlide();
-            sendAnalytics("Photo_Guide_Opened", currentGuideType);
+            renderSlide(); sendAnalytics("Photo_Guide_Opened", currentGuideType);
         }
 
         function openBenderMarks() {
@@ -591,9 +602,7 @@
         }
         
         function openCheatSheet() {
-            vibro();
-            document.getElementById('cheatModal').style.display = 'block';
-            sendAnalytics("Cheat_Sheet_Opened");
+            vibro(); document.getElementById('cheatModal').style.display = 'block'; sendAnalytics("Cheat_Sheet_Opened");
         }
         
         function openFillCalc() {
@@ -603,13 +612,10 @@
             if (mainSize === "5") fillSizeSel.value = "16"; 
             if (mainSize === "6") fillSizeSel.value = "21"; 
             if (mainSize === "8") fillSizeSel.value = "27"; 
-            
             document.getElementById('fillModal').style.display = 'block';
-            calcFill();
-            sendAnalytics("CEC_Fill_Calculator_Opened");
+            calcFill(); sendAnalytics("CEC_Fill_Calculator_Opened");
         }
 
-        // ВОССТАНОВЛЕННАЯ ФУНКЦИЯ ИЗ ОБРЕЗАННОГО КОДА
         function calcFill() {
             let size = document.getElementById('fillConduitSize').value;
             let totalArea100 = CEC.emtArea[size];
@@ -643,8 +649,7 @@
                 bar.style.background = '#444'; status.style.color = '#a0a0a0'; status.innerText = t.statusEnter;
             } else if (relativePct > 100) {
                 bar.style.background = '#ff3333'; status.style.color = '#ff3333'; 
-                status.innerText = `${t.statusOver} (${fillPct.toFixed(1)}%)`;
-                vibro(); 
+                status.innerText = `${t.statusOver} (${fillPct.toFixed(1)}%)`; vibro(); 
             } else if (relativePct > 85) {
                 bar.style.background = '#ff9900'; status.style.color = '#ff9900'; 
                 status.innerText = `${t.statusTight} (${fillPct.toFixed(1)}%)`;
@@ -672,7 +677,6 @@
             
             document.getElementById('modalImg').src = imgs[currentSlideIdx] || "";
             document.getElementById('modalText').innerText = texts[currentSlideIdx] || "Опис відсутній / Описание отсутствует / No description";
-            
             document.getElementById('slideCounter').innerText = (currentSlideIdx + 1) + " / " + imgs.length;
             document.getElementById('btnPrev').disabled = (currentSlideIdx === 0);
             document.getElementById('btnNext').disabled = (currentSlideIdx === imgs.length - 1);
@@ -733,11 +737,8 @@
             let op = document.getElementById('fOp').value;
             let res = (op === '+') ? (val1 + val2) : (val1 - val2);
             
-            if (res < 0) {
-                document.getElementById('fracResText').innerHTML = "Менше нуля! (Below 0)";
-            } else {
-                document.getElementById('fracResText').innerHTML = "= " + toFraction(res);
-            }
+            if (res < 0) { document.getElementById('fracResText').innerHTML = "Менше нуля! (Below 0)"; } 
+            else { document.getElementById('fracResText').innerHTML = "= " + toFraction(res); }
             document.getElementById('fracResultBox').style.display = 'block';
             sendAnalytics("Fraction_Calculated", `${val1} ${op} ${val2} = ${res}`);
         }
@@ -746,48 +747,30 @@
             vibro();
             const typeText = document.getElementById('bendType').options[document.getElementById('bendType').selectedIndex].text;
             const sizeText = document.getElementById('conduitSize').options[document.getElementById('conduitSize').selectedIndex].text;
-            
             let marksNodes = document.querySelectorAll('#marks .mark');
             let marksList = Array.from(marksNodes).map(node => node.innerText).join('\n');
-            
             let textToShare = `⚡️ BEND IT: ${typeText}\nТруба: ${sizeText}\n\n📏 Мітки:\n${marksList}`;
             let shareUrl = `https://t.me/share/url?url=&text=${encodeURIComponent(textToShare)}`;
             
             if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openTelegramLink) {
-                window.Telegram.WebApp.openTelegramLink(shareUrl);
-                sendAnalytics("Share_Telegram_Clicked", typeText);
-            } else {
-                window.open(shareUrl, '_blank');
-            }
+                window.Telegram.WebApp.openTelegramLink(shareUrl); sendAnalytics("Share_Telegram_Clicked", typeText);
+            } else { window.open(shareUrl, '_blank'); }
         }
 
-        // НОВАЯ ФУНКЦИЯ КОПИРОВАНИЯ
         function copyResults() {
             vibro();
             const typeText = document.getElementById('bendType').options[document.getElementById('bendType').selectedIndex].text;
             const sizeText = document.getElementById('conduitSize').options[document.getElementById('conduitSize').selectedIndex].text;
-            
             let marksNodes = document.querySelectorAll('#marks .mark');
             let marksList = Array.from(marksNodes).map(node => node.innerText).join('\n');
-            
             let textToCopy = `⚡️ BEND IT: ${typeText}\nТруба: ${sizeText}\n\n📏 Мітки:\n${marksList}`;
             
             navigator.clipboard.writeText(textToCopy).then(() => {
                 const btn = document.getElementById('btnCopy');
                 const originalText = btn.innerText;
-                const copiedText = dict[currentLang].btnCopied;
-                
-                btn.innerText = copiedText;
-                btn.style.backgroundColor = "#28a745"; // Зеленый цвет успеха
-                
-                setTimeout(() => {
-                    btn.innerText = originalText;
-                    btn.style.backgroundColor = "#444"; // Возвращаем родной цвет
-                }, 2000);
-            }).catch(err => {
-                console.error("Copy failed", err);
-            });
-            
+                btn.innerText = dict[currentLang].btnCopied; btn.style.backgroundColor = "#28a745"; 
+                setTimeout(() => { btn.innerText = originalText; btn.style.backgroundColor = "#444"; }, 2000);
+            }).catch(err => { console.error("Copy failed", err); });
             sendAnalytics("Copy_Clicked", typeText);
         }
 
@@ -799,16 +782,16 @@
             const t = dict[currentLang];
 
             sendAnalytics("Calculate_Click", `Type: ${type}, Size: ${size}`);
+            if (typeof gtag === 'function') { gtag('event', 'calculate_click', { 'bend_type': type, 'conduit_size': size }); }
 
-            if (typeof gtag === 'function') {
-                gtag('event', 'calculate_click', {
-                    'bend_type': type,
-                    'conduit_size': size
-                });
+            const mandatoryDist = ['stub90', 'backToBack', 'fullB2B', 'concentric'];
+            if (!dist && mandatoryDist.includes(type)) { 
+                alert(t.distAlert); 
+                return; 
             }
 
-            if (!dist) { alert("Distance/Span required!"); return; }
             let resHTML = "", infoHTML = "", maxMark = 0; 
+            let hasDist = dist > 0;
 
             if (type === 'stub90') {
                 const takeup = parseFloat(size); let mark = dist - takeup;
@@ -837,23 +820,46 @@
                 let shrink = h * shrinkPerInch, step = h * multiplier;
 
                 if (type === 'offset' || type === 'rolling') {
-                    let m1 = dist + shrink, m2 = m1 + step;
-                    resHTML = `<div class="mark"><span class="highlight">M1:</span> ${toFraction(m1)} ${t.markStart}</div><div class="mark"><span class="highlight">M2:</span> ${toFraction(m2)} ${t.markEnd}</div>`;
-                    infoHTML += `<b>${t.shrink}:</b> ${toFraction(shrink)} <br><b>${t.spacing}:</b> ${toFraction(step)}<br><br>${t.tipOffset}`; maxMark = m2;
+                    if (hasDist) {
+                        let m1 = dist + shrink, m2 = m1 + step;
+                        resHTML = `<div class="mark"><span class="highlight">M1:</span> ${toFraction(m1)} ${t.markStart}</div><div class="mark"><span class="highlight">M2:</span> ${toFraction(m2)} ${t.markEnd}</div>`;
+                        maxMark = m2;
+                    } else {
+                        resHTML = `<div class="mark"><span class="highlight">M1:</span> ${t.arbPoint}</div><div class="mark"><span class="highlight">M2:</span> ${t.fromM} М1 + ${toFraction(step)}</div>`;
+                    }
+                    infoHTML += `<b>${t.shrink}:</b> ${toFraction(shrink)} <br><b>${t.spacing}:</b> ${toFraction(step)}<br><br>${t.tipOffset}`; 
                 } else if (type === 'parallelOffset') {
-                    let count = parseInt(document.getElementById('pipeCount').value) || 2, spacing = getFullVal('spacing') || 1, baseM1 = dist + shrink, baseM2 = baseM1 + step, angleRad = (angle * Math.PI) / 180, stagger = spacing * Math.tan(angleRad / 2);
-                    infoHTML += `<b>${t.shrink}:</b> ${toFraction(shrink)} <br><b>Stagger:</b> ${toFraction(stagger)}<br><br>${t.tipParallel}`;
-                    for (let i = 0; i < count; i++) {
-                        let shiftAmount = i * stagger, piM1 = baseM1 + shiftAmount, piM2 = baseM2 + shiftAmount;
-                        resHTML += `<div class="mark"><span class="highlight">Pipe ${i+1}:</span> M1: ${toFraction(piM1)} | M2: ${toFraction(piM2)}</div>`; maxMark = piM2;
+                    let count = parseInt(document.getElementById('pipeCount').value) || 2, spacing = getFullVal('spacing') || 1, angleRad = (angle * Math.PI) / 180, stagger = spacing * Math.tan(angleRad / 2);
+                    infoHTML += `<b>${t.shrink}:</b> ${toFraction(shrink)} <br><b>Stagger:</b> ${toFraction(stagger)}<br><b>${t.spacing}:</b> ${toFraction(step)}<br><br>${t.tipParallel}`;
+                    if (hasDist) {
+                        let baseM1 = dist + shrink, baseM2 = baseM1 + step;
+                        for (let i = 0; i < count; i++) {
+                            let shiftAmount = i * stagger, piM1 = baseM1 + shiftAmount, piM2 = baseM2 + shiftAmount;
+                            resHTML += `<div class="mark"><span class="highlight">Pipe ${i+1}:</span> M1: ${toFraction(piM1)} | M2: ${toFraction(piM2)}</div>`; maxMark = piM2;
+                        }
+                    } else {
+                        for (let i = 0; i < count; i++) {
+                            let shiftAmount = i * stagger;
+                            resHTML += `<div class="mark"><span class="highlight">Pipe ${i+1}:</span> ${t.shiftText} ${toFraction(shiftAmount)}</div>`;
+                        }
                     }
                 } else if (type === 'saddle3') {
-                    let m2 = dist + shrink, m1 = m2 - step, m3 = m2 + step;
-                    resHTML = `<div class="mark"><span class="highlight">M1:</span> ${toFraction(m1)} ${t.markSide}</div><div class="mark" style="color:#ff3333;"><b>M2: ${toFraction(m2)} ${t.markCenter}</b></div><div class="mark"><span class="highlight">M3:</span> ${toFraction(m3)} ${t.markSide}</div>`; infoHTML += `<b>${t.shrink}:</b> ${toFraction(shrink)} <br><b>${t.spacing}:</b> ${toFraction(step)}<br><br>${t.tipSaddle3}`; maxMark = m3;
+                    if (hasDist) {
+                        let m2 = dist + shrink, m1 = m2 - step, m3 = m2 + step;
+                        resHTML = `<div class="mark"><span class="highlight">M1:</span> ${toFraction(m1)} ${t.markSide}</div><div class="mark" style="color:#ff3333;"><b>M2: ${toFraction(m2)} ${t.markCenter}</b></div><div class="mark"><span class="highlight">M3:</span> ${toFraction(m3)} ${t.markSide}</div>`; maxMark = m3;
+                    } else {
+                        resHTML = `<div class="mark"><span class="highlight">M1:</span> ${t.fromM} M2 - ${toFraction(step)}</div><div class="mark" style="color:#ff3333;"><b>M2 (${t.markCenter}): ${t.arbPoint}</b></div><div class="mark"><span class="highlight">M3:</span> ${t.fromM} M2 + ${toFraction(step)}</div>`;
+                    }
+                    infoHTML += `<b>${t.shrink}:</b> ${toFraction(shrink)} <br><b>${t.spacing}:</b> ${toFraction(step)}<br><br>${t.tipSaddle3}`; 
                 } else if (type === 'saddle4') {
                     let w = getFullVal('width'); if (!w) { alert("Obstacle width required!"); return; }
-                    let m2 = dist + shrink, m1 = m2 - step, m3 = m2 + w, m4 = m3 + step;
-                    resHTML = `<div class="mark"><span class="highlight">M1:</span> ${toFraction(m1)}</div><div class="mark"><span class="highlight">M2:</span> ${toFraction(m2)}</div><div class="mark"><span class="highlight">M3:</span> ${toFraction(m3)}</div><div class="mark"><span class="highlight">M4:</span> ${toFraction(m4)}</div>`; infoHTML += `<b>${t.shrink}:</b> ${toFraction(shrink)} <br><b>${t.spacing}:</b> ${toFraction(step)}<br><br>${t.tipSaddle4}`; maxMark = m4;
+                    if (hasDist) {
+                        let m2 = dist + shrink, m1 = m2 - step, m3 = m2 + w, m4 = m3 + step;
+                        resHTML = `<div class="mark"><span class="highlight">M1:</span> ${toFraction(m1)}</div><div class="mark"><span class="highlight">M2:</span> ${toFraction(m2)}</div><div class="mark"><span class="highlight">M3:</span> ${toFraction(m3)}</div><div class="mark"><span class="highlight">M4:</span> ${toFraction(m4)}</div>`; maxMark = m4;
+                    } else {
+                        resHTML = `<div class="mark"><span class="highlight">M1:</span> ${t.fromM} M2 - ${toFraction(step)}</div><div class="mark"><span class="highlight">M2:</span> ${t.arbPoint}</div><div class="mark"><span class="highlight">M3:</span> ${t.fromM} M2 + ${toFraction(w)}</div><div class="mark"><span class="highlight">M4:</span> ${t.fromM} M3 + ${toFraction(step)}</div>`;
+                    }
+                    infoHTML += `<b>${t.shrink}:</b> ${toFraction(shrink)} <br><b>${t.spacing}:</b> ${toFraction(step)}<br><br>${t.tipSaddle4}`; 
                 }
             }
             if (maxMark > 120) infoHTML += `<div class="limit-warning">${t.limitWarn}</div>`;
@@ -862,18 +868,19 @@
             document.getElementById('resultBox').style.display = 'block';
         }
 
-        initDropdowns(); updateUI();
+        try {
+            initDropdowns(); 
+            updateUI();
+        } catch(err) { alert("⚠️ Ошибка запуска: " + err.message); }
 
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./service-worker.js')
-                    .then(reg => console.log('Офлайн-режим активирован!'))
-                    .catch(err => console.error('Ошибка офлайн-режима:', err));
+            navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                for(let registration of registrations) { registration.unregister(); }
             });
         }
 
         document.getElementById('conduitSize').addEventListener('change', function() {
-            localStorage.setItem('savedConduitSize', this.value);
+            try { localStorage.setItem('savedConduitSize', this.value); } catch(e) {}
         });
     </script>
 </body>
