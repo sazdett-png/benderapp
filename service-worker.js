@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bendit-cache-v7';
+const CACHE_NAME = 'bendit-cache-v8';
 
 // 1. При первой загрузке сохраняем основные файлы в память телефона
 self.addEventListener('install', event => {
