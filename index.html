@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
+    <script>
+        // ЛОВЕЦ ОШИБОК: Если скрипт падает, он покажет причину на экране
+        window.onerror = function(msg, url, lineNo, columnNo, error) {
+            alert("⚠️ Сбой кода: " + msg + " (Строка: " + lineNo + ")");
+            return false;
+        };
+    </script>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -17,23 +24,25 @@
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx1-WnxYagJAvJGzabxFzfxjOH0qdicOzsgm08JCqcV03XPPR1NRRQ6urrojdEaeauJ/exec";
 
         function sendAnalytics(eventName, extraInfo = "") {
-            let tg = window.Telegram.WebApp;
-            let user = tg.initDataUnsafe?.user;
-            let userId = user ? user.id : "No ID";
-            let username = user ? (user.username ? "@" + user.username : user.first_name) : "Web Browser";
-            let platform = tg.platform || "Unknown"; 
-            let lang = (typeof currentLang !== 'undefined') ? currentLang : 'ua';
+            try {
+                let tg = window.Telegram.WebApp;
+                let user = tg.initDataUnsafe ? tg.initDataUnsafe.user : null;
+                let userId = user ? user.id : "No ID";
+                let username = user ? (user.username ? "@" + user.username : user.first_name) : "Web Browser";
+                let platform = tg.platform || "Unknown"; 
+                let lang = (typeof currentLang !== 'undefined') ? currentLang : 'ua';
 
-            let payload = {
-                userId: userId, username: username, event: eventName,
-                platform: platform, language: lang, extraData: extraInfo
-            };
+                let payload = {
+                    userId: userId, username: username, event: eventName,
+                    platform: platform, language: lang, extraData: extraInfo
+                };
 
-            fetch(GOOGLE_SCRIPT_URL, {
-                method: "POST", mode: "no-cors",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            }).catch(err => console.error("Analytics error:", err));
+                fetch(GOOGLE_SCRIPT_URL, {
+                    method: "POST", mode: "no-cors",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                }).catch(err => console.error("Analytics error:", err));
+            } catch (e) { console.error(e); }
         }
 
         window.onload = function() {
@@ -288,14 +297,4 @@
                     <br><span style="font-size: 12px;">(<span id="lblLimit">Ліміт за CEC Table 8:</span> <span id="limitPctText">40</span>%)</span>
                 </div>
                 <div style="width: 100%; background: #111; height: 16px; border-radius: 8px; overflow: hidden; margin-bottom: 10px; border: 1px solid #444;">
-                    <div id="fillBar" style="height: 100%; width: 0%; background: #4da6ff; transition: width 0.3s, background 0.3s;"></div>
-                </div>
-                <div id="fillStatus" style="font-size: 18px; font-weight: bold; color: #4da6ff;">Введіть кількість</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- МОДАЛЬНОЕ ОКНО ШПАРГАЛКИ (CHEAT SHEET) -->
-    <div id="cheatModal" class="modal" onclick="closeModalOutside(event, 'cheatModal')">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeModal
+                    <div id="fillBar" style="height: 100%; width: 0%; background: #4da6ff; transition: width 0.3s, background 0.3s;"
