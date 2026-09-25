@@ -4,44 +4,56 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#121211">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="manifest" href="manifest.json">
     
     <title>BEND IT⚡️</title>
+    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-1R9B204RWW"></script>
     <script>
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx1-WnxYagJAvJGzabxFzfxjOH0qdicOzsgm08JCqcV03XPPR1NRRQ6urrojdEaeauJ/exec";
 
         function sendAnalytics(eventName, extraInfo = "") {
             let tg = window.Telegram.WebApp;
+            
             let user = tg.initDataUnsafe?.user;
             let userId = user ? user.id : "No ID";
             let username = user ? (user.username ? "@" + user.username : user.first_name) : "Web Browser";
             let platform = tg.platform || "Unknown"; 
+            
             let lang = (typeof currentLang !== 'undefined') ? currentLang : 'ua';
 
             let payload = {
-                userId: userId, username: username, event: eventName,
-                platform: platform, language: lang, extraData: extraInfo
+                userId: userId,
+                username: username,
+                event: eventName,
+                platform: platform,
+                language: lang,
+                extraData: extraInfo
             };
 
             fetch(GOOGLE_SCRIPT_URL, {
-                method: "POST", mode: "no-cors",
+                method: "POST",
+                mode: "no-cors",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload)
             }).catch(err => console.error("Analytics error:", err));
         }
 
         window.onload = function() {
-            if (window.Telegram && window.Telegram.WebApp) { window.Telegram.WebApp.expand(); }
+            if (window.Telegram && window.Telegram.WebApp) {
+                window.Telegram.WebApp.expand();
+            }
             sendAnalytics("App_Opened");
         };
 
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date()); gtag('config', 'G-1R9B204RWW');
+        gtag('js', new Date());
+        gtag('config', 'G-1R9B204RWW');
     </script>
     <style>
         :root {
@@ -205,7 +217,7 @@
                 </div>
             </div>
 
-            <button class="calc-btn" id="btnFracCalc" onclick="calcFractionResult()">Рахувати</button>
+            <button class="calc-btn" onclick="calcFractionResult()">Рахувати</button>
             
             <div class="result-box" id="fracResultBox" style="display: none; border-left-color: #4da6ff; margin-top: 15px; padding: 15px;">
                 <div class="mark" style="text-align: center; font-size: 26px; color: #4da6ff; border-bottom: none; margin: 0;" id="fracResText">0"</div>
@@ -220,7 +232,7 @@
             <h3 id="fillTitle">📊 Заповнення труби (CEC)</h3>
             
             <div class="form-group">
-                <label id="lblFillSize">Розмір труби (EMT)</label>
+                <label>Розмір труби (EMT)</label>
                 <select id="fillConduitSize" onchange="calcFill()">
                     <option value="16">1/2"</option>
                     <option value="21">3/4"</option>
@@ -228,7 +240,7 @@
                 </select>
             </div>
             
-            <label id="lblWire1" style="color:#fff; margin-bottom:10px;">Провід 1 (Тип/Переріз):</label>
+            <label style="color:#fff; margin-bottom:10px;">Провід 1:</label>
             <div class="input-row" style="margin-bottom: 15px;">
                 <select id="wireType1" onchange="calcFill()">
                     <option value="t90">T90 (Nylon)</option>
@@ -243,7 +255,7 @@
                 <input type="number" id="wireQty1" placeholder="Шт" value="0" min="0" oninput="calcFill()" style="width: 60px; flex: none;">
             </div>
 
-            <label id="lblWire2" style="color:#fff; margin-bottom:10px;">Провід 2 (Додатково):</label>
+            <label style="color:#fff; margin-bottom:10px;">Провід 2 (Додатково):</label>
             <div class="input-row" style="margin-bottom: 20px;">
                 <select id="wireType2" onchange="calcFill()">
                     <option value="t90">T90 (Nylon)</option>
@@ -260,8 +272,8 @@
 
             <div style="padding: 15px; background: #2a2a2a; border-radius: 8px; text-align: center;">
                 <div style="font-size: 14px; color: #a0a0a0; margin-bottom: 10px;">
-                    <span id="lblOccupied">Зайнято:</span> <span id="fillAreaText">0</span> / <span id="maxAreaText">0</span> мм² 
-                    <br><span style="font-size: 12px;">(<span id="lblLimit">Ліміт за CEC Table 8:</span> <span id="limitPctText">40</span>%)</span>
+                    Зайнято: <span id="fillAreaText">0</span> / <span id="maxAreaText">0</span> мм² 
+                    <br><span style="font-size: 12px;">(Ліміт за CEC Table 8: <span id="limitPctText">40</span>%)</span>
                 </div>
                 <div style="width: 100%; background: #111; height: 16px; border-radius: 8px; overflow: hidden; margin-bottom: 10px; border: 1px solid #444;">
                     <div id="fillBar" style="height: 100%; width: 0%; background: #4da6ff; transition: width 0.3s, background 0.3s;"></div>
@@ -272,6 +284,7 @@
     </div>
 
     <script>
+        // --- ВИБРАЦИЯ ПРИ КЛИКАХ ---
         function vibro() {
             if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
                 window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
@@ -280,35 +293,31 @@
             }
         }
 
+        // --- CEC CONDUIT FILL CALCULATOR ---
         const CEC = {
-            emtArea: { "16": 196, "21": 343, "27": 556 }, 
-            wireArea: { 
+            emtArea: { "16": 196, "21": 343, "27": 556 }, // Table 6 (100% Area mm2)
+            wireArea: { // Table 9 (Area mm2)
                 "t90": { "14": 5.61, "12": 7.55, "10": 10.99, "8": 23.36 },
                 "rw90": { "14": 10.24, "12": 13.01, "10": 16.70, "8": 28.18 }
             }
         };
 
-        const themes = ['red', 'orange', 'blue'];
-        const themeIcons = ['🔴', '🟠', '🔵'];
-        let currentThemeIdx = 0;
-        
-        function cycleTheme() {
+        function openFillCalc() {
             vibro();
-            currentThemeIdx = (currentThemeIdx + 1) % themes.length;
-            document.body.className = 'theme-' + themes[currentThemeIdx];
-            document.getElementById('themeBtn').innerText = themeIcons[currentThemeIdx];
-            sendAnalytics("Theme_Changed", themes[currentThemeIdx]);
+            let mainSize = document.getElementById('conduitSize').value;
+            let fillSizeSel = document.getElementById('fillConduitSize');
+            if (mainSize === "5") fillSizeSel.value = "16"; 
+            if (mainSize === "6") fillSizeSel.value = "21"; 
+            if (mainSize === "8") fillSizeSel.value = "27"; 
+            
+            document.getElementById('fillModal').style.display = 'block';
+            calcFill();
+            sendAnalytics("CEC_Fill_Calculator_Opened");
         }
 
-        let wakeLock = null;
-        async function toggleWakeLock() {
-            vibro();
-            if (!('wakeLock' in navigator)) { alert('Твій браузер не підтримує функцію незгасаючого екрану (Wake Lock API).'); return; }
-            try {
-                const btn = document.getElementById('wakeLockBtn');
-                if (wakeLock !== null) {
-                    await wakeLock.release(); wakeLock = null; btn.classList.remove('active');
-                } else {
-                    wakeLock = await navigator.wakeLock.request('screen'); btn.classList.add('active');
-                    document.addEventListener('visibilitychange', async () => {
-                        if (wakeLock !== null && document.visibilityState === 'visible
+        function calcFill() {
+            let size = document.getElementById('fillConduitSize').value;
+            let totalArea100 = CEC.emtArea[size];
+            
+            let wT1 = document.getElementById('wireType1').value, wA1 = document.getElementById('wireAwg1').value, q1 = parseInt(document.getElementById('wireQty1').value) || 0;
+            let wT2 = document.getElementById('wireType2').value, wA2 = document.getElementById('wireAwg2').value, q2 = parseInt(document.g
