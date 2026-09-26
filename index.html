@@ -67,11 +67,11 @@
         .logo-container img { max-width: 300px; height: auto; border-radius: 45px; }
         
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; position: relative; width: 100%; }
-        .left-controls { display: flex; gap: 8px; z-index: 2; }
-        .right-controls { display: flex; gap: 8px; z-index: 2; }
-        h2 { color: #B04D3A; margin: 0; text-transform: uppercase; letter-spacing: 1px; font-style: italic; font-size: 22px; position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; z-index: 1; }
+        .left-controls { display: flex; gap: 6px; z-index: 2; }
+        .right-controls { display: flex; gap: 6px; z-index: 2; }
+        h2 { color: #B04D3A; margin: 0; text-transform: uppercase; letter-spacing: 1px; font-style: italic; font-size: 20px; position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; z-index: 1; }
         
-        .icon-btn, .lang-btn { background-color: #333; color: #fff; border: 1px solid #555; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; display: flex; align-items: center; justify-content: center; min-width: 44px;}
+        .icon-btn, .lang-btn { background-color: #333; color: #fff; border: 1px solid #555; padding: 8px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; display: flex; align-items: center; justify-content: center; min-width: 38px;}
         #wakeLockBtn { opacity: 0.4; transition: opacity 0.3s; }
         #wakeLockBtn.active { opacity: 1; background-color: #444; border-color: #ffd700; box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
 
@@ -145,6 +145,7 @@
             <button class="icon-btn" id="wakeLockBtn" onclick="toggleWakeLock()" title="Keep Screen On">💡</button>
             <button class="icon-btn" id="fracBtn" onclick="openFracCalc()" title="Fraction Calculator">🧮</button>
             <button class="icon-btn" onclick="openFillCalc()" title="Conduit Fill Calculator">📊</button>
+            <button class="icon-btn" onclick="openRackCalc()" title="Rack Spacing Calculator">🛤️</button>
             <button class="icon-btn" onclick="openCheatSheet()" title="Cheat Sheet">📋</button>
         </div>
         <h2>BEND IT⚡️</h2>
@@ -243,6 +244,45 @@
         </div>
     </div>
 
+    <!-- МОДАЛЬНОЕ ОКНО RACK SPACING -->
+    <div id="rackModal" class="modal" onclick="closeModalOutside(event, 'rackModal')">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('rackModal')">&times;</span>
+            <h3 id="rackTitle">🛤️ Ідеальна траса (Rack)</h3>
+            
+            <div class="form-group">
+                <label id="lblRackGap">Зазор між трубами (Gap):</label>
+                <div class="input-row">
+                    <input type="number" id="rackGapWhole" value="1">
+                    <select id="rackGapFrac" class="frac-select"></select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label id="lblRackPipes">Кількість труб:</label>
+                <select id="rackCount" onchange="buildRackPipes()">
+                    <option value="2">2</option>
+                    <option value="3" selected>3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                </select>
+            </div>
+
+            <div id="rackPipesContainer" style="background: #2a2a2a; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                <!-- Трубы генерируются через JS -->
+            </div>
+
+            <button class="calc-btn" id="btnRackCalc" onclick="calcRack()">Розрахувати</button>
+
+            <div class="result-box" id="rackResultBox" style="display: none; border-left-color: #ff9900; margin-top: 15px; padding: 15px;">
+                <div class="result-title" style="color: #ff9900;">Мітки центрів (Centers):</div>
+                <div class="info" style="margin-bottom:10px;">(Відміряй рулеткою один раз від центру першої труби)</div>
+                <div id="rackResultMarks"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- МОДАЛЬНОЕ ОКНО CONDUIT FILL (CEC) -->
     <div id="fillModal" class="modal" onclick="closeModalOutside(event, 'fillModal')">
         <div class="modal-content">
@@ -328,6 +368,8 @@
             } catch (e) {}
         }
 
+        const EMT_OD = { "16": 0.706, "21": 0.922, "27": 1.163, "35": 1.510, "41": 1.740, "53": 2.197 };
+
         const CEC = {
             emtArea: { "16": 196, "21": 343, "27": 556 }, 
             wireArea: { 
@@ -383,19 +425,19 @@
         let currentSlideIdx = 0;
         let isMarkerView = false;
 
-                const dict = {
+        const dict = {
             ua: {
                 btnText: "UA", sizeLabel: "Розмір труби (EMT Size)", angleLabel: "Кут вигину (Bend Angle)", btnCalc: "Розрахувати", resTitle: "Мітки (Layout Marks):", btnPhotoGuide: "📸 Фото-Гайд", btnMarks: "🔍 Значки трубогиба", modalTitleGuide: "Покроковий Гайд", modalTitleMarks: "Значки трубогиба", btnPrev: "❮ Назад", btnNext: "Вперед ❯", tabArrow: "➔ Стрілка", tabStar: "★ Зірка", tabNotch: "⯎ Насічка",
                 btnShare: "✈️ В чат", btnCopy: "📋 Копіювати", btnCopied: "✅ Скопійовано!", cheatTitle: "📋 Шпаргалка (Cheat Sheet)", thAngle: "Кут (Angle)", thMult: "Множник", thShrink: "Усадка/дюйм",
                 arbPoint: "Довільна точка (відступ)", fromM: "Від", distAlert: "Введіть відстань (Distance)!", shiftText: "Зсув старту на",
                 fracTitle: "📏 Калькулятор дробів", fillTitle: "📊 Заповнення труби (CEC)", fillSize: "Розмір труби (EMT)", wire1: "Провід 1 (Тип/Переріз):", wire2: "Провід 2 (Додатково):", occupied: "Зайнято:", limit: "Ліміт за CEC Table 8:", qty: "Шт", statusEnter: "Введіть кількість", statusOver: "⚠️ ПЕРЕБІР!", statusTight: "Впритул", statusOk: "Норма",
+                rackTitle: "🛤️ Ідеальна траса (Rack)", rackGap: "Зазор між трубами (Gap):", rackPipes: "Кількість труб:", pipeLabel: "Труба",
                 types: { stub90: "90° Stub", backToBack: "Back-to-Back", fullB2B: "Full B2B (X/Y)", offset: "Offset", parallelOffset: "Parallel Offset", rolling: "Rolling Offset", saddle3: "3-Point Saddle", saddle4: "4-Point Saddle", concentric: "Concentric 90°" },
                 sizes: { "5": '1/2" (Take-up 5")', "6": '3/4" (Take-up 6")', "8": '1" (Take-up 8")' },
                 anglesOffset: { 10: '10° (Множник 6)', 22.5: '22.5° (Множник 2.6)', 30: '30° (Множник 2)', 45: '45° (Множник 1.4)' },
                 anglesSaddle: { 22.5: 'Центр 45° / Боки 22.5°', 30: 'Центр 60° / Боки 30°' },
                 lblDistStub: "Відстань до спинки труби (Distance)", lblDistB2B: "Відстань від 1-го гибу до упору (Span Y)", lblFullB2B_Y: "Загальна довжина до упору (Span Y)", lblFullB2B_X: "Висота першої стійки (Stub X)", lblDistStart: "Відстань (Distance)", lblDistCenter: "Відстань (Distance)", lblDistRadius: "Радіус перешкоди (Radius)", lblHeight: "Висота (Rise)", lblWidth: "Ширина перешкоди", lblShift: "Зсув убік (Roll)", lblPipes: "Кількість труб у пучку", lblSpacing: "Відстань між осями труб", lblBends: "Кількість дрібних вигинів",
                 
-                // НОВЫЕ ПОДРОБНЫЕ ПОДСКАЗКИ ДЛЯ ЗАМЕРОВ (UA)
                 guideStub: "📏 <b>Як міряти:</b><br>• Відстань вказується від краю труби до <b>зовнішньої спинки (Back)</b> майбутнього кута 90°.",
                 guideB2B: "📏 <b>Як міряти:</b><br>• Від <b>зовнішньої спинки</b> вже готового 90° до стіни/упору (де буде спинка другого гиба).",
                 guideFullB2B: "📏 <b>Як міряти:</b><br>• <b>Stub X:</b> висота першого 90° (від підлоги до зовнішньої спинки).<br>• <b>Span Y:</b> загальна довжина від спинки до спинки.",
@@ -411,7 +453,7 @@
                 markDesc: { arrow: "Стрілка (Arrow) - використовується для більшості стандартних вигинів (Stub, Offset).", star: "Зірка (Star) - використовується для Back-to-Back, коли труба дивиться в інший бік.", notch: "Насічка (Notch / Tear Drop) - використовується ТІЛЬКИ для центру 3-Point Saddle." },
                 steps: {
                     stub90: [ "Текст 1", "Текст 2", "Текст 3", "Текст 4", "Текст 5", "Текст 6", "Текст 7" ],
-                    backToBack: [ "Виміряй точну відстань між двома стінами (від упору до упору).", "Зроби перший гиб 90° (по Стрілці). Від його зовнішньої спинки відміряй відстань із Кроку 1 і постав мітку М2.", "Розверни трубогиб гаком до вільного кінця труби. Вирівняй мітку М2 рівно по Зірці [ ★ ].", "Зігни трубу до 90°. Важливо: стеж, щоб обидва гиби лежали строго в одній площині.", "Готово." ],
+                    backToBack: [ "Виміряй точну відстань між двома стінами (від упору до упору).", "Зроби перший гиб 90° (по Стрілці). Від його зовнішньої спинки відміряй відстань із Кроку 1 і постав мітку М2.", "Розверни трубогиб гаком до вільного кінця труби. Вирівняй мітку М2 рівно по Зірці [ ★ ].", "Зігни трубу до 90°. Важливо: стеж, щоб обидва гиби лежали строго в одній площині, без перекосу (вертольота).", "Готово. U-подібна труба має ідеально стати врозпір між поверхнями." ],
                     fullB2B: [ "Текст 1" ], offset: [ "Текст 1" ], parallelOffset: [ "Текст 1" ], rolling: [ "Текст 1" ],
                     saddle3: [ "Виміряй висоту перешкоди та відстань рівно до її центру.", "Нанеси 3 мітки: М2 (центр) та бічні М1, М3.", "Для центрального гибу завжди використовується Насічка (Notch / Tear Drop).", "Постав центральную мітку М2 рівно на Насічку.", "Зігни трубу до кута 45° (або 60°).", "Переверни трубогиб. Прокрути трубу на 180° і вирівняй мітку М1 по Стрілці [ ➔ ].", "Зігни трубу в повітрі до 22.5° (або 30°).", "Зсунь трубогиб на мітку М3. Гак дивиться до центру. Вирівняй М3 по Стрілці [ ➔ ].", "Знову зігни трубу в повітрі.", "Готово." ],
                     saddle4: [ "Текст 1" ], concentric: [ "Текст 1" ]
@@ -422,13 +464,13 @@
                 btnShare: "✈️ В чат", btnCopy: "📋 Копировать", btnCopied: "✅ Скопировано!", cheatTitle: "📋 Шпаргалка (Cheat Sheet)", thAngle: "Угол (Angle)", thMult: "Множитель", thShrink: "Усадка/дюйм",
                 arbPoint: "Произвольная точка (отступ)", fromM: "От", distAlert: "Введите расстояние (Distance)!", shiftText: "Сдвиг старта на",
                 fracTitle: "📏 Калькулятор дробей", fillTitle: "📊 Заполнение трубы (CEC)", fillSize: "Размер трубы (EMT)", wire1: "Провод 1 (Тип/Сечение):", wire2: "Провод 2 (Дополнительно):", occupied: "Занято:", limit: "Лимит по CEC Table 8:", qty: "Шт", statusEnter: "Введите количество", statusOver: "⚠️ ПЕРЕБОР!", statusTight: "Впритык", statusOk: "Норма",
+                rackTitle: "🛤️ Идеальная трасса (Rack)", rackGap: "Зазор между трубами (Gap):", rackPipes: "Количество труб:", pipeLabel: "Труба",
                 types: { stub90: "90° Stub", backToBack: "Back-to-Back", fullB2B: "Full B2B (X/Y)", offset: "Offset", parallelOffset: "Parallel Offset", rolling: "Rolling Offset", saddle3: "3-Point Saddle", saddle4: "4-Point Saddle", concentric: "Concentric 90°" },
                 sizes: { "5": '1/2" (Take-up 5")', "6": '3/4" (Take-up 6")', "8": '1" (Take-up 8")' },
                 anglesOffset: { 10: '10° (Множитель 6)', 22.5: '22.5° (Множитель 2.6)', 30: '30° (Множитель 2)', 45: '45° (Множитель 1.4)' },
                 anglesSaddle: { 22.5: 'Центр 45° / Бока 22.5°', 30: 'Центр 60° / Бока 30°' },
                 lblDistStub: "Расстояние до спинки трубы (Distance)", lblDistB2B: "Расстояние от 1-го гиба до упора (Span Y)", lblFullB2B_Y: "Общая длина до упора (Span Y)", lblFullB2B_X: "Высота первой стойки (Stub X)", lblDistStart: "Расстояние (Distance)", lblDistCenter: "Расстояние (Distance)", lblDistRadius: "Радиус препятствия (Radius)", lblHeight: "Высота (Rise)", lblWidth: "Ширина препятствия", lblShift: "Смещение вбок (Roll)", lblPipes: "Количество труб в пучке", lblSpacing: "Шаг между осями труб", lblBends: "Количество мелких изгибов",
                 
-                // НОВЫЕ ПОДРОБНЫЕ ПОДСКАЗКИ ДЛЯ ЗАМЕРОВ (RU)
                 guideStub: "📏 <b>Как замерять:</b><br>• Расстояние указывается от края трубы до <b>внешней спинки (Back)</b> будущего угла 90°.",
                 guideB2B: "📏 <b>Как замерять:</b><br>• От <b>внешней спинки</b> уже готового 90° до стены/упора (где будет спинка второго гиба).",
                 guideFullB2B: "📏 <b>Как замерять:</b><br>• <b>Stub X:</b> высота первого 90° (от пола до внешней спинки).<br>• <b>Span Y:</b> общая длина от спинки до спинки.",
@@ -440,7 +482,7 @@
                 guideConcentric: "📏 Гайд: Укажи радиус обхода.",
                 
                 tipStub: "👉 Метку на Стрелку [ ➔ ]. Гни до 90°.", tipB2B: "👉 Стрелка [ ➔ ] для M1. Звезда [ ★ ] для M2.", tipFullB2B: "👉 Оба гиба по Стрелке [ ➔ ].", tipOffset: "👉 Обе метки по Стрелке [ ➔ ]. Разверни трубу на 180°.", tipParallel: "👉 Гни по Стрелке [ ➔ ].", tipSaddle3: "👉 Центр по Насечке [ ⯎ ]. Бока по Стрелке [ ➔ ].", tipSaddle4: "👉 Размечай по порядку. Гни в последовательности: M2 ➔ M1 ➔ M3 ➔ M4 (все по Стрелке ➔).", tipConcentric: "👉 Все метки по Стрелке, гнуть в одну сторону.",
-                markStart: "(Начало)", markEnd: "(Конец)", markSide: "(Боковой)", markCenter: "ЦЕНТР", shrink: "Усадка (Shrink)", spacing: "Шаг (Spacing)", trueOffset: "Реальная высота", limitWarn: "⚠️ Потребуется муфта (Coupling)!",
+                markStart: "(Начало)", markEnd: "(Конец)", markSide: "(Боковий)", markCenter: "ЦЕНТР", shrink: "Усадка (Shrink)", spacing: "Шаг (Spacing)", trueOffset: "Реальная высота", limitWarn: "⚠️ Потребуется муфта (Coupling)!",
                 markDesc: { arrow: "Стрелка (Arrow) - используется для большинства гибов (Stub, Offset).", star: "Звезда (Star) - используется для Back-to-Back, когда труба смотрит в другую сторону.", notch: "Насечка (Notch / Tear Drop) - используется ТОЛЬКО для центра 3-Point Saddle." },
                 steps: {
                     stub90: [ "Текст 1" ], backToBack: [ "Текст 1" ], fullB2B: [ "Текст 1" ], offset: [ "Текст 1" ], parallelOffset: [ "Текст 1" ], rolling: [ "Текст 1" ], saddle3: [ "Текст 1" ], saddle4: [ "Текст 1" ], concentric: [ "Текст 1" ]
@@ -451,13 +493,13 @@
                 btnShare: "✈️ Share", btnCopy: "📋 Copy", btnCopied: "✅ Copied!", cheatTitle: "📋 Cheat Sheet", thAngle: "Angle", thMult: "Multiplier", thShrink: "Shrink/inch",
                 arbPoint: "Arbitrary point (offset)", fromM: "From", distAlert: "Distance/Span required!", shiftText: "Stagger start by",
                 fracTitle: "📏 Fraction Helper", fillTitle: "📊 Conduit Fill (CEC)", fillSize: "Conduit Size (EMT)", wire1: "Wire 1 (Type/AWG):", wire2: "Wire 2 (Optional):", occupied: "Used:", limit: "CEC Table 8 Limit:", qty: "Qty", statusEnter: "Enter quantity", statusOver: "⚠️ OVERFILL!", statusTight: "Tight", statusOk: "Good",
+                rackTitle: "🛤️ Rack Spacing", rackGap: "Gap between pipes:", rackPipes: "Number of pipes:", pipeLabel: "Pipe",
                 types: { stub90: "90° Stub", backToBack: "Back-to-Back", fullB2B: "Full B2B (X/Y)", offset: "Offset", parallelOffset: "Parallel Offset", rolling: "Rolling Offset", saddle3: "3-Point Saddle", saddle4: "4-Point Saddle", concentric: "Concentric 90°" },
                 sizes: { "5": '1/2" (Take-up 5")', "6": '3/4" (Take-up 6")', "8": '1" (Take-up 8")' },
                 anglesOffset: { 10: '10° (Multiplier 6)', 22.5: '22.5° (Multiplier 2.6)', 30: '30° (Multiplier 2)', 45: '45° (Multiplier 1.4)' },
                 anglesSaddle: { 22.5: 'Center 45° / Sides 22.5°', 30: 'Center 60° / Sides 30°' },
                 lblDistStub: "Distance to back of 90° bend", lblDistB2B: "Distance from first bend to wall", lblFullB2B_Y: "Total span to wall (Span Y)", lblFullB2B_X: "First stub height (Stub X)", lblDistStart: "Distance", lblDistCenter: "Distance", lblDistRadius: "Radius of curve", lblHeight: "Obstacle Height (Rise)", lblWidth: "Obstacle Width", lblShift: "Horizontal Shift (Roll)", lblPipes: "Number of Pipes", lblSpacing: "Pipe Spacing", lblBends: "Number of small bends",
                 
-                // NEW DETAILED GUIDE TIPS (EN)
                 guideStub: "📏 <b>How to measure:</b><br>• Distance is measured from the end of the pipe to the <b>OUTSIDE BACK</b> of the 90° bend.",
                 guideB2B: "📏 <b>How to measure:</b><br>• Measure from the <b>BACK</b> of the first 90° bend to the wall/stopping point.",
                 guideFullB2B: "📏 <b>How to measure:</b><br>• <b>Stub X:</b> Height of the first 90° (to the back).<br>• <b>Span Y:</b> Total length from back to back.",
@@ -476,7 +518,6 @@
                 }
             }
         };
-
 
         const fracOptions = [
             {v: 0, t: '0"'}, {v: 0.0625, t: '1/16"'}, {v: 0.125, t: '1/8"'}, {v: 0.1875, t: '3/16"'}, {v: 0.25, t: '1/4"'}, {v: 0.3125, t: '5/16"'}, {v: 0.375, t: '3/8"'}, {v: 0.4375, t: '7/16"'},
@@ -562,6 +603,12 @@
             document.getElementById('thMult').innerText = dict[currentLang].thMult;
             document.getElementById('thShrink').innerText = dict[currentLang].thShrink;
             
+            document.getElementById('rackTitle').innerText = dict[currentLang].rackTitle;
+            document.getElementById('lblRackGap').innerText = dict[currentLang].rackGap;
+            document.getElementById('lblRackPipes').innerText = dict[currentLang].rackPipes;
+            document.getElementById('btnRackCalc').innerText = dict[currentLang].btnCalc;
+            
+            buildRackPipes();
             if(document.getElementById('fillModal').style.display === 'block') { calcFill(); }
         }
 
@@ -627,6 +674,13 @@
             sendAnalytics("Fraction_Calculator_Opened");
         }
         
+        function openRackCalc() {
+            vibro();
+            document.getElementById('rackResultBox').style.display = 'none';
+            document.getElementById('rackModal').style.display = 'block';
+            sendAnalytics("Rack_Calculator_Opened");
+        }
+        
         function openCheatSheet() {
             vibro(); document.getElementById('cheatModal').style.display = 'block'; sendAnalytics("Cheat_Sheet_Opened");
         }
@@ -642,10 +696,66 @@
             calcFill(); sendAnalytics("CEC_Fill_Calculator_Opened");
         }
 
+        function buildRackPipes() {
+            let count = parseInt(document.getElementById('rackCount').value);
+            let container = document.getElementById('rackPipesContainer');
+            let existingVals = [];
+            for(let i=1; i<=6; i++) {
+                let sel = document.getElementById('rackPipe' + i);
+                if(sel) existingVals.push(sel.value);
+            }
+            container.innerHTML = '';
+            let tPipe = dict[currentLang].pipeLabel || "Труба";
+            for (let i = 1; i <= count; i++) {
+                container.innerHTML += `<div class="input-row" style="margin-bottom: 10px;">
+                    <label id="lblTr${i}" style="flex:1; align-self:center; margin:0; color:#fff;">${tPipe} ${i}:</label>
+                    <select id="rackPipe${i}" style="flex:2;">
+                        <option value="16">1/2" (OD 0.71")</option>
+                        <option value="21">3/4" (OD 0.92")</option>
+                        <option value="27" selected>1" (OD 1.16")</option>
+                        <option value="35">1-1/4" (OD 1.51")</option>
+                        <option value="41">1-1/2" (OD 1.74")</option>
+                        <option value="53">2" (OD 2.20")</option>
+                    </select>
+                </div>`;
+            }
+            for(let i=1; i<=count; i++) {
+                let sel = document.getElementById('rackPipe' + i);
+                if(sel && existingVals[i-1]) sel.value = existingVals[i-1];
+            }
+        }
+
+        function calcRack() {
+            vibro();
+            let gapW = parseFloat(document.getElementById('rackGapWhole').value) || 0;
+            let gapF = parseFloat(document.getElementById('rackGapFrac').value) || 0;
+            let gap = gapW + gapF;
+            let count = parseInt(document.getElementById('rackCount').value);
+            let pipes = [];
+            
+            for(let i=1; i<=count; i++) pipes.push(document.getElementById('rackPipe' + i).value);
+            
+            let resultsHTML = `<div class="mark"><span style="color:#a0a0a0;">Tr 1:</span> 0" (Центр/Старт)</div>`;
+            let cumulative = 0;
+            
+            for(let i=0; i<count-1; i++) {
+                let od1 = EMT_OD[pipes[i]];
+                let od2 = EMT_OD[pipes[i+1]];
+                let centerToCenter = (od1 / 2) + gap + (od2 / 2);
+                cumulative += centerToCenter;
+                
+                resultsHTML += `<div style="font-size:13px; color:#666; margin-left:20px;">+ ${toFraction(centerToCenter)}</div>`;
+                resultsHTML += `<div class="mark"><span style="color:#a0a0a0;">Tr ${i+2}:</span> <span class="highlight" style="font-size:24px;">${toFraction(cumulative)}</span></div>`;
+            }
+            
+            document.getElementById('rackResultBox').style.display = 'block';
+            document.getElementById('rackResultMarks').innerHTML = resultsHTML;
+            sendAnalytics("Rack_Calculated", `Pipes: ${count}, Gap: ${gap}`);
+        }
+
         function calcFill() {
             let size = document.getElementById('fillConduitSize').value;
             let totalArea100 = CEC.emtArea[size];
-            
             let wT1 = document.getElementById('wireType1').value, wA1 = document.getElementById('wireAwg1').value, q1 = parseInt(document.getElementById('wireQty1').value) || 0;
             let wT2 = document.getElementById('wireType2').value, wA2 = document.getElementById('wireAwg2').value, q2 = parseInt(document.getElementById('wireQty2').value) || 0;
             
