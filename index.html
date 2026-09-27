@@ -417,7 +417,8 @@
             rolling: [ "https://i.imgur.com/jwLb4pg.jpeg" , "https://i.imgur.com/t4ALF82.jpeg" , "https://i.imgur.com/NI2iCS9.jpeg" , "https://i.imgur.com/FTO2m3v.jpeg" , "https://i.imgur.com/a2ch6Vb.jpeg" , "https://i.imgur.com/eJkZf2Y.jpeg" , "https://i.imgur.com/9QkF7ZI.jpeg" , "https://i.imgur.com/BUzJWJd.jpeg" , "https://i.imgur.com/HC9oM3d.jpeg" , "https://i.imgur.com/jEes8IZ.jpeg" , "https://i.imgur.com/025sWMx.jpeg" , "https://i.imgur.com/qJZaauH.jpeg" ],
             saddle3: [ "https://i.imgur.com/5PSTYp2.png" , "https://i.imgur.com/PMRtfbj.jpeg" , "https://i.imgur.com/ebHsMGB.png" , "https://i.imgur.com/IohvGlc.png" , "https://i.imgur.com/kL5hvlq.png" , "https://i.imgur.com/QdlexX5.png" , "https://i.imgur.com/hhQVf5J.png" , "https://i.imgur.com/YsIl4YX.png" , "https://i.imgur.com/qU3geYR.png" , "https://i.imgur.com/d7AhHCA.png" ],
             saddle4: [ "https://i.imgur.com/BAGW9lk.jpeg" , "https://i.imgur.com/ijvbKFO.jpeg" , "https://i.imgur.com/JUjFT5z.jpeg" , "https://i.imgur.com/08zMVrJ.jpeg" , "https://i.imgur.com/XJ9UAaV.jpeg" , "https://i.imgur.com/Q7Omf69.jpeg" , "https://i.imgur.com/IA7Y7U8.jpeg" , "https://i.imgur.com/55rCLMq.jpeg" , "https://i.imgur.com/v95hFXN.jpeg" , "https://i.imgur.com/8hbnL8r.jpeg" , "https://i.imgur.com/xyVqWx2.jpeg" , "https://i.imgur.com/wzjEbkc.jpeg" , "https://i.imgur.com/cf8ShtP.jpeg" , "https://i.imgur.com/c6Wroib.jpeg" , "https://i.imgur.com/RMvoGcp.jpeg" , "https://i.imgur.com/iZyZnan.jpeg" , "https://i.imgur.com/Htykh91.jpeg" ],
-            concentric: [ "ссылка на фото" ]
+            concentric: [ "ссылка на фото" ],
+            kicked90: []
         };
 
         let currentLang = 'ua';
@@ -432,7 +433,7 @@
                 arbPoint: "Довільна точка (відступ)", fromM: "Від", distAlert: "Введіть відстань (Distance)!", shiftText: "Зсув старту на",
                 fracTitle: "📏 Калькулятор дробів", fillTitle: "📊 Заповнення труби (CEC)", fillSize: "Розмір труби (EMT)", wire1: "Провід 1 (Тип/Переріз):", wire2: "Провід 2 (Додатково):", occupied: "Зайнято:", limit: "Ліміт за CEC Table 8:", qty: "Шт", statusEnter: "Введіть кількість", statusOver: "⚠️ ПЕРЕБІР!", statusTight: "Впритул", statusOk: "Норма",
                 rackTitle: "🛤️ Ідеальна траса (Rack)", rackGap: "Зазор між трубами (Gap):", rackPipes: "Кількість труб:", pipeLabel: "Труба",
-                types: { stub90: "90° Stub", backToBack: "Back-to-Back", fullB2B: "Full B2B (X/Y)", offset: "Offset", parallelOffset: "Parallel Offset", rolling: "Rolling Offset", saddle3: "3-Point Saddle", saddle4: "4-Point Saddle", concentric: "Concentric 90°" },
+                types: { stub90: "90° Stub", backToBack: "Back-to-Back", fullB2B: "Full B2B (X/Y)", offset: "Offset", parallelOffset: "Parallel Offset", rolling: "Rolling Offset", saddle3: "3-Point Saddle", saddle4: "4-Point Saddle", concentric: "Concentric 90°", kicked90: "Parallel Kicked 90s" },
                 sizes: { "5": '1/2" (Take-up 5")', "6": '3/4" (Take-up 6")', "8": '1" (Take-up 8")' },
                 anglesOffset: { 10: '10° (Множник 6)', 22.5: '22.5° (Множник 2.6)', 30: '30° (Множник 2)', 45: '45° (Множник 1.4)' },
                 anglesSaddle: { 22.5: 'Центр 45° / Боки 22.5°', 30: 'Центр 60° / Боки 30°' },
@@ -447,8 +448,9 @@
                 guideSaddle3: "📏 <b>Як міряти:</b><br>• <b>Distance:</b> від краю труби рівно до <b>ЦЕНТРУ</b> перешкоди.<br>• <b>Rise:</b> від площини до <b>ВЕРХУ</b> перешкоди.<br><i>*Можна залишити Distance порожнім.</i>",
                 guideSaddle4: "📏 <b>Як міряти:</b><br>• <b>Distance:</b> від краю труби до <b>ПОЧАТКУ</b> короба.<br>• <b>Width:</b> повна ширина короба від краю до краю.<br><i>*Можна залишити Distance порожнім.</i>",
                 guideConcentric: "📏 Гайд: Вкажи радіус обходу. Згинай по центру і від нього.",
+                guideKicked90: "📏 <b>Як міряти:</b><br>• Введи початковий крок (Spacing) між трубами на стелі та кут кика. Довжина (Distance) та Висота (Rise) тут не потрібні.",
                 
-                tipStub: "👉 Мітку на Стрілку [ ➔ ]. Гни до 90°.", tipB2B: "👉 Стрілка [ ➔ ] для M1. Зірка [ ★ ] для M2.", tipFullB2B: "👉 Обидва гиби по Стрілці [ ➔ ].", tipOffset: "👉 Обидві мітки по Стрілці [ ➔ ]. Розверни трубу на 180°.", tipParallel: "👉 Згинай по Стрілці [ ➔ ].", tipSaddle3: "👉 Центр по Насічці [ ⯎ ]. Боки по Стрілці [ ➔ ].", tipSaddle4: "👉 Роби мітки по порядку. Гни у послідовності: M2 ➔ M1 ➔ M3 ➔ M4 (всі по Стрілці ➔).", tipConcentric: "👉 Всі мітки по Стрілці, гнути в один бік.",
+                tipStub: "👉 Мітку на Стрілку [ ➔ ]. Гни до 90°.", tipB2B: "👉 Стрілка [ ➔ ] для M1. Зірка [ ★ ] для M2.", tipFullB2B: "👉 Обидва гиби по Стрілці [ ➔ ].", tipOffset: "👉 Обидві мітки по Стрілці [ ➔ ]. Розверни трубу на 180°.", tipParallel: "👉 Згинай по Стрілці [ ➔ ].", tipSaddle3: "👉 Центр по Насічці [ ⯎ ]. Боки по Стрілці [ ➔ ].", tipSaddle4: "👉 Роби мітки по порядку. Гни у послідовності: M2 ➔ M1 ➔ M3 ➔ M4 (всі по Стрілці ➔).", tipConcentric: "👉 Всі мітки по Стрілці, гнути в один бік.", tipKicked90: "👉 <b>Порада:</b> Розміть кріплення на новій стіні з новим кроком ДО того, як почнеш гнути. Роби кик на кожній трубі рівно поперек траси (без зсуву).",
                 markStart: "(Початок)", markEnd: "(Кінець)", markSide: "(Боковий)", markCenter: "ЦЕНТР", shrink: "Усадка (Shrink)", spacing: "Крок (Spacing)", trueOffset: "Реальна висота", limitWarn: "⚠️ Потрібна муфта (Coupling)!",
                 markDesc: { arrow: "Стрілка (Arrow) - використовується для більшості стандартних вигинів (Stub, Offset).", star: "Зірка (Star) - використовується для Back-to-Back, коли труба дивиться в інший бік.", notch: "Насічка (Notch / Tear Drop) - використовується ТІЛЬКИ для центру 3-Point Saddle." },
               steps: {
@@ -524,7 +526,8 @@
         "Зсунь трубу і вирівняй стрілку по ПЕРШІЙ мітці (М1).", 
         "Зігни останній кут на 30° і перевір всю конструкцію." 
     ],
-    concentric: [ "Текст 1" ]
+    concentric: [ "Текст 1" ],
+    kicked90: [ "Фото-гайд у розробці" ]
 }
             },
             ru: {
@@ -533,7 +536,7 @@
                 arbPoint: "Произвольная точка (отступ)", fromM: "От", distAlert: "Введите расстояние (Distance)!", shiftText: "Сдвиг старта на",
                 fracTitle: "📏 Калькулятор дробей", fillTitle: "📊 Заполнение трубы (CEC)", fillSize: "Размер трубы (EMT)", wire1: "Провод 1 (Тип/Сечение):", wire2: "Провод 2 (Дополнительно):", occupied: "Занято:", limit: "Лимит по CEC Table 8:", qty: "Шт", statusEnter: "Введите количество", statusOver: "⚠️ ПЕРЕБОР!", statusTight: "Впритык", statusOk: "Норма",
                 rackTitle: "🛤️ Идеальная трасса (Rack)", rackGap: "Зазор между трубами (Gap):", rackPipes: "Количество труб:", pipeLabel: "Труба",
-                types: { stub90: "90° Stub", backToBack: "Back-to-Back", fullB2B: "Full B2B (X/Y)", offset: "Offset", parallelOffset: "Parallel Offset", rolling: "Rolling Offset", saddle3: "3-Point Saddle", saddle4: "4-Point Saddle", concentric: "Concentric 90°" },
+                types: { stub90: "90° Stub", backToBack: "Back-to-Back", fullB2B: "Full B2B (X/Y)", offset: "Offset", parallelOffset: "Parallel Offset", rolling: "Rolling Offset", saddle3: "3-Point Saddle", saddle4: "4-Point Saddle", concentric: "Concentric 90°", kicked90: "Parallel Kicked 90s" },
                 sizes: { "5": '1/2" (Take-up 5")', "6": '3/4" (Take-up 6")', "8": '1" (Take-up 8")' },
                 anglesOffset: { 10: '10° (Множитель 6)', 22.5: '22.5° (Множитель 2.6)', 30: '30° (Множитель 2)', 45: '45° (Множитель 1.4)' },
                 anglesSaddle: { 22.5: 'Центр 45° / Бока 22.5°', 30: 'Центр 60° / Бока 30°' },
@@ -548,8 +551,9 @@
                 guideSaddle3: "📏 <b>Как замерять:</b><br>• <b>Distance:</b> от края трубы ровно до <b>ЦЕНТРА</b> препятствия.<br>• <b>Rise:</b> от плоскости до <b>ВЕРХА</b> препятствия.<br><i>*Для гиба на весу просто оставь Distance пустым.</i>",
                 guideSaddle4: "📏 <b>Как замерять:</b><br>• <b>Distance:</b> от края трубы до <b>НАЧАЛА</b> короба.<br>• <b>Width:</b> полная ширина короба от края до края.<br><i>*Можно оставить Distance пустым.</i>",
                 guideConcentric: "📏 Гайд: Укажи радиус обхода.",
+                guideKicked90: "📏 <b>Как замерять:</b><br>• Введи начальный шаг (Spacing) между трубами на потолке и угол кика. Длина (Distance) и Высота (Rise) здесь не нужны.",
                 
-                tipStub: "👉 Метку на Стрелку [ ➔ ]. Гни до 90°.", tipB2B: "👉 Стрелка [ ➔ ] для M1. Звезда [ ★ ] для M2.", tipFullB2B: "👉 Оба гиба по Стрелке [ ➔ ].", tipOffset: "👉 Обе метки по Стрелке [ ➔ ]. Разверни трубу на 180°.", tipParallel: "👉 Гни по Стрелке [ ➔ ].", tipSaddle3: "👉 Центр по Насечке [ ⯎ ]. Бока по Стрелке [ ➔ ].", tipSaddle4: "👉 Размечай по порядку. Гни в последовательности: M2 ➔ M1 ➔ M3 ➔ M4 (все по Стрелке ➔).", tipConcentric: "👉 Все метки по Стрелке, гнуть в одну сторону.",
+                tipStub: "👉 Метку на Стрелку [ ➔ ]. Гни до 90°.", tipB2B: "👉 Стрелка [ ➔ ] для M1. Звезда [ ★ ] для M2.", tipFullB2B: "👉 Оба гиба по Стрелке [ ➔ ].", tipOffset: "👉 Обе метки по Стрелке [ ➔ ]. Разверни трубу на 180°.", tipParallel: "👉 Гни по Стрелке [ ➔ ].", tipSaddle3: "👉 Центр по Насечке [ ⯎ ]. Бока по Стрелке [ ➔ ].", tipSaddle4: "👉 Размечай по порядку. Гни в последовательности: M2 ➔ M1 ➔ M3 ➔ M4 (все по Стрелке ➔).", tipConcentric: "👉 Все метки по Стрелке, гнуть в одну сторону.", tipKicked90: "👉 <b>Совет:</b> Разметь профиль/страпы на новой стене с Новым Шагом ДО изгиба труб. Делай кик на каждой трубе ровно поперек трассы (без сдвига).",
                 markStart: "(Начало)", markEnd: "(Конец)", markSide: "(Боковий)", markCenter: "ЦЕНТР", shrink: "Усадка (Shrink)", spacing: "Шаг (Spacing)", trueOffset: "Реальная высота", limitWarn: "⚠️ Потребуется муфта (Coupling)!",
                 markDesc: { arrow: "Стрелка (Arrow) - используется для большинства гибов (Stub, Offset).", star: "Звезда (Star) - используется для Back-to-Back, когда труба смотрит в другую сторону.", notch: "Насечка (Notch / Tear Drop) - используется ТОЛЬКО для центра 3-Point Saddle." },
               steps: {
@@ -625,7 +629,8 @@
         "Сдвинь трубу и выровняй стрелку по ПЕРВОЙ метке (М1).", 
         "Согни последний угол на 30° и проверь всю трассу." 
     ], 
-    concentric: [ "Текст 1" ]
+    concentric: [ "Текст 1" ],
+    kicked90: [ "Фото-гайд в разработке" ]
 }
             },
             en: {
@@ -634,7 +639,7 @@
                 arbPoint: "Arbitrary point (offset)", fromM: "From", distAlert: "Distance/Span required!", shiftText: "Stagger start by",
                 fracTitle: "📏 Fraction Helper", fillTitle: "📊 Conduit Fill (CEC)", fillSize: "Conduit Size (EMT)", wire1: "Wire 1 (Type/AWG):", wire2: "Wire 2 (Optional):", occupied: "Used:", limit: "CEC Table 8 Limit:", qty: "Qty", statusEnter: "Enter quantity", statusOver: "⚠️ OVERFILL!", statusTight: "Tight", statusOk: "Good",
                 rackTitle: "🛤️ Rack Spacing", rackGap: "Gap between pipes:", rackPipes: "Number of pipes:", pipeLabel: "Pipe",
-                types: { stub90: "90° Stub", backToBack: "Back-to-Back", fullB2B: "Full B2B (X/Y)", offset: "Offset", parallelOffset: "Parallel Offset", rolling: "Rolling Offset", saddle3: "3-Point Saddle", saddle4: "4-Point Saddle", concentric: "Concentric 90°" },
+                types: { stub90: "90° Stub", backToBack: "Back-to-Back", fullB2B: "Full B2B (X/Y)", offset: "Offset", parallelOffset: "Parallel Offset", rolling: "Rolling Offset", saddle3: "3-Point Saddle", saddle4: "4-Point Saddle", concentric: "Concentric 90°", kicked90: "Parallel Kicked 90s" },
                 sizes: { "5": '1/2" (Take-up 5")', "6": '3/4" (Take-up 6")', "8": '1" (Take-up 8")' },
                 anglesOffset: { 10: '10° (Multiplier 6)', 22.5: '22.5° (Multiplier 2.6)', 30: '30° (Multiplier 2)', 45: '45° (Multiplier 1.4)' },
                 anglesSaddle: { 22.5: 'Center 45° / Sides 22.5°', 30: 'Center 60° / Sides 30°' },
@@ -649,8 +654,9 @@
                 guideSaddle3: "📏 <b>How to measure:</b><br>• <b>Distance:</b> Directly to the <b>CENTER</b> of the obstacle.<br>• <b>Rise:</b> From the surface to the <b>TOP</b> of the obstacle.<br><i>*Leave Distance blank to air bend.</i>",
                 guideSaddle4: "📏 <b>How to measure:</b><br>• <b>Distance:</b> To the <b>START</b> of the obstacle.<br>• <b>Width:</b> Total width from edge to edge.<br><i>*Leave Distance blank to air bend.</i>",
                 guideConcentric: "📏 Guide: Enter curve radius.",
+                guideKicked90: "📏 <b>How to measure:</b><br>• Enter the original pipe spacing on the ceiling/wall and the kick angle. Distance and Rise are not needed.",
                 
-                tipStub: "👉 Mark on Arrow [ ➔ ]. Bend to 90°.", tipB2B: "👉 Arrow [ ➔ ] for M1. Star [ ★ ] for M2.", tipFullB2B: "👉 Both bends on Arrow [ ➔ ].", tipOffset: "👉 Both marks on Arrow [ ➔ ]. Roll conduit 180°.", tipParallel: "👉 Bend on Arrow [ ➔ ].", tipSaddle3: "👉 Center on Notch [ ⯎ ]. Sides on Arrow [ ➔ ].", tipSaddle4: "👉 Layout in order. Bend in sequence: M2 ➔ M1 ➔ M3 ➔ M4 (all on Arrow ➔).", tipConcentric: "👉 Bend all marks on Arrow.",
+                tipStub: "👉 Mark on Arrow [ ➔ ]. Bend to 90°.", tipB2B: "👉 Arrow [ ➔ ] for M1. Star [ ★ ] for M2.", tipFullB2B: "👉 Both bends on Arrow [ ➔ ].", tipOffset: "👉 Both marks on Arrow [ ➔ ]. Roll conduit 180°.", tipParallel: "👉 Bend on Arrow [ ➔ ].", tipSaddle3: "👉 Center on Notch [ ⯎ ]. Sides on Arrow [ ➔ ].", tipSaddle4: "👉 Layout in order. Bend in sequence: M2 ➔ M1 ➔ M3 ➔ M4 (all on Arrow ➔).", tipConcentric: "👉 Bend all marks on Arrow.", tipKicked90: "👉 <b>Tip:</b> Layout your strut/straps on the new plane using the New Spacing BEFORE bending. Bend all kicks straight across the rack (no stagger).",
                 markStart: "(Start)", markEnd: "(End)", markSide: "(Side bend)", markCenter: "CENTER", shrink: "Shrink", spacing: "Spacing", trueOffset: "True Offset", limitWarn: "⚠️ Coupling required!",
                 markDesc: { arrow: "Arrow - Used for standard bends like Stubs and Offsets.", star: "Star - Used for Back-to-Back bends when bender is reversed.", notch: "Tear Drop (Notch) - Used ONLY for the center of a 3-Point Saddle." },
                steps: {
@@ -726,7 +732,8 @@
         "Slide the pipe and align the Arrow with the FIRST mark (M1).", 
         "Make the final 30° bend and check your completed 4-point saddle." 
     ], 
-    concentric: [ "Text 1" ]
+    concentric: [ "Text 1" ],
+    kicked90: [ "Photo guide in progress" ]
 }
             }
         };
@@ -834,15 +841,18 @@
             const angleSel = document.getElementById('bendAngle');
             const dLabel = document.getElementById('lblDist'), hLabel = document.getElementById('lblHeight'), guide = document.getElementById('guideText'), t = dict[currentLang];
             
+            const isParallel = (type === 'parallelOffset');
+            const isKicked = (type === 'kicked90');
+            
             document.getElementById('conduitSizeGroup').style.display = 'block';
             document.getElementById('angleGroup').style.display = (type === 'stub90' || type === 'backToBack' || type === 'fullB2B' || type === 'concentric') ? 'none' : 'block';
-            document.getElementById('heightGroup').style.display = (type !== 'stub90' && type !== 'backToBack' && type !== 'concentric') ? 'block' : 'none';
+            document.getElementById('heightGroup').style.display = (type === 'stub90' || type === 'backToBack' || type === 'concentric' || isKicked) ? 'none' : 'block';
+            document.getElementById('distanceGroup').style.display = isKicked ? 'none' : 'block';
             document.getElementById('widthGroup').style.display = (type === 'saddle4') ? 'block' : 'none';
             document.getElementById('shiftGroup').style.display = (type === 'rolling') ? 'block' : 'none';
             document.getElementById('bendsCountGroup').style.display = (type === 'concentric') ? 'block' : 'none';
-            
-            const isParallel = (type === 'parallelOffset');
-            document.getElementById('pipesGroup').style.display = isParallel ? 'block' : 'none'; document.getElementById('spacingGroup').style.display = isParallel ? 'block' : 'none';
+            document.getElementById('pipesGroup').style.display = (isParallel || isKicked) ? 'block' : 'none'; 
+            document.getElementById('spacingGroup').style.display = (isParallel || isKicked) ? 'block' : 'none';
 
             angleSel.innerHTML = '';
             document.getElementById('btnPhotoGuide').style.display = 'flex';
@@ -851,6 +861,11 @@
             else if (type === 'backToBack') { dLabel.innerText = t.lblDistB2B; guide.innerHTML = t.guideB2B; } 
             else if (type === 'fullB2B') { dLabel.innerText = t.lblFullB2B_Y; hLabel.innerText = t.lblFullB2B_X; document.getElementById('heightGroup').style.display = 'block'; guide.innerHTML = t.guideFullB2B; } 
             else if (type === 'concentric') { dLabel.innerText = t.lblDistRadius; guide.innerHTML = t.guideConcentric; } 
+            else if (type === 'kicked90') { 
+                guide.innerHTML = t.guideKicked90; 
+                for (const [key, val] of Object.entries(t.anglesOffset)) { angleSel.add(new Option(val, key)); } 
+                angleSel.value = "30"; 
+            }
             else if (type === 'offset' || type === 'rolling' || type === 'saddle4' || type === 'parallelOffset') {
                 dLabel.innerText = t.lblDistStart; hLabel.innerText = t.lblHeight; guide.innerHTML = (type === 'offset') ? t.guideOffset : (type === 'rolling' ? t.guideRolling : (type === 'parallelOffset' ? t.guideParallel : t.guideSaddle4));
                 for (const [key, val] of Object.entries(t.anglesOffset)) { angleSel.add(new Option(val, key)); } angleSel.value = "30";
@@ -1155,6 +1170,29 @@
             } else if (type === 'concentric') {
                 let radius = dist, bends = parseInt(document.getElementById('bendsCount').value), devLength = radius * 1.5708, spacing = devLength / bends, degPerBend = 90 / bends, sideMarks = (bends - 1) / 2;
                 resHTML = `<div class="mark"><span class="highlight">${t.spacing}:</span> ${toFraction(spacing)}</div><div class="mark"><span class="highlight">Angle:</span> ${degPerBend}° per bend</div>`; infoHTML = `<b>Всього міток:</b> ${bends} (1 Центр + по ${sideMarks} шт в обидва боки від центру)<br><br>${t.tipConcentric}`; maxMark = devLength; 
+            } else if (type === 'kicked90') {
+                let spacing = getFullVal('spacing');
+                if (!spacing) { alert("Pipe spacing required!"); return; }
+                const angle = parseFloat(document.getElementById('bendAngle').value);
+                
+                let csc = 0;
+                if (angle === 10) csc = 5.76;
+                if (angle === 22.5) csc = 2.61;
+                if (angle === 30) csc = 2.0;
+                if (angle === 45) csc = 1.41;
+
+                let newSpacing = spacing * csc;
+
+                resHTML = `
+                    <div class="mark"><span class="highlight">New Spacing:</span> ${toFraction(newSpacing)}</div>
+                    <div class="mark" style="border:none; font-size: 14px; color: #a0a0a0; padding-top: 0;">(Center-to-Center on new plane)</div>
+                `;
+                
+                infoHTML += `
+                    <b>Original Spacing:</b> ${toFraction(spacing)} <br>
+                    <b>Angle:</b> ${angle}° (CSC: ${csc})<br><br>
+                    ${t.tipKicked90}
+                `; 
             } else {
                 let h = getFullVal('height'); if (!h) { alert("Rise height required!"); return; }
                 const angle = parseFloat(document.getElementById('bendAngle').value); let shrinkPerInch = 0, multiplier = 0;
